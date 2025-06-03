@@ -31,7 +31,7 @@ CREATE TABLE items_carrito (
     usuario_id INT NOT NULL,
     juego_id INT NOT NULL,
     precio DOUBLE NOT NULL,
-    tipo_envio VARCHAR,
+    tipo_envio VARCHAR(50),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
     FOREIGN KEY (juego_id) REFERENCES juegos(id) ON DELETE CASCADE
 );
