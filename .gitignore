@@ -37,5 +37,7 @@ htmlcov/
 pip-wheel-metadata/
 
 # Ignorar archivos de entorno pipenv
-Pipfile/
-Pipfile.lock/
+Pipfile
+Pipfile.lock
+*/Pipfile
+*/Pipfile.lock
