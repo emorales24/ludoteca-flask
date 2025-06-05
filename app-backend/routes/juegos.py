@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from db import get_connection
 
-juegos_bp = Blueprint("usuarios",__name__)
+juegos_bp = Blueprint("juegos",__name__)
 
 @juegos_bp.route("/")
 def get_juegos():
