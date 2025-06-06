@@ -4,7 +4,7 @@ USE ludoteca;
 
 CREATE TABLE generos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL UNIQUE
+    nombre_genero VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE juegos (
@@ -45,7 +45,7 @@ CREATE TABLE items_carrito (
     FOREIGN KEY (juego_id) REFERENCES juegos(id) ON DELETE CASCADE
 );
 
-INSERT INTO generos (nombre) VALUES 
+INSERT INTO generos (nombre_genero) VALUES 
 ('rpg'), 
 ('aventura'), 
 ('deportes'),
