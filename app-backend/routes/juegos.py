@@ -3,7 +3,7 @@ from db import get_connection
 
 juegos_bp = Blueprint("juegos",__name__)
 
-@juegos_bp.route("/")
+@juegos_bp.route("/juegos")
 def get_juegos():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -12,4 +12,3 @@ def get_juegos():
     cursor.close()
     conn.close()
     return jsonify(juegos)
-
