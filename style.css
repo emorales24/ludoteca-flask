@@ -35,13 +35,13 @@ body {
   --bs-body-font-size: 18px;
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
-  --bs-body-color: #8f8f8f;
+  --bs-body-color: #1B263B;
   --bs-body-color-rgb: 143, 143, 143;
 
   --bs-primary: #8C907E;
   --bs-secondary: #6c757d;
   --bs-black: #111;
-  --bs-light: #F1F1F0;
+  --bs-light: #1B263B;
   --bs-dark: #212529;
   --bs-gray: #9aa1a7;
   --bs-gray-dark: #51565b;
@@ -57,6 +57,7 @@ body {
   --bs-link-decoration: underline;
   --bs-link-hover-color: #111;
   --bs-link-hover-color-rgb: 17, 17, 17;
+  background-color: #1B263B !important;
 }
 
 body {
@@ -1539,4 +1540,15 @@ a.btn-link.text-light:after {
   background-position: center;
   background-size: cover;
   transition: transform .3s ease-out;
+}
+.navbar.fixed-top {
+  background-color: #0D1B2A !important; /* Fondo azul más oscuro para el header */
+}
+.slideshow {
+  background-color: #1B263B !important; /* Fondo del contenedor del carrusel */
+}
+
+.swiper-slide {
+  background-color: #1B263B !important; /* Fondo de cada slide */
+  background-image: none !important; /* Elimina cualquier imagen de fondo */
 }
