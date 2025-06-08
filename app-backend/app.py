@@ -9,7 +9,7 @@ from routes.items_carrito import items_carrito_bp
 app = Flask(__name__)
 # CORS(app)
 
-app.register_blueprint(usuarios_bp) #podria cambiarse por login o dividirse  con login
+app.register_blueprint(usuarios_bp) #podria cambiarse por login o dividirse con login
 app.register_blueprint(juegos_bp)
 app.register_blueprint(admin_bp)
 app.register_blueprint(items_carrito_bp)
