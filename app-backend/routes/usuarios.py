@@ -3,7 +3,7 @@ from db import get_connection
 
 usuarios_bp = Blueprint("usuarios",__name__)
 
-@usuarios_bp.route("/usuarios")
+@usuarios_bp.route("/")
 def get_usuarios():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)

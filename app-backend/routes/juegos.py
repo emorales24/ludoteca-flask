@@ -3,7 +3,7 @@ from db import get_connection
 
 juegos_bp = Blueprint("juegos",__name__)
 
-@juegos_bp.route("/juegos")
+@juegos_bp.route("/")
 def get_juegos():
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
@@ -13,7 +13,7 @@ def get_juegos():
     conn.close()
     return jsonify(juegos)
 
-@juegos_bp.route("/juegos/ofertas")
+@juegos_bp.route("/ofertas")
 def get_juegos_oferta():
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
@@ -31,7 +31,7 @@ def get_juegos_oferta():
     cursor.close()
     return jsonify(ofertas)
 
-@juegos_bp.route("/juegos/recientes/<int:fecha>")
+@juegos_bp.route("/recientes/<int:fecha>")
 def get_juegos_recientes(fecha):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
@@ -49,7 +49,7 @@ def get_juegos_recientes(fecha):
     cursor.close()
     return jsonify(recientes)
 
-@juegos_bp.route("/juegos/mas_valorados/<int:puntaje>")
+@juegos_bp.route("/mas_valorados/<int:puntaje>")
 def get_juegos_mas_valorados(puntaje):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)

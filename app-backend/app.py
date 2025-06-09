@@ -9,10 +9,10 @@ from routes.items_carrito import items_carrito_bp
 app = Flask(__name__)
 # CORS(app)
 
-app.register_blueprint(usuarios_bp) #podria cambiarse por login o dividirse con login
-app.register_blueprint(juegos_bp)
-app.register_blueprint(admin_bp)
-app.register_blueprint(items_carrito_bp)
+app.register_blueprint(usuarios_bp, url_prefix="usuarios") #podria cambiarse por login o dividirse con login
+app.register_blueprint(juegos_bp, url_prefix="juegos")
+app.register_blueprint(admin_bp, url_prefix="admin")
+app.register_blueprint(items_carrito_bp, url_prefix="items_carrito")
 
 if __name__ == "__main__":
     app.run(debug=True)
