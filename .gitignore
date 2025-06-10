@@ -1,6 +1,7 @@
 # Ignorar entorno virtual
 .venv/
 .venv/*
+*/.venv/*
 
 # Archivos de Python compilados
 __pycache__/
@@ -35,3 +36,9 @@ htmlcov/
 
 # Ignorar paquetes descargados por pip
 pip-wheel-metadata/
+
+# Ignorar archivos de entorno pipenv
+Pipfile
+Pipfile.lock
+*/Pipfile
+*/Pipfile.lock
