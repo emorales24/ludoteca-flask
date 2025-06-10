@@ -15,15 +15,17 @@ def get_usuarios():
 
 
 
+# Busca un usuario por su nombre de usuario en la tabla 'usuarios'.
+# Retorna un diccionario con los datos del usuario (usuario, contraseña, rol)
+# o None si no se encuentra.
 @usuarios_bp.route("/login")
 def login_usuario():
     conn = get_connection()
-    cursor = conn.cursor(dictionary = True)
-    cursor.execute(
-        """
+    if not conn:
+        return None
 
-        """
-    )
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute("SELECT TOP 1 usuario, contraseña, rol FROM usuarios WHERE usuario = %s")
     usuario = cursor.fetchall()
     conn.close()
     cursor.close()
