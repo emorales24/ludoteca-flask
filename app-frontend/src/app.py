@@ -18,5 +18,13 @@ mail = Mail(app)
 
 API_BASE = "http://locahost:5000" # Conexion con la API de app_backend
 
+def obtener_usuario(usr):
+    response = requests.get(f"{API_BASE}/usuarios/{usr}")
+    if response.status.code == 200:
+        return response.json()
+    return None
+
+
+
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)
