@@ -16,7 +16,7 @@ app.config['MAIL_PASSWORD'] = 'clave-temporal' # Password generado desde las pas
 app.config['MAIL_DEFAULT_SENDER'] = 'mail'
 mail = Mail(app)
 
+API_BASE = "http://locahost:5000" # Conexion con la API de app_backend
 
-
-if __name__ == 'main':
-    app.run(debug = True)
+if __name__ == '__main__':
+    app.run(debug = True, port = 5001)
