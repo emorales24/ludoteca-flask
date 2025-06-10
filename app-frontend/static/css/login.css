@@ -1,0 +1,6 @@
+.login-window {
+    background-image: url("../images/login-img.png");
+    background-size: cover;
+    width: 600px;
+    height: 600px;
+}

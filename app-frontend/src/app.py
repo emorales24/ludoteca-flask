@@ -1,11 +1,15 @@
-import os
 from flask import Flask, render_template, jsonify, request, redirect
 from flask_mail import Mail, Message
+import os
 import requests
 
-dir_padre = os.path.join(os.path.dirname(__file__), '..')
+# base_dir es /ruta/completa/app-frontend
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-app = Flask(__name__, root_path = dir_padre)
+template_dir = os.path.join(base_dir, "templates")
+static_dir = os.path.join(base_dir, "static")
+
+app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -16,7 +20,22 @@ app.config['MAIL_PASSWORD'] = 'clave-temporal' # Password generado desde las pas
 app.config['MAIL_DEFAULT_SENDER'] = 'mail'
 mail = Mail(app)
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+# - GET: Muestra el formulario de login.
+# - POST: Procesa las credenciales enviadas por JSON y retorna una respuesta JSON.
+@app.route("/usuarios/login", methods=["GET","POST"])
+def log_in():
+
+    if request.method == "GET":
+        return render_template("login.html")
+    elif request.method == "POST":
+        return render_template("login.html")
 
 
-if __name__ == 'main':
-    app.run(debug = True)
+
+if __name__ == "__main__":
+    # app.secret_key = "supersecretkey"
+    app.run(port=5001, debug=True)

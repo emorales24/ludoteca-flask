@@ -12,3 +12,19 @@ def get_usuarios():
     cursor.close()
     conn.close()
     return jsonify(usuarios)
+
+
+
+@usuarios_bp.route("/login")
+def login_usuario():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute(
+        """
+
+        """
+    )
+    usuario = cursor.fetchall()
+    conn.close()
+    cursor.close()
+    return jsonify(usuario)
