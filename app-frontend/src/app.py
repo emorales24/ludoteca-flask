@@ -1,15 +1,11 @@
+import os
 from flask import Flask, render_template, jsonify, request, redirect
 from flask_mail import Mail, Message
-import os
 import requests
 
-# base_dir es /ruta/completa/app-frontend
-base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+dir_padre = os.path.join(os.path.dirname(__file__), '..')
 
-template_dir = os.path.join(base_dir, "templates")
-static_dir = os.path.join(base_dir, "static")
-
-app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+app = Flask(__name__, root_path = dir_padre)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -23,3 +19,4 @@ mail = Mail(app)
 API_BASE = "http://locahost:5000" # Conexion con la API de app_backend
 
 if __name__ == '__main__':
+    app.run(debug = True, port = 5001)

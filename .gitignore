@@ -22,6 +22,7 @@ __pycache__/
 # Archivos de IDEs y editores
 .vscode/
 .idea/
+.vs/
 
 # Carpetas temporales del sistema operativo
 .DS_Store
