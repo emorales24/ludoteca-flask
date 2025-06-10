@@ -20,22 +20,6 @@ app.config['MAIL_PASSWORD'] = 'clave-temporal' # Password generado desde las pas
 app.config['MAIL_DEFAULT_SENDER'] = 'mail'
 mail = Mail(app)
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+API_BASE = "http://locahost:5000" # Conexion con la API de app_backend
 
-# - GET: Muestra el formulario de login.
-# - POST: Procesa las credenciales enviadas por JSON y retorna una respuesta JSON.
-@app.route("/usuarios/login", methods=["GET","POST"])
-def log_in():
-
-    if request.method == "GET":
-        return render_template("login.html")
-    elif request.method == "POST":
-        return render_template("login.html")
-
-
-
-if __name__ == "__main__":
-    # app.secret_key = "supersecretkey"
-    app.run(port=5001, debug=True)
+if __name__ == '__main__':

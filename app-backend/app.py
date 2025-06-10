@@ -15,4 +15,4 @@ app.register_blueprint(admin_bp, url_prefix="/admin")
 app.register_blueprint(items_carrito_bp, url_prefix="/items_carrito")
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = True, port = 5000)
