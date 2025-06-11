@@ -22,7 +22,7 @@ def get_juegos_oferta():
         SELECT
         generos.nombre_genero, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
-        LEFT JOIN generos ON generos.id = juegos.id_genero
+        JOIN generos ON generos.id = juegos.id_genero
         WHERE en_oferta = TRUE
         """
     )
@@ -40,7 +40,7 @@ def get_juegos_recientes(fecha):
         SELECT
         generos.nombre_genero, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
-        LEFT JOIN generos ON generos.id = juegos.id_genero
+        JOIN generos ON generos.id = juegos.id_genero
         WHERE fecha_lanzamiento like '%s%'
         """, (fecha,)
     )
@@ -58,7 +58,7 @@ def get_juegos_mas_valorados(puntaje):
         SELECT
         generos.nombre_genero, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
-        LEFT JOIN generos ON generos.id = juegos.id_genero
+        JOIN generos ON generos.id = juegos.id_genero
         WHERE puntuacion >= %s
         """, (puntaje,)
     )

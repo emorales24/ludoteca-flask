@@ -3,7 +3,7 @@ from flask import Flask, render_template, jsonify, request, redirect
 from flask_mail import Mail, Message
 import requests
 
-# Base dir es la raíz del proyecto
+# Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 template_dir = os.path.join(base_dir, "templates")
@@ -16,7 +16,7 @@ app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'mail'
-app.config['MAIL_PASSWORD'] = 'clave-temporal'  # Contraseña de aplicación
+app.config['MAIL_PASSWORD'] = 'clave-temporal'  # Contrase�a de aplicaci�n
 app.config['MAIL_DEFAULT_SENDER'] = 'mail'
 mail = Mail(app)
 
@@ -186,5 +186,13 @@ def carrito():
     return render_template("carrito.html")
 
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+def obtener_usuario(usr):
+    response = requests.get(f"{API_BASE}/usuarios/{usr}")
+    if response.status.code == 200:
+        return response.json()
+    return None
+
+
+
+if __name__ == '__main__':
+    app.run(debug = True, port = 5001)
