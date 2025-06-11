@@ -261,3 +261,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+// Funcionalidad de las Flechas del Carrusel
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.overflow-x-auto');
+    const leftBtn = document.querySelector('button[aria-label="Anterior"]');
+    const rightBtn = document.querySelector('button[aria-label="Siguiente"]');
+    
+    rightBtn.addEventListener('click', () => {
+        container.scrollBy({ left: 650, behavior: 'smooth' });
+    });
+    
+    leftBtn.addEventListener('click', () => {
+        container.scrollBy({ left: -650, behavior: 'smooth' });
+    });
+});

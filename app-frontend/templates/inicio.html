@@ -59,34 +59,71 @@
             </div>
         </section>
 
-        <!-- Sección 3: Recomendaciones para ti -->
-        <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h3 class="estilo-h3">Recomendaciones para ti</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Imagen 1 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/ADD8E6/000000?text=Recomendado+1" alt="Recomendado 1" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Rol Fantástico</h4>
-                        <p class="text-gray-600">Adéntrate en un mundo mágico lleno de misterios.</p>
+        <!-- Sección 1: Ofertas -->
+        <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
+            <h3 class="estilo-h3 mb-6">Recomendaciones para ti</h3>
+            
+            <!-- Contenedor principal del carrusel -->
+            <div class="relative">
+                <!-- Flecha izquierda -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Anterior">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <!-- Contenedor del carrusel -->
+                <div class="overflow-x-auto pb-4 scrollbar-hide">
+                    <div class="flex space-x-6 w-max">
+                        <!-- Item 1 -->
+                        <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out flex flex-col w-[640px] flex-shrink-0">
+                            <div class="w-full h-[640px] overflow-hidden">
+                                <img src="" alt="Oferta 1" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4 flex-grow bg-white">
+                                <a href="#" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">Titulo Oferta 1</h4>
+                                </a>
+                                <p class="text-gray-600">Adéntrate en un mundo mágico lleno de misterios.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Item 2 -->
+                        <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out flex flex-col w-[640px] flex-shrink-0">
+                            <div class="w-full h-[640px] overflow-hidden">
+                                <img src="" alt="Oferta 2" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4 flex-grow bg-white">
+                                <a href="#" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">Titulo Oferta 2</h4>
+                                </a>
+                                <p class="text-gray-600">Siente la adrenalina con los deportes más emocionantes.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Item 3 -->
+                        <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out flex flex-col w-[640px] flex-shrink-0">
+                            <div class="w-full h-[640px] overflow-hidden">
+                                <img src="]" alt="Oferta 3" class="w-full h-full object-cover">
+                            </div>
+                            <div class="p-4 flex-grow bg-white">
+                                <a href="#" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors">Titulo Oferta 3</h4>
+                                </a>
+                                <p class="text-gray-600">Aprende mientras te diviertes con este juego educativo.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Puedes agregar más items aquí -->
                     </div>
                 </div>
-                <!-- Imagen 2 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/90EE90/000000?text=Recomendado+2" alt="Recomendado 2" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Deportes Extremos</h4>
-                        <p class="text-gray-600">Siente la adrenalina con los deportes más emocionantes.</p>
-                    </div>
-                </div>
-                <!-- Imagen 3 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/FFB6C1/000000?text=Recomendado+3" alt="Recomendado 3" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Educativo y Divertido</h4>
-                        <p class="text-gray-600">Aprende mientras te diviertes con este juego educativo.</p>
-                    </div>
-                </div>
+                
+                <!-- Flecha derecha -->
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Siguiente">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </section>
     </main>
