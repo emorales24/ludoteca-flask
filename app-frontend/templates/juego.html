@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Juego - Mi Aplicación</title>
+    <!-- Carga de Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fuente Inter para una apariencia moderna y legible */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth; /* Desplazamiento suave para anclas */
+        }
+        /* Estilos para el contenedor principal para que ocupe toda la altura */
+        .min-h-screen-minus-nav-footer {
+            min-height: calc(100vh - 4rem - 4rem); /* Altura de la vista menos la altura del navbar y el footer */
+        }
+        /* Estilo para la imagen del juego con relación de aspecto 16:9 */
+        .game-image-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9 / 16 * 100) */
+            background-color: #374151; /* gray-700 */
+        }
+        .game-image-container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body class="bg-gray-800 text-gray-200">
+    <!-- Navbar (similar a otras páginas para coherencia) -->
+    <nav class="bg-blue-600 p-4 shadow-lg rounded-b-lg">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <!-- Título de la Aplicación / Logo -->
+            <a href="/" class="text-white text-2xl font-bold hover:text-blue-200 transition duration-300 ease-in-out">
+                MiApp
+            </a>
+
+            <!-- Input de Buscador (funcional en esta página también) -->
+            <form action="/buscar" method="GET" class="relative w-full md:w-1/3">
+                <input type="text" name="q" placeholder="Buscar..."
+                       class="w-full pl-10 pr-4 py-2 rounded-lg bg-blue-700 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:text-gray-800 transition duration-300 ease-in-out shadow-sm">
+                <button type="submit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 h-5 w-5 p-0 bg-transparent border-none cursor-pointer">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Enlaces de Navegación -->
+            <div class="flex flex-wrap justify-center md:justify-end space-x-4">
+                <a href="/inicio" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">INICIO</a>
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">CATEGORIAS</a>
+                <a href="/perfil" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">Mi Perfil</a>
+                <a href="#" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">CONTACTO</a>
+                <a href="/carrito" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">CARRITO</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido Principal del Detalle del Juego -->
+    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-8 min-h-screen-minus-nav-footer">
+        <!-- Sección de Imagen del Juego -->
+        <section class="lg:w-3/5 bg-gray-900 p-6 rounded-lg shadow-xl flex items-center justify-center">
+            <div class="game-image-container rounded-lg overflow-hidden shadow-lg w-full">
+                <img id="gameImage" src="https://placehold.co/1200x675/4A90E2/FFFFFF?text=Cargando+Imagen..." alt="Imagen del Juego" class="w-full h-full object-cover">
+            </div>
+        </section>
+
+        <!-- Sección de Detalles y Compra -->
+        <section class="lg:w-2/5 bg-gray-900 p-8 rounded-lg shadow-xl flex flex-col justify-between">
+            <div>
+                <pre>{{ juego }}</pre>
+                <h2 id="gameName" class="text-4xl font-bold text-blue-400 mb-4">{{ juego.nombre }}</h2>
+                <p id="gameType" class="text-lg text-gray-300 mb-2">Tipo: <span class="font-semibold">{{ juego.tipo }}</span></p>
+                <p id="gameGenre" class="text-lg text-gray-300 mb-2">Género: <span class="font-semibold">{{ juego.nombre_genero }}</span></p>
+                <p id="gameReleaseDate" class="text-lg text-gray-300 mb-2">Lanzamiento: <span class="font-semibold">{{ juego.fecha_lanzamiento }}</span></p>
+                <p id="gameScore" class="text-lg text-gray-300 mb-4">Puntuación: <span class="font-semibold">{{ juego.puntuacion }}</span> / 10</p>
+
+                <div class="flex items-baseline mb-6">
+                    <p id="gamePrice" class="text-5xl font-extrabold text-green-400 mr-4">
+                        {% if juego.en_oferta %}
+                            <p id="gamePrice" class="text-5xl font-extrabold text-green-400 mr-4">
+                                {{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                <span class="line-through text-red-400 text-2xl ml-2">{{ juego.precio }}</span>
+                            </p>
+                        {% else %}
+                            <p id="gamePrice" class="text-5xl font-extrabold text-green-400 mr-4">
+                                {{ juego.precio }}
+                            </p>
+                        {% endif %}
+                    </p>
+                    <p id="gameOriginalPrice" class="text-xl line-through text-gray-400 hidden">Dato no cargado</p>
+
+                    {% if juego.en_oferta %}
+                        <span id="gameOfferBadge" class="bg-red-500 text-white text-lg font-bold px-3 py-1 rounded-full  ml-4">{{ juego.porcentaje_oferta}}%</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Botón de Compra -->
+            <div class="mt-auto">
+                <button id="buyButton" class="w-full py-4 bg-purple-600 text-white font-bold text-xl rounded-md shadow-lg hover:bg-purple-700 transition duration-200 ease-in-out">
+                    Añadir al Carrito
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer (similar a otras páginas para coherencia) -->
+    <footer class="bg-gray-800 text-white p-4 text-center mt-12 rounded-t-lg">
+        <div class="container mx-auto">
+            <p>&copy; 2024 MiApp. Todos los derechos reservados.</p>
+            <div class="flex justify-center space-x-4 mt-2">
+                <a href="#" class="hover:text-blue-400 transition duration-300 ease-in-out">Política de Privacidad</a>
+                <a href="#" class="hover:text-blue-400 transition duration-300 ease-in-out">Términos de Servicio</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Obtener el ID del juego de la URL
+            const pathSegments = window.location.pathname.split('/');
+            const gameId = pathSegments[pathSegments.length - 1]; // Asume que la URL es /juego/<id>
+
+            if (!gameId || isNaN(gameId)) {
+                console.error("ID de juego no válido en la URL.");
+                document.getElementById('gameName').textContent = "Juego no encontrado";
+                // Podrías redirigir o mostrar un mensaje de error más amigable
+                return;
+            }
+
+            // try {
+            //     // Realizar la solicitud al backend para obtener los detalles del juego
+            //     const response = await fetch(`/api/juegos/${gameId}`);
+            //     if (!response.ok) {
+            //         throw new Error(`Error HTTP: ${response.status}`);
+            //     }
+            //     const game = await response.json();
+
+            //     if (game) {
+            //         // Actualizar elementos HTML con los datos del juego
+            //         document.getElementById('gameImage').src = game.direccion_imagen || 'https://placehold.co/1200x675/CCCCCC/000000?text=Imagen+No+Disponible';
+            //         document.getElementById('gameImage').alt = game.nombre;
+            //         document.getElementById('gameName').textContent = game.nombre;
+            //         document.getElementById('gameType').querySelector('span').textContent = game.tipo || 'N/A';
+            //         document.getElementById('gameGenre').querySelector('span').textContent = game.nombre_genero || 'N/A';
+            //         document.getElementById('gameReleaseDate').querySelector('span').textContent = game.fecha_lanzamiento ? new Date(game.fecha_lanzamiento).toLocaleDateString('es-ES') : 'N/A';
+            //         document.getElementById('gameScore').querySelector('span').textContent = game.puntuacion || 'N/A';
+
+            //         const priceElement = document.getElementById('gamePrice');
+            //         const originalPriceElement = document.getElementById('gameOriginalPrice');
+            //         const offerBadgeElement = document.getElementById('gameOfferBadge');
+
+            //         if (game.en_oferta && game.porcentaje_oferta > 0) {
+            //             const discountedPrice = game.precio * (1 - game.porcentaje_oferta / 100);
+            //             priceElement.textContent = `$${discountedPrice.toFixed(2)}`;
+            //             originalPriceElement.textContent = `$${game.precio.toFixed(2)}`;
+            //             originalPriceElement.classList.remove('hidden');
+            //             offerBadgeElement.textContent = `-${game.porcentaje_oferta}%`;
+            //             offerBadgeElement.classList.remove('hidden');
+            //         } else {
+            //             priceElement.textContent = `$${game.precio.toFixed(2)}`;
+            //             originalPriceElement.classList.add('hidden');
+            //             offerBadgeElement.classList.add('hidden');
+            //         }
+
+            //         // Lógica del botón de compra (ejemplo)
+            //         document.getElementById('buyButton').addEventListener('click', () => {
+            //             // Aquí se añadiría la lógica para añadir el juego al carrito
+            //             console.log(`Añadir "${game.nombre}" al carrito`);
+            //             // Una llamada a la API del backend para añadir el ítem al carrito.
+            //             // Posiblemente redirigir a la página del carrito o mostrar una confirmación.
+            //         });
+
+            //     } else {
+            //         document.getElementById('gameName').textContent = "Juego no encontrado";
+            //         console.warn("No se encontraron datos para el juego.");
+            //     }
+
+            // } catch (error) {
+            //     console.error("Error al cargar los detalles del juego:", error);
+            //     document.getElementById('gameName').textContent = "Error al cargar los detalles";
+            //     // Muestra un mensaje de error al usuario
+            // }
+        });
+    </script>
+</body>
+</html>
