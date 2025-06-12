@@ -25,46 +25,35 @@ mail = Mail(app)
 # API Backend
 API_BASE = "http://localhost:5000"
 
-usuario_online=None
-
-# LOGIN PRIMERO
-
-@app.route("/")
-def login_pantalla():
-    return render_template("login.html", error=None)
-
-@app.route("/login")
-def login():
-
-    error_message = None
-    global usuario_online
-
-    if request.method == 'POST' :  
-
-        usuario = request.form['usuario']
-        contrasenia = request.form['contraseña']
-        response = obtener_usuario(usuario,contrasenia)
-        
-        if response == None:
-            error_message = "Datos invalidos. Intente de nuevo"
-            return render_template("login.html", error = error_message)
-        else:
-            usuario_online = response
-
-            if response['rol'] == "admin":
-                return redirect(url_for('ver_juego', id=1)) #cambiar esto por la pantalla de admin
-            else:
-                return render_template("inicio.html") 
-
-    else:
-        return render_template("login.html", error=error_message)
-
 def obtener_usuario(usr):
     response = requests.get(f"{API_BASE}/usuarios/{usr}")
-    if response.status.code == 200:
+    if response.status_code == 200:
         return response.json()
     return None
 
+# LOGIN PRIMERO
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    error = None
+
+    if request.method == "POST":
+        user = request.form["usuario"]
+        contra = request.form["contraseña"]
+        if not user:
+            return redirect(url_for("login"))
+        else:
+            # Faltan modificaciones
+            usuario = obtener_usuario(user)
+            if usuario == None:
+                error = "Usuario no encontrado"
+                return render_template("login.html", error=error)
+            if usuario["rol"] == "admin":
+                return redirect(url_for("inicioAdmin"))
+            else:
+                return redirect(url_for("perfil", usuario))
+    
+    return render_template("login.html")
+    
 
 #PAGINA DE ADMIN
 @app.route("/admin")
@@ -72,7 +61,7 @@ def inicioAdmin():
     return render_template("inicio.html")
 
 #INICIO DE PAG USUARIO FINAL
-@app.route("/inicio")
+@app.route("/")
 def index():
 
     juegosRecientes = requests.get(f"{API_BASE}/juegos/recientes")
@@ -102,8 +91,8 @@ def ver_juego(id):
 
 #PAGINA DE PERFIL
 @app.route("/perfil")
-def perfil():
-    global usuario_online
+def perfil(datos_usr):
+
     user = requests.get(f"{API_BASE}/perfil/{usuario_online['usuario']}")
     return render_template("perfil.html", usuario=user)
 
@@ -132,7 +121,7 @@ def post_itemCarrito(id):
 
 ## falta el borrar item carrito pero es un delete nada mas y podriamos no agregarlo (dejar para el final)
 
-@app.route("carrito/comprar")
+@app.route("/carrito/comprar")
 def comprar_carrito():
     # a partir del nombre del user genero un script de UPDATE para pasar
     # todos los items de carrito que esten en estado de proceso de compra a "comprados" (no me acuerdo como era el nombre de estado)

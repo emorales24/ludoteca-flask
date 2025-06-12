@@ -10,7 +10,7 @@
 <body class="body-login">
     <div class="login-container">
         <h2 class="login-title">Iniciar Sesión</h2>
-        <form id="loginForm" class="login-form" action="{{ url_for('login')}}" method="get">
+        <form id="loginForm" class="login-form" method="POST">
             <div>
                 <label for="usuario" class="login-label">Nombre de Usuario</label>
                 <input type="text" id="usuario" name="usuario" required class="login-input">
@@ -19,13 +19,11 @@
                 <label for="contraseña" class="login-label">Contraseña</label>
                 <input type="password" id="contraseña" name="contraseña" required class="login-input">
             </div>
-            <button type="submit" class="login-button">
-                Ingresar
-            </button>
+            <button type="submit" class="login-button">Ingresar</button>
 
 
             <div id="message" class="login-error hidden">
-                <!--  se muestra el error si lo hay -->
+                <!--  se muestra el error si lo hay (revisar)-->
                     {% if error %}
                         <p>{{ error }}</p>
                     {% endif %}

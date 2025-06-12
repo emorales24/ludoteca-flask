@@ -14,19 +14,6 @@ def get_usuarios():
     return jsonify(usuarios)
 
 @usuarios_bp.route("/<usr>")
-def login(usr):
-    conn = get_connection()
-    cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (usr,))
-    usuario = cursor.fetchone()
-    cursor.close()
-    conn.close()
-    if not usuario:
-        return ("Usuario no encontrado", 404)
-    return jsonify(usuario)
-
-
-@usuarios_bp.route("/<usr>")
 def get_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
