@@ -64,7 +64,7 @@ def login():
 #PAGINA DE ADMIN
 @app.route("/admin")
 def inicioAdmin():
-    return render_template("inicio.html")
+    return render_template("admin.html", juegos = juegos.values())
 
 #INICIO DE PAG USUARIO FINAL
 @app.route("/")

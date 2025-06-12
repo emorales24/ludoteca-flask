@@ -276,3 +276,24 @@ document.addEventListener('DOMContentLoaded', function() {
         container.scrollBy({ left: -650, behavior: 'smooth' });
     });
 });
+
+// Funcionalidad ADMIN.HTML
+function toggleEnOferta(btn) {
+    btn.textContent = btn.textContent.trim() === "Sí" ? "No" : "Sí";
+}
+
+function editarPorcentaje(id) {
+    const celda = document.getElementById('porcentaje-' + id);
+    const valorActual = celda.textContent.replace('%', '').trim();
+    celda.innerHTML = `
+        <input type="number" id="input-porcentaje-${id}" value="${valorActual}" min="0" max="100" class="w-16 text-black rounded px-1">
+        <button onclick="guardarPorcentaje('${id}')" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">OK</button>
+    `;
+}
+
+function guardarPorcentaje(id) {
+    const input = document.getElementById('input-porcentaje-' + id);
+    const nuevoValor = input.value;
+    const celda = document.getElementById('porcentaje-' + id);
+    celda.textContent = nuevoValor + '%';
+}
