@@ -23,4 +23,4 @@ def modificar_juegos(id_juego):
     conn.commit()
     cursor.close()
     conn.close()
-    return ("Nota agregada correctamente", 201)
+    return ("Valores Modificados", 201)
