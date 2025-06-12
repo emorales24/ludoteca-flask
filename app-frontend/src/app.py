@@ -65,6 +65,7 @@ def login():
             issue = "Contaseña Invalida."
     
     return render_template("login.html", error = issue)
+# Se podria guardar el nombre de usuario en la variable global y en la redireccion se lleva a inicio en vez de perfil
 
 #PAGINA DE PERFIL
 @app.route("/perfil/<usr>")
