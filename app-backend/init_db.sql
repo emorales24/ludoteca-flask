@@ -112,7 +112,5 @@ INSERT INTO juegos (nombre, tipo, id_genero, fecha_lanzamiento, precio, porcenta
 
 
 INSERT INTO usuarios (rol, usuario, contraseña, email, nombre, apellido, calle, direccion, codigo_postal) VALUES
-('admin', 'adminUser', 'admin123', 'admin@example.com', 'Admin', 'Root', 'Avenida Central', '123 Piso 1', '1000'),
-('final', 'juancito', 'clave123', 'juan@gmail.com', 'Juan', 'Pérez', 'Mitre', '4325 Dto 3', '1407'),
-('final', 'mariar', 'mypass', 'maria@gmail.com', 'María', 'Rodríguez', 'Sarmiento', '800 PB', '1802'),
-('final', 'gamerz', 'pass456', 'gamerz@gmail.com', 'Lucas', 'Martínez', 'Corrientes', '4500 1°A', '1225');
+('admin', 'admin', '1234', 'admin@example.com', 'Admin', 'Root', 'Avenida Central', '123 Piso 1', '1000'),
+('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Mitre', '4325 Dto 3', '1407'),

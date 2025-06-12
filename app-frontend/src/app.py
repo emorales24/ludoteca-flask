@@ -1,7 +1,9 @@
 import os
-from flask import Flask, render_template, jsonify, request, redirect
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 from flask_mail import Mail, Message
 import requests
+
+from datos_auxiliares import generos,juegos
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -23,132 +25,55 @@ mail = Mail(app)
 # API Backend
 API_BASE = "http://localhost:5000"
 
-
-generos = {
-    1: "rpg",
-    2: "aventura",
-    3: "deportes",
-    4: "visual novel",
-    5: "terror",
-    6: "cozy"
-}
-
-juegos = {
-    1: {
-        "id": 1,
-        "nombre": "The Witcher 3",
-        "tipo": "BASE",
-        "id_genero": 1,
-        "fecha_lanzamiento": "2015-05-19",
-        "precio": 59.99,
-        "porcentaje_oferta": 50,
-        "en_oferta": True,
-        "puntuacion": 92,
-        "direccion_imagen": "images/witcher3.jpg"
-    },
-    2: {
-        "id": 2,
-        "nombre": "Hogwarts Legacy",
-        "tipo": "BASE",
-        "id_genero": 2,
-        "fecha_lanzamiento": "2023-02-10",
-        "precio": 74.99,
-        "porcentaje_oferta": 13,
-        "en_oferta": True,
-        "puntuacion": 85,
-        "direccion_imagen": "images/hogwarts.jpg"
-    },
-    3: {
-        "id": 3,
-        "nombre": "Cyberpunk 2077",
-        "tipo": "BASE",
-        "id_genero": 1,
-        "fecha_lanzamiento": "2020-12-10",
-        "precio": 49.99,
-        "porcentaje_oferta": 20,
-        "en_oferta": True,
-        "puntuacion": 78,
-        "direccion_imagen": "images/cyberpunk.jpg"
-    },
-    4: {
-        "id": 4,
-        "nombre": "Monster Hunter World: Iceborne",
-        "tipo": "DLC",
-        "id_genero": 1,
-        "fecha_lanzamiento": "2019-09-06",
-        "precio": 19.99,
-        "porcentaje_oferta": None,
-        "en_oferta": False,
-        "puntuacion": 88,
-        "direccion_imagen": "images/mhiceborn.jpg"
-    },
-    5: {
-        "id": 5,
-        "nombre": "Resident Evil Village",
-        "tipo": "BASE",
-        "id_genero": 5,
-        "fecha_lanzamiento": "2021-05-07",
-        "precio": 59.99,
-        "porcentaje_oferta": 25,
-        "en_oferta": True,
-        "puntuacion": 84,
-        "direccion_imagen": "images/revillage.jpg"
-    },
-    6: {
-        "id": 6,
-        "nombre": "Stardew Valley",
-        "tipo": "BASE",
-        "id_genero": 6,
-        "fecha_lanzamiento": "2016-02-26",
-        "precio": 14.99,
-        "porcentaje_oferta": None,
-        "en_oferta": False,
-        "puntuacion": 89,
-        "direccion_imagen": "images/stardew.jpg"
-    },
-    7: {
-        "id": 7,
-        "nombre": "Doki Doki Literature Club",
-        "tipo": "BASE",
-        "id_genero": 4,
-        "fecha_lanzamiento": "2017-09-22",
-        "precio": 0.00,
-        "porcentaje_oferta": None,
-        "en_oferta": False,
-        "puntuacion": 91,
-        "direccion_imagen": "images/dokidoki.jpg"
-    },
-    8: {
-        "id": 8,
-        "nombre": "Little Nightmares",
-        "tipo": "BASE",
-        "id_genero": 5,
-        "fecha_lanzamiento": "2017-04-28",
-        "precio": 24.99,
-        "porcentaje_oferta": 60,
-        "en_oferta": True,
-        "puntuacion": 83,
-        "direccion_imagen": "images/littlenightmares.jpg"
-    },
-    9: {
-        "id": 9,
-        "nombre": "Animal Crossing: New Horizons",
-        "tipo": "BASE",
-        "id_genero": 6,
-        "fecha_lanzamiento": "2020-03-20",
-        "precio": 59.99,
-        "porcentaje_oferta": 17,
-        "en_oferta": True,
-        "puntuacion": 90,
-        "direccion_imagen": "images/animalcrossing.jpg"
-    }
-}
-
+usuario_online=None
 
 # LOGIN PRIMERO
+
 @app.route("/")
+def login_pantalla():
+    return render_template("login.html", error=None)
+
+@app.route("/login")
 def login():
-    return render_template("login.html")
+
+    error_message = None
+    global usuario_online
+
+    if request.method == 'POST' :  
+
+        usuario = request.form['usuario']
+        contrasenia = request.form['contraseña']
+        response = None
+
+        #ambos campos de contraseña y usuario completos   // ESTE CACHO DE CODIGO LO PUEDO BORRAR
+        # if usuario != None and contrasenia != None:    // EL FRONT YA DENIEGA ESTO
+            #chequeo existencia de ese usuario -> request_buscar_usuario que es otra funcion ya existente
+        response = obtener_usuario(usuario,contrasenia)
+        
+        if response == None:
+            error_message = "Datos invalidos. Intente de nuevo"
+            return render_template("login.html", error = error_message)
+        else:
+            usuario_online = response
+
+            if response['rol'] == "admin":
+                return redirect(url_for('ver_juego', id=1)) #cambiar esto por la pantalla de admin
+            else:
+                return render_template("inicio.html") 
+
+        # else:
+        #     error_message = "Tenes que completar tus datos para comprarr!"  // EL FRONT YA DENIEGA ESTO
+        #     return render_template("login.html", error = error_message)
+
+    else:
+        return render_template("login.html", error=error_message)
+
+def obtener_usuario(usr):
+    response = requests.get(f"{API_BASE}/usuarios/{usr}")
+    if response.status.code == 200:
+        return response.json()
+    return None
+
 
 #PAGINA DE ADMIN
 @app.route("/admin")
@@ -158,12 +83,20 @@ def inicioAdmin():
 #INICIO DE PAG USUARIO FINAL
 @app.route("/inicio")
 def index():
-    return render_template("inicio.html")
+
+    juegosRecientes = requests.get(f"{API_BASE}/juegos/recientes")
+    juegosRebajados = requests.get(f"{API_BASE}/juegos/ofertas")
+    juegosRecomendados = requests.get(f"{API_BASE}/juegos/mas_valorados/{50}") #esto lo podriamos hacer un boton o similar como una constante igual a como manejamos los usuarios y setearlo para aprovecharlo -> es facil y rapido
+
+    return render_template("inicio.html", juegosRecientes=juegosRecientes,juegosRebajados=juegosRebajados,juegosRecomendados=juegosRecomendados)
 
 #PAGINA DE LISTA DE JUEGOS
 @app.route("/juegos")
 def buscador():
-    return render_template("buscador.html")
+
+    juegos = juegos  # horribles los nombres aca pero se entiende que es 
+                     # variable = datos_auxiliares.juegos, cambiarlo despues
+    return render_template("buscador.html", juegos=juegos) 
 
 #PAGINA DE DETALLE DE JUEGO
 @app.route("/juego/<int:id>")
@@ -178,21 +111,42 @@ def ver_juego(id):
 #PAGINA DE PERFIL
 @app.route("/perfil")
 def perfil():
-    return render_template("perfil.html")
+    global usuario_online
+    user = request.
+    return render_template("perfil.html", usuario=user)
 
 #PAGINA DE CARRITO
 @app.route("/carrito")
 def carrito():
-    return render_template("carrito.html")
+
+    #el carrito lo puedo obtener
+    itemsCarrito = obtener_carrito()
+    return render_template("carrito.html", itemsCarrito=itemsCarrito)
+
+@app.route("/carrito/agregar/<int:id>")
+def post_itemCarrito():
+
+    #obtengo el id del user o hago un create basandome solo en el nombre de usuario que
+    #ya tengo en el dato global usuario_online
+
+    #guarda el item en bd creando un dato itemCarrito enlazando el id del juego y el del user actual
+    
+    #vuelve a buscar todos los items del usuario que cumplan el estado de en proceso de compra
+    itemsCarrito = itemsCarrito
+
+    return render_template("carrito.html", itemsCarrito=itemsCarrito)
+
+@app.route("carrito/comprar")
+def comprar_carrito():
+    # a partir del nombre del user genero un script de UPDATE para pasar
+    # todos los items de carrito que esten en estado de proceso de compra a "comprados" (no me acuerdo como era el nombre de estado)
+
+    # reinicio el como veo la pantalla (aca podriamos agregar un mini mensaje por magia de javascript al apretar
+    # comprar que le diga al usuario que ya compró para que no se vea tan brusco)
+    return render_template("carrito.html", itemsCarrito=None)
 
 
-def obtener_usuario(usr):
-    response = requests.get(f"{API_BASE}/usuarios/{usr}")
-    if response.status.code == 200:
-        return response.json()
-    return None
-
-
+# 
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)
