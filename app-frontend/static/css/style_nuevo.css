@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 /* Fuente Inter para una apariencia moderna y legible */
 body {
     font-family: 'Inter', sans-serif;

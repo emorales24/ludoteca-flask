@@ -31,6 +31,12 @@ def obtener_usuario(usr):
         return response.json()
     return None
 
+def validar_usuario(usr):
+    response = requests.get(f"{API_BASE}/usuarios/validar/{usr}")
+    if response.status_code == 200:
+        return response.json()
+    return None
+
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
 def login():
