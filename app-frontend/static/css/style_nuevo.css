@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/* Fuente Inter para una apariencia moderna y legible */
+body {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth; /* Desplazamiento suave para anclas */
+}
+/* Ajuste para que el contenido principal ocupe el espacio restante */
+#main-content {
+    min-height: calc(100vh - 4rem - 4rem); /* 100vh - altura del navbar - altura del footer */
+}
+
+/* Estilos específicos del carrusel vertical */
+.carousel-item {
+    display: none; /* Oculta todos los ítems por defecto */
+}
+.carousel-item.active {
+    display: block; /* Muestra el ítem activo */
+}
+
+/* Estilo para los thumbnails del carrusel */
+.thumbnail-item {
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+.thumbnail-item.active {
+    border-color: #2563EB; /* Color azul para el thumbnail activo */
+    transform: scale(1.05);
+}
+.thumbnail-item:hover {
+    transform: scale(1.03);
+}
+/* Ocultar las barras de desplazamiento en los contenedores */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Estilos para el contenedor principal para que ocupe toda la altura */
+.min-h-screen-minus-nav-footer {
+    min-height: calc(100vh - 4rem - 4rem); /* Altura de la vista menos la altura del navbar y el footer */
+}
+
+/* Estilo para la imagen del juego con relación de aspecto 16:9 */
+.game-image-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio (9 / 16 * 100) */
+    background-color: #374151; /* gray-700 */
+}
+.game-image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Estilo para la barra de scroll */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

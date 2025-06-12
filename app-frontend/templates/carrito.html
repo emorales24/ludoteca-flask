@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <!-- Contenido Principal del Carrito -->
+    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-6 min-h-screen-minus-nav-footer">
+        <!-- Lista de Productos en el Carrito -->
+        <section class="lg:w-3/4 bg-gray-900 p-8 rounded-lg shadow-xl">
+            <h2 class="text-3xl font-bold text-blue-400 mb-8">Mi Carrito de Compras</h2>
+
+            <div id="cartItemsContainer" class="space-y-6">
+                <!-- Ejemplo de un ítem en el carrito. Estos se generarían dinámicamente con JS. -->
+                <div class="flex items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                    <img src="https://placehold.co/100x100/FF5733/FFFFFF?text=Juego1" alt="Juego del Carrito 1" class="w-24 h-24 object-cover rounded-md mr-4">
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-semibold text-gray-100">Aventura Épica</h3>
+                        <p class="text-gray-300">Precio Unitario: <span class="font-bold">$29.99</span></p>
+                        <div class="flex items-center mt-2">
+                            <label for="quantity1" class="mr-2 text-gray-300">Cantidad:</label>
+                            <input type="number" id="quantity1" value="1" min="1"
+                                   class="w-16 p-2 rounded-md bg-gray-600 text-gray-100 border border-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                   onchange="updateCartItem(1, this.value)">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-bold text-blue-300">Subtotal: $29.99</p>
+                        <button class="text-red-400 hover:text-red-500 transition duration-200 ease-in-out mt-2 text-sm">
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center bg-gray-700 p-4 rounded-lg shadow-md">
+                    <img src="https://placehold.co/100x100/33FF57/FFFFFF?text=Juego2" alt="Juego del Carrito 2" class="w-24 h-24 object-cover rounded-md mr-4">
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-semibold text-gray-100">Simulador Urbano</h3>
+                        <p class="text-gray-300">Precio Unitario: <span class="font-bold">$19.99</span></p>
+                        <div class="flex items-center mt-2">
+                            <label for="quantity2" class="mr-2 text-gray-300">Cantidad:</label>
+                            <input type="number" id="quantity2" value="2" min="1"
+                                   class="w-16 p-2 rounded-md bg-gray-600 text-gray-100 border border-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                   onchange="updateCartItem(2, this.value)">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-lg font-bold text-blue-300">Subtotal: $39.98</p>
+                        <button class="text-red-400 hover:text-red-500 transition duration-200 ease-in-out mt-2 text-sm">
+                            Eliminar
+                        </button>
+                    </div>
+                </div>
+                <!-- Más ítems se añadirían aquí -->
+            </div>
+            
+            <div id="emptyCartMessage" class="text-center text-gray-400 text-xl mt-8 hidden">
+                Tu carrito está vacío. ¡Explora nuestros juegos y añade algunos!
+            </div>
+        </section>
+
+        <!-- Resumen del Pedido / Acciones -->
+        <aside class="lg:w-1/4 bg-gray-900 p-6 rounded-lg shadow-xl flex flex-col space-y-6">
+            <h3 class="text-2xl font-bold text-blue-400 mb-4">Resumen del Pedido</h3>
+            
+            <div class="flex justify-between text-lg">
+                <span>Subtotal:</span>
+                <span id="subtotalAmount" class="font-bold">$69.97</span>
+            </div>
+            <div class="flex justify-between text-lg">
+                <span>Envío:</span>
+                <span id="shippingAmount" class="font-bold">$0.00</span> <!-- O un valor si aplica -->
+            </div>
+            <div class="border-t border-gray-700 pt-4 flex justify-between text-2xl font-bold text-blue-300">
+                <span>Total:</span>
+                <span id="totalAmount">$69.97</span>
+            </div>
+
+            <button class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-200 ease-in-out text-lg">
+                Finalizar Compra
+            </button>
+            <a href="/inicio" class="w-full text-center py-3 border border-blue-600 text-blue-400 font-semibold rounded-md hover:bg-blue-700 hover:text-white transition duration-200 ease-in-out text-lg">
+                Continuar Comprando
+            </a>
+        </aside>
+    </main>
+{% endblock %}
