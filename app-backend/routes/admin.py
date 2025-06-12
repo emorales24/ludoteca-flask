@@ -23,4 +23,4 @@ def modificar_juegos(id_juego):
     conn.commit()
     cursor.close()
     conn.close()
-    return ("Valores Modificados", 201)
+    return ("Valores Modificados", 202)
