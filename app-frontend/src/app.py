@@ -43,11 +43,6 @@ def login():
 
         usuario = request.form['usuario']
         contrasenia = request.form['contraseña']
-        response = None
-
-        #ambos campos de contraseña y usuario completos   // ESTE CACHO DE CODIGO LO PUEDO BORRAR
-        # if usuario != None and contrasenia != None:    // EL FRONT YA DENIEGA ESTO
-            #chequeo existencia de ese usuario -> request_buscar_usuario que es otra funcion ya existente
         response = obtener_usuario(usuario,contrasenia)
         
         if response == None:
@@ -60,10 +55,6 @@ def login():
                 return redirect(url_for('ver_juego', id=1)) #cambiar esto por la pantalla de admin
             else:
                 return render_template("inicio.html") 
-
-        # else:
-        #     error_message = "Tenes que completar tus datos para comprarr!"  // EL FRONT YA DENIEGA ESTO
-        #     return render_template("login.html", error = error_message)
 
     else:
         return render_template("login.html", error=error_message)
@@ -93,9 +84,10 @@ def index():
 #PAGINA DE LISTA DE JUEGOS
 @app.route("/juegos")
 def buscador():
+    # horribles los nombres aca pero se entiende que es 
+    # variable = datos_auxiliares.juegos, cambiarlo despues
 
-    juegos = juegos  # horribles los nombres aca pero se entiende que es 
-                     # variable = datos_auxiliares.juegos, cambiarlo despues
+    juegos = requests.get(f"{API_BASE}/juegos") 
     return render_template("buscador.html", juegos=juegos) 
 
 #PAGINA DE DETALLE DE JUEGO
@@ -112,7 +104,7 @@ def ver_juego(id):
 @app.route("/perfil")
 def perfil():
     global usuario_online
-    user = request.
+    user = requests.get(f"{API_BASE}/perfil/{usuario_online['usuario']}")
     return render_template("perfil.html", usuario=user)
 
 #PAGINA DE CARRITO
@@ -120,21 +112,25 @@ def perfil():
 def carrito():
 
     #el carrito lo puedo obtener
-    itemsCarrito = obtener_carrito()
+    itemsCarrito = requests.get(f"{API_BASE}/itemsCarrito/{usuario_online['usuario']}")
     return render_template("carrito.html", itemsCarrito=itemsCarrito)
 
+
+# es mejor que el boton solo agregue y no modifique la pagina (en nuestro
+# caso deberia estar el boton de comprar solo en la pantalla donde se ve un juego unico)
 @app.route("/carrito/agregar/<int:id>")
-def post_itemCarrito():
+def post_itemCarrito(id): 
 
     #obtengo el id del user o hago un create basandome solo en el nombre de usuario que
     #ya tengo en el dato global usuario_online
-
+        #<codigo>
     #guarda el item en bd creando un dato itemCarrito enlazando el id del juego y el del user actual
+        #<codigo>
     
-    #vuelve a buscar todos los items del usuario que cumplan el estado de en proceso de compra
-    itemsCarrito = itemsCarrito
+    return redirect(url_for('ver_juego', id=id))
 
-    return render_template("carrito.html", itemsCarrito=itemsCarrito)
+
+## falta el borrar item carrito pero es un delete nada mas y podriamos no agregarlo (dejar para el final)
 
 @app.route("carrito/comprar")
 def comprar_carrito():
@@ -145,8 +141,6 @@ def comprar_carrito():
     # comprar que le diga al usuario que ya compró para que no se vea tan brusco)
     return render_template("carrito.html", itemsCarrito=None)
 
-
-# 
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)
