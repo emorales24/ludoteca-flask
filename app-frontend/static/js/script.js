@@ -278,8 +278,23 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Funcionalidad ADMIN.HTML
-function toggleEnOferta(btn) {
-    btn.textContent = btn.textContent.trim() === "Sí" ? "No" : "Sí";
+function toggleEnOferta(juegoId, enOfertaActual, btn) {
+    fetch(`/admin/toggle_oferta/${juegoId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ en_oferta: !enOfertaActual })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            btn.textContent = data.nuevo_valor ? 'Sí' : 'No';
+            btn.setAttribute('onclick', `toggleEnOferta('${juegoId}', ${data.nuevo_valor}, this)`);
+        } else {
+            alert('Error al actualizar');
+        }
+    });
 }
 
 function editarPorcentaje(id) {

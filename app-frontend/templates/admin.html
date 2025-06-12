@@ -54,7 +54,7 @@
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100" id="porcentaje-1">{{ juego.porcentaje_oferta }}%</td>
                         <td class="px-6 py-4 text-center">
                             <button class="px-3 py-1 rounded bg-blue-500/80 text-white hover:bg-blue-700/80 transition"
-                                    onclick="editarEnOferta(this)">
+                                    onclick="toggleEnOferta('{{juego.id}}')">
                                 {{ 'Sí' if juego.en_oferta else 'No' }}
                             </button>
                         </td>
