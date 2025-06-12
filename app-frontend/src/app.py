@@ -60,7 +60,7 @@ def login():
             if usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))
             else:
-                return redirect(url_for("perfil", datos_usr = usuario["usuario"]))
+                return redirect(url_for("perfil", usr = usuario["usuario"]))
         else:
             issue = "Contaseña Invalida."
     
