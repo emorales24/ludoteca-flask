@@ -28,6 +28,12 @@
         </div>
     </nav>
 
+    <div class="w-full flex flex-col items-center mt-8 mb-4">
+        <div class="bg-blue-900/90 px-8 py-4 rounded-lg shadow-lg text-center">
+            <h1 class="text-4xl font-bold text-blue-300 mb-2">Página Administrador</h1>
+        </div>
+    </div>
+    
     <!-- Sección de Contenido Principal del Perfil -->
     <section class="mx-auto my-12 w-full max-w-6xl bg-gray-900/80 p-8 rounded-lg shadow-2xl">
         <h2 class="text-3xl font-bold text-blue-400 mb-8">Juegos Inicio</h2>
@@ -48,7 +54,7 @@
                     {% for juego in juegos %}
                     <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition" id="fila-{{ juego.id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.id_genero }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre_genero.upper() }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.tipo }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">${{ juego.precio }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100" id="porcentaje-{{ juego.id }}">{{ juego.porcentaje_oferta }}%</td>
