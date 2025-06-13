@@ -276,3 +276,15 @@ document.addEventListener('DOMContentLoaded', function() {
         container.scrollBy({ left: -650, behavior: 'smooth' });
     });
 });
+
+// Funcionalidad ADMIN.HTML
+function mostrarFormularioEditar(id, precio, porcentaje, en_oferta) {
+    document.getElementById('formulario-editar').classList.remove('hidden');
+    document.getElementById('editar-id').value = id;
+    document.getElementById('editar-precio').value = precio;
+    document.getElementById('editar-porcentaje').value = porcentaje;
+    document.getElementById('editar-en-oferta').value = (en_oferta === "True" || en_oferta === "1" || en_oferta === "true") ? "True" : "False";
+}
+function cerrarFormularioEditar() {
+    document.getElementById('formulario-editar').classList.add('hidden');
+}

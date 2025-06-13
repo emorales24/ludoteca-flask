@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, jsonify, request, redirect, url_for
+from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
 from flask_mail import Mail, Message
 import requests
 
@@ -42,6 +42,21 @@ def validar_usuario(usr):
         return response.json()
     return None
 
+def modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta):
+    response = requests.post(
+        f"{API_BASE}/admin/modificar_juego/{id_juego}",
+        json={"precio": precio, "porcentaje_oferta": porcentaje_oferta, "en_oferta": en_oferta},
+    )
+    if response.status_code == 200:
+        return True
+    return None
+
+def obtener_ofertas():
+    response = requests.get(f"{API_BASE}/juegos/ofertas")
+    if response.status_code == 200:
+        return response.json()
+    return None
+
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -50,7 +65,7 @@ def login():
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contraseña"]
-
+        
         usuario = validar_usuario(user)
         if usuario == None:                         # Si la query return None, se modifica la variable issue
             issue = "Usuario no encontrado"
@@ -74,9 +89,20 @@ def perfil(usr):
     return render_template("perfil.html", usuario = usr)
 
 #PAGINA DE ADMIN
-@app.route("/admin")
+@app.route("/admin", methods=["POST", "GET"])
 def inicioAdmin():
-    return render_template("inicio.html")
+    ofertas = obtener_ofertas()
+
+    if request.method == "POST":
+        id_juego = request.form["id_juego"]
+        precio = request.form["precio"]
+        porcentaje_oferta = request.form["porcentaje_oferta"]
+        en_oferta = request.form["en_oferta"]
+
+        modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
+        return redirect(url_for("inicioAdmin", juegos = ofertas))
+
+    return render_template("admin.html", juegos = ofertas)
 
 #INICIO DE PAG USUARIO FINAL
 @app.route("/")
