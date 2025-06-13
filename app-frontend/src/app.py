@@ -9,7 +9,7 @@ from datos_auxiliares import generos,juegos
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 template_dir = os.path.join(base_dir, "templates")
-static_dir = os.path.join(base_dir, "static")  # Corregido
+static_dir = os.path.join(base_dir, "static")
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
@@ -25,10 +25,15 @@ mail = Mail(app)
 # API Backend
 API_BASE = "http://localhost:5000"
 
+# Revisar si se puede usar (me parece que no)
+usuario_online = None
+
 def obtener_usuario(usr):
     response = requests.get(f"{API_BASE}/usuarios/{usr}")
     if response.status_code == 200:
         return response.json()
+    elif response.status_code == 404:
+        return {"error": response.text}
     return None
 
 def validar_usuario(usr):
@@ -55,25 +60,33 @@ def obtener_ofertas():
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    error = None
+    issue = None
 
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contraseña"]
-        if not user:
-            return redirect(url_for("login"))
-        else:
-            # Ya arreglado en la branch de login
-            usuario = obtener_usuario(user)
-            if usuario == None:
-                error = "Usuario no encontrado"
-                return render_template("login.html", error=error)
+        
+        usuario = validar_usuario(user)
+        if usuario == None:                         # Si la query return None, se modifica la variable issue
+            issue = "Usuario no encontrado"
+        elif "error" in usuario:                    # Maneja el 404 de la query
+            issue = usuario["error"]
+        elif usuario["contraseña"] == contra:       # Evalua si son iguales los campos
             if usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))
             else:
-                return redirect(url_for("perfil", usuario))
+                return redirect(url_for("perfil", usr = usuario["usuario"]))
+        else:
+            issue = "Contaseña Invalida."
     
-    return render_template("login.html")
+    return render_template("login.html", error = issue)
+# Se podria guardar el nombre de usuario en la variable global y en la redireccion se lleva a inicio en vez de perfil
+
+#PAGINA DE PERFIL
+@app.route("/perfil/<usr>")
+def perfil(usr):
+    # Hay que agregar validacion de usuario online (porque actualmente se puede pedir cualquier usuario y responde 200)
+    return render_template("perfil.html", usuario = usr)
 
 #PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])
@@ -120,13 +133,6 @@ def ver_juego(id):
         return render_template("juego.html", juego= juego)
     return render_template("inicio.html")
 
-#PAGINA DE PERFIL
-@app.route("/perfil")
-def perfil(datos_usr):
-
-    user = requests.get(f"{API_BASE}/perfil/{usuario_online['usuario']}")
-    return render_template("perfil.html", usuario=user)
-
 #PAGINA DE CARRITO
 @app.route("/carrito")
 def carrito():
@@ -160,7 +166,6 @@ def comprar_carrito():
     # reinicio el como veo la pantalla (aca podriamos agregar un mini mensaje por magia de javascript al apretar
     # comprar que le diga al usuario que ya compró para que no se vea tan brusco)
     return render_template("carrito.html", itemsCarrito=None)
-
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)
