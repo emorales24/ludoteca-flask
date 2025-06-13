@@ -278,37 +278,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Funcionalidad ADMIN.HTML
-function toggleEnOferta(juegoId, enOfertaActual, btn) {
-    fetch(`/admin/toggle_oferta/${juegoId}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ en_oferta: !enOfertaActual })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            btn.textContent = data.nuevo_valor ? 'Sí' : 'No';
-            btn.setAttribute('onclick', `toggleEnOferta('${juegoId}', ${data.nuevo_valor}, this)`);
-        } else {
-            alert('Error al actualizar');
-        }
-    });
+function mostrarFormularioEditar(id, precio, porcentaje, en_oferta) {
+    document.getElementById('formulario-editar').classList.remove('hidden');
+    document.getElementById('editar-id').value = id;
+    document.getElementById('editar-precio').value = precio;
+    document.getElementById('editar-porcentaje').value = porcentaje;
+    document.getElementById('editar-en-oferta').value = (en_oferta === "True" || en_oferta === "1" || en_oferta === "true") ? "True" : "False";
 }
-
-function editarPorcentaje(id) {
-    const celda = document.getElementById('porcentaje-' + id);
-    const valorActual = celda.textContent.replace('%', '').trim();
-    celda.innerHTML = `
-        <input type="number" id="input-porcentaje-${id}" value="${valorActual}" min="0" max="100" class="w-16 text-black rounded px-1">
-        <button onclick="guardarPorcentaje('${id}')" class="ml-2 px-2 py-1 bg-green-500 text-white rounded">OK</button>
-    `;
-}
-
-function guardarPorcentaje(id) {
-    const input = document.getElementById('input-porcentaje-' + id);
-    const nuevoValor = input.value;
-    const celda = document.getElementById('porcentaje-' + id);
-    celda.textContent = nuevoValor + '%';
+function cerrarFormularioEditar() {
+    document.getElementById('formulario-editar').classList.add('hidden');
 }

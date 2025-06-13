@@ -4,7 +4,7 @@ from db import get_connection
 admin_bp = Blueprint("admin",__name__)
 
 @admin_bp.route("/modificar_juego/<int:id_juego>", methods = ["POST"])
-def modificar_juegos(id_juego):
+def modificar_juego(id_juego):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     data = request.json

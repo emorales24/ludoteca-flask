@@ -46,12 +46,12 @@
                 </thead>
                 <tbody>
                     {% for juego in juegos %}
-                    <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition">
+                    <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition" id="fila-{{ juego.id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.id_genero }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.tipo }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">${{ juego.precio }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-100" id="porcentaje-1">{{ juego.porcentaje_oferta }}%</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-100" id="porcentaje-{{ juego.id }}">{{ juego.porcentaje_oferta }}%</td>
                         <td class="px-6 py-4 text-center">
                             <button class="px-3 py-1 rounded bg-blue-500/80 text-white hover:bg-blue-700/80 transition"
                                     onclick="toggleEnOferta('{{juego.id}}')">
@@ -60,7 +60,7 @@
                         </td>
                         <td class="px-6 py-4 text-center">
                             <button class="px-3 py-1 rounded bg-green-500/80 text-white hover:bg-green-700/80 transition"
-                                    onclick="editarPorcentaje('{{ juego.id }}')">
+                                    onclick="mostrarFormularioEditar('{{ juego.id }}', '{{ juego.precio }}', '{{ juego.porcentaje_oferta }}', '{{ juego.en_oferta }}')">
                                 Editar
                             </button>
                         </td>
@@ -68,6 +68,24 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        
+        <div id="formulario-editar" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <form id="editar-form" class="bg-gray-800 p-6 rounded-lg shadow-xl w-80 relative" method="POST" action="{{ url_for("inicioAdmin") }}">
+                <input type="hidden" name="id_juego" id="editar-id">
+                <button type="button" onclick="cerrarFormularioEditar()" class="absolute top-2 right-2 text-gray-400 hover:text-white">&times;</button>
+                <h3 class="text-xl font-bold text-blue-400 mb-4">Editar Juego</h3>
+                <label class="block text-gray-200 mb-2">Precio:</label>
+                <input type="number" name="precio" step="0.01" id="editar-precio" class="w-full mb-4 p-2 rounded bg-gray-700 text-white" required>
+                <label class="block text-gray-200 mb-2">% Oferta:</label>
+                <input type="number" name="porcentaje_oferta" id="editar-porcentaje" class="w-full mb-4 p-2 rounded bg-gray-700 text-white" min="0" max="100" required>
+                <label class="block text-gray-200 mb-2">En Oferta:</label>
+                <select name="en_oferta" id="editar-en-oferta" class="w-full mb-4 p-2 rounded bg-gray-700 text-white">
+                    <option value="True">Sí</option>
+                    <option value="False">No</option>
+                </select>
+                <button type="submit" class="w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 rounded">Guardar</button>
+            </form>
         </div>
     </section>
 
