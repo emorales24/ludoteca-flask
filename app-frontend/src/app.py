@@ -39,11 +39,17 @@ def validar_usuario(usr):
 
 def modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta):
     response = requests.post(
-        f"{API_BASE}/modificar_juego/{id_juego}",
+        f"{API_BASE}/admin/modificar_juego/{id_juego}",
         json={"precio": precio, "porcentaje_oferta": porcentaje_oferta, "en_oferta": en_oferta},
     )
-    if response.status_code == 201:
+    if response.status_code == 200:
         return True
+    return None
+
+def obtener_ofertas():
+    response = requests.get(f"{API_BASE}/juegos/ofertas")
+    if response.status_code == 200:
+        return response.json()
     return None
 
 # LOGIN PRIMERO
@@ -80,9 +86,7 @@ def inicioAdmin():
         porcentaje_oferta = request.form["porcentaje_oferta"]
         en_oferta = request.form["en_oferta"]
 
-        modificado = modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
-    
-
+        modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
         return redirect(url_for("inicioAdmin", juegos = ofertas))
 
     return render_template("admin.html", juegos = ofertas)

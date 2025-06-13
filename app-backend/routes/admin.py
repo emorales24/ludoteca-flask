@@ -14,13 +14,13 @@ def modificar_juego(id_juego):
     cursor.execute(
         """
             UPDATE juegos
-            SET precio = %s
-                porcentaje_oferta = %s
+            SET precio = %s,
+                porcentaje_oferta = %s,
                 en_oferta = %s
-            WHERE id_juego = %s
+            WHERE id = %s
         """, (precio, porcentaje_oferta, en_oferta, id_juego,)
     )
     conn.commit()
     cursor.close()
     conn.close()
-    return ("Valores Modificados", 202)
+    return ("Valores Modificados", 200)
