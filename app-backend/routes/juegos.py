@@ -20,7 +20,7 @@ def get_juegos_oferta():
     cursor.execute(
         """
         SELECT
-        generos.nombre_genero, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.puntuacion, juegos.direccion_imagen
+        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE en_oferta = TRUE
@@ -38,7 +38,7 @@ def get_juegos_recientes(fecha):
     cursor.execute(
         """
         SELECT
-        generos.nombre_genero, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.puntuacion, juegos.direccion_imagen
+        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE fecha_lanzamiento like '%s%'
@@ -56,7 +56,7 @@ def get_juegos_mas_valorados(puntaje):
     cursor.execute(
         """
         SELECT
-        generos.nombre_genero, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.puntuacion, juegos.direccion_imagen
+        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE puntuacion >= %s

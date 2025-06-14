@@ -1,7 +1,3 @@
-
-
-
-
 generos = {
     1: "rpg",
     2: "aventura",

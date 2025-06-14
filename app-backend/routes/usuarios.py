@@ -21,18 +21,14 @@ def get_usuario(usr):
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    if not usuario:
-        return ("Usuario no encontrado", 404)
     return jsonify(usuario)
 
 @usuarios_bp.route("/validar/<usr>")
-def validar_usuario(usr):
+def get_rol_usuario_clave(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT usuario, contraseña FROM usuarios WHERE usuario = %s", (usr,))
+    cursor.execute("SELECT rol, usuario, contraseña FROM usuarios WHERE usuario = %s", (usr,))
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    if not usuario:
-        return ("Usuario no encontrado", 404)
     return jsonify(usuario)
