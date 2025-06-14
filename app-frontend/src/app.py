@@ -15,8 +15,8 @@ static_dir = os.path.join(base_dir, "static")
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
-# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
-
+# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+# (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -59,7 +59,7 @@ def perfil(usr):
 
     if datos_usr == None:
         flash("Usuario no Encontrado")
-        return redirect(url_for("index"))
+        return redirect(url_for("index")) # CAMBIAR POR REGISTRARSE
     
     if request.method == "POST":
         username = request.form["username"]
@@ -103,7 +103,8 @@ def index():
 
     juegosRecientes = requests.get(f"{API_BASE}/juegos/recientes")
     juegosRebajados = requests.get(f"{API_BASE}/juegos/ofertas")
-    juegosRecomendados = requests.get(f"{API_BASE}/juegos/mas_valorados/{50}") #esto lo podriamos hacer un boton o similar como una constante igual a como manejamos los usuarios y setearlo para aprovecharlo -> es facil y rapido
+    juegosRecomendados = requests.get(f"{API_BASE}/juegos/mas_valorados/{50}") 
+    #esto lo podriamos hacer un boton o similar como una constante igual a como manejamos los usuarios y setearlo para aprovecharlo -> es facil y rapido
 
     return render_template("inicio.html", juegosRecientes=juegosRecientes,juegosRebajados=juegosRebajados,juegosRecomendados=juegosRecomendados)
 
