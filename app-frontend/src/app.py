@@ -49,11 +49,12 @@ def login():
     
     return render_template("login.html", error = issue)
 
-#PAGINA DE PERFIL
+#PAGINA DE PERFIL (agregar validacion de usuario online)
 @app.route("/perfil/<usr>")
 def perfil(usr):
-    # Hay que agregar validacion de usuario online (porque actualmente se puede pedir cualquier usuario y responde 200)
-    return render_template("perfil.html", usuario = usr)
+    datos_usr = obtener_usuario(usr)
+
+    return render_template("perfil.html", usuario = datos_usr)
 
 #PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])

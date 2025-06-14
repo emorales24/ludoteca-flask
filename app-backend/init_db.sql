@@ -29,6 +29,8 @@ CREATE TABLE usuarios (
     email VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
+    pais varchar(50) NOT NULL,
+    ciudad varchar(50) NOT NULL,
     calle VARCHAR(50),
     direccion VARCHAR(50),
     codigo_postal VARCHAR(15)
@@ -111,6 +113,6 @@ INSERT INTO juegos (nombre, tipo, id_genero, fecha_lanzamiento, precio, porcenta
 ('NBA 2K21', 'BASE', 3, '2020-09-03', 50.00, 30, FALSE, 50, 'images/nba_2k21_1.jpg');
 
 
-INSERT INTO usuarios (rol, usuario, contraseña, email, nombre, apellido, calle, direccion, codigo_postal) VALUES
-('admin', 'admin', '1234', 'admin@example.com', 'Admin', 'Root', 'Avenida Central', '123 Piso 1', '1000'),
-('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Mitre', '4325 Dto 3', '1407'),
+INSERT INTO usuarios (rol, usuario, contraseña, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal) VALUES
+('admin', 'admin', '1234', 'admin@example.com', 'Admin', 'Root', 'Argentina', 'CABA', 'Avenida Central', '123 Piso 1', '1000'),
+('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Argentina','AVELLANEDA', 'Mitre', '4325 Dto 3', '1407');
