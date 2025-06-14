@@ -21,8 +21,6 @@ def get_usuario(usr):
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    if not usuario:
-        return ("Usuario no encontrado", 404)
     return jsonify(usuario)
 
 @usuarios_bp.route("/validar/<usr>")
@@ -33,6 +31,4 @@ def get_rol_usuario_clave(usr):
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    if not usuario:
-        return ("Usuario no encontrado", 404)
     return jsonify(usuario)

@@ -32,8 +32,6 @@ def obtener_usuario(usr):
     response = requests.get(f"{API_BASE}/usuarios/{usr}")
     if response.status_code == 200:
         return response.json()
-    elif response.status_code == 404:
-        return {"error": response.text}
     return None
 
 def validar_usuario(usr):
@@ -69,8 +67,6 @@ def login():
         usuario = validar_usuario(user)
         if usuario == None:                         # Si la query return None, se modifica la variable issue
             issue = "Usuario no encontrado"
-        elif "error" in usuario:                    # Maneja el 404 de la query
-            issue = usuario["error"]
         elif usuario["contraseña"] == contra:       # Evalua si son iguales los campos
             if usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))
