@@ -15,6 +15,9 @@ static_dir = os.path.join(base_dir, "static")
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
+# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/' (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
+
+
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
@@ -54,6 +57,10 @@ def login():
 def perfil(usr):
     datos_usr = obtener_usuario(usr)
 
+    if datos_usr == None:
+        flash("Usuario no Encontrado")
+        return redirect(url_for("index"))
+    
     if request.method == "POST":
         username = request.form["username"]
         email = request.form["email"]
