@@ -30,4 +30,22 @@ def obtener_ofertas():
         return response.json()
     return None
 
-def actualizar_usuario(username, )
+def actualizar_usuario(usuario, email, contra, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, usuario_viejo):
+    response = requests.post(
+        f"{API_BASE}/usuarios/update/{usuario_viejo}",
+        json = {
+            "usuario": usuario,
+            "email": email,
+            "contraseña": contra,
+            "nombre": nombre,
+            "apellido": apellido,
+            "calle": calle,
+            "direccion": direccion,
+            "codigo_postal": codigo_postal,
+            "ciudad": ciudad,
+            "pais": pais,
+        },
+    )
+    if response.status_code == 200:
+        return True
+    return None

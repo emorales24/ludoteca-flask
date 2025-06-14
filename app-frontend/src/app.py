@@ -56,17 +56,20 @@ def perfil(usr):
 
     if request.method == "POST":
         username = request.form["username"]
-        mail = request.form["email"]
-        contra = request.form["contraseña"]
+        email = request.form["email"]
+        contraseña = request.form["contraseña"]
         nombre = request.form["nombre"]
         apellido = request.form["apellido"]
         calle = request.form["calle"]
-        numero = request.form["numero"]
+        direccion = request.form["direccion"]
         codigo_postal = request.form["cp"]
         ciudad = request.form["ciudad"]
         pais = request.form["pais"]
 
-        actualizar_usuario(username, mail, contra, nombre, apellido, calle, numero, codigo_postal, ciudad, pais)
+        actualizar_usuario(username, email, contraseña, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
+        datos_usr = obtener_usuario(username)
+        
+        return redirect(url_for("perfil", usr = datos_usr["usuario"]))
 
 
     return render_template("perfil.html", usuario = datos_usr)
