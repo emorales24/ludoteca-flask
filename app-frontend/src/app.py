@@ -50,11 +50,19 @@ def login():
     return render_template("login.html", error = issue)
 
 #PAGINA DE PERFIL (agregar validacion de usuario online)
-@app.route("/perfil/<usr>")
+@app.route("/perfil/<usr>", methods = ["GET", "POST"])
 def perfil(usr):
     datos_usr = obtener_usuario(usr)
 
     return render_template("perfil.html", usuario = datos_usr)
+
+def actualizar_usuario():
+    if request.method == "POST":
+        nombre_usuario = request.form["username"]
+        mail = request.form["email"]
+        # Obtener resto de campos
+
+    #Falta redireccionamiento y update de la API
 
 #PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])

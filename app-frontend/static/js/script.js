@@ -288,3 +288,24 @@ function mostrarFormularioEditar(id, precio, porcentaje, en_oferta) {
 function cerrarFormularioEditar() {
     document.getElementById('formulario-editar').classList.add('hidden');
 }
+
+// Funcionalidad PERFIL.HTML
+document.addEventListener('DOMContentLoaded', function() {
+    const editarBtn = document.getElementById('editar-btn');
+    const guardarBtn = document.getElementById('guardar-btn');
+    const cancelarBtn = document.getElementById('cancelar-btn');
+    const eliminarBtn = document.getElementById('eliminar-btn'); // Falta funcionalidad
+    const inputs = document.querySelectorAll('#perfil-form input');
+
+    editarBtn.addEventListener('click', function() {
+        inputs.forEach(input => input.disabled = false);
+        editarBtn.classList.add('hidden');
+        guardarBtn.classList.remove('hidden');
+        cancelarBtn.classList.remove('hidden');
+    });
+
+    cancelarBtn.addEventListener('click', function() {
+        // Recarga la página para restaurar los valores originales
+        window.location.reload();
+    });
+});
