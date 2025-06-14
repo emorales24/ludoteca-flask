@@ -4,6 +4,8 @@ from flask_mail import Mail, Message
 import requests
 
 from datos_auxiliares import generos,juegos
+# Importo funciones de peticiones a la API
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -22,38 +24,8 @@ app.config['MAIL_PASSWORD'] = 'clave-temporal'  # Contrase�a de aplicaci�n
 app.config['MAIL_DEFAULT_SENDER'] = 'mail'
 mail = Mail(app)
 
-# API Backend
+# API Backend (ver de quitar)
 API_BASE = "http://localhost:5000"
-
-# Revisar si se puede usar (me parece que no)
-usuario_online = None
-
-def obtener_usuario(usr):
-    response = requests.get(f"{API_BASE}/usuarios/{usr}")
-    if response.status_code == 200:
-        return response.json()
-    return None
-
-def validar_usuario(usr):
-    response = requests.get(f"{API_BASE}/usuarios/validar/{usr}")
-    if response.status_code == 200:
-        return response.json()
-    return None
-
-def modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta):
-    response = requests.post(
-        f"{API_BASE}/admin/modificar_juego/{id_juego}",
-        json={"precio": precio, "porcentaje_oferta": porcentaje_oferta, "en_oferta": en_oferta},
-    )
-    if response.status_code == 200:
-        return True
-    return None
-
-def obtener_ofertas():
-    response = requests.get(f"{API_BASE}/juegos/ofertas")
-    if response.status_code == 200:
-        return response.json()
-    return None
 
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
@@ -76,7 +48,6 @@ def login():
             issue = "Contaseña Invalida."
     
     return render_template("login.html", error = issue)
-# Se podria guardar el nombre de usuario en la variable global y en la redireccion se lleva a inicio en vez de perfil
 
 #PAGINA DE PERFIL
 @app.route("/perfil/<usr>")
