@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -54,15 +54,22 @@ def login():
 def perfil(usr):
     datos_usr = obtener_usuario(usr)
 
-    return render_template("perfil.html", usuario = datos_usr)
-
-def actualizar_usuario():
     if request.method == "POST":
-        nombre_usuario = request.form["username"]
+        username = request.form["username"]
         mail = request.form["email"]
-        # Obtener resto de campos
+        contra = request.form["contraseña"]
+        nombre = request.form["nombre"]
+        apellido = request.form["apellido"]
+        calle = request.form["calle"]
+        numero = request.form["numero"]
+        codigo_postal = request.form["cp"]
+        ciudad = request.form["ciudad"]
+        pais = request.form["pais"]
 
-    #Falta redireccionamiento y update de la API
+        actualizar_usuario(username, mail, contra, nombre, apellido, calle, numero, codigo_postal, ciudad, pais)
+
+
+    return render_template("perfil.html", usuario = datos_usr)
 
 #PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])

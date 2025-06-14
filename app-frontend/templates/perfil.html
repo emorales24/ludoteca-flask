@@ -13,7 +13,7 @@
 
         <!-- Sección de Contenido Principal del Perfil -->
         <section class="lg:w-3/4 bg-gray-900 p-8 rounded-lg shadow-xl">
-            <form id="perfil-form" method="POST" action="#">
+            <form id="perfil-form" method="POST" action="{{ url_for("perfil", usr = usuario.usuario) }}">
 
                 <h2 class="text-3xl font-bold text-blue-400 mb-8">Información de la Cuenta</h2>
                 <!-- Información de la Cuenta -->

@@ -29,3 +29,5 @@ def obtener_ofertas():
     if response.status_code == 200:
         return response.json()
     return None
+
+def actualizar_usuario(username, )

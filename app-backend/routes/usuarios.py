@@ -32,3 +32,18 @@ def get_rol_usuario_clave(usr):
     cursor.close()
     conn.close()
     return jsonify(usuario)
+
+@usuarios_bp.route("/update/<usr>")
+def update_usuario(usr):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    data = request.json
+
+    cursor.execute(
+        """
+            UPDATE usuarios
+            SET usuario = %s
+            
+            WHERE usuario = %s
+        """, ()
+    )
