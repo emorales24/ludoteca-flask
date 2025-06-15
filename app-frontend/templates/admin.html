@@ -35,11 +35,11 @@
             <table class="min-w-full bg-gray-800 rounded-lg shadow-lg">
                 <thead>
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Nombre</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Categoría</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Tipo</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">Precio</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-blue-200 uppercase tracking-wider">% Porcentaje Oferta</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">Nombre</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">Categoría</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">Tipo</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">Precio</th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">% Porcentaje Oferta</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">En Oferta</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-blue-200 uppercase tracking-wider">Oferta</th>
                     </tr>
@@ -48,7 +48,7 @@
                     {% for juego in juegos %}
                     <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition" id="fila-{{ juego.id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.id_genero }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre_genero.upper() }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.tipo }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">${{ juego.precio }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100" id="porcentaje-{{ juego.id }}">{{ juego.porcentaje_oferta }}%</td>
