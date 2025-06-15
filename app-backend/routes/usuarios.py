@@ -88,25 +88,21 @@ def eliminar_perfil(usr):
     conn.close()
     return ("Valores Modificados", 200)
 
-@usuarios_bp.route("login/<usr>")
+@usuarios_bp.route("login/<usr>",  methods = ["POST"])
 def post_usuario_online(usr):
 
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     cursor.execute("""
-        INSERT INTO usuario_online (id, usuario_id, rol, nombre, apellido)
-        SELECT 1, id, rol, nombre, apellido
+        INSERT INTO usuario_online (id, usuario_id, rol, usuario, email)
+        SELECT 1, id, rol, usuario, email
         FROM usuarios
         WHERE usuario = %s
-    """, (usr,))  # Podriamos usar Replace que hace que si no encuentra uno, lo agrega, y si existe uno,
-                  # lo reescribe. Pero ahi perdemos el error. Borrar este comentario al entregar el TP
+    """, (usr,)) 
     conn.commit()
-
-    
-    usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    return jsonify(usuario)
+    return jsonify("Se inició sesión correctamente", 204)
 
 
 # este es borrable pero lo dejo para no modificar el del perfil
@@ -115,15 +111,24 @@ def post_usuario_online(usr):
 # CONSECUENCIA EN EL FRONT 1: Si existe, lo mostramos trayendolo con get_usuario
 # CONSECUENTA EN EL FRONT 2: Si no hay dato, lo redirigimos al login
 # (este comentario es mejor moverlo al app.py de front)
-@usuarios_bp.route("check/<usr>")  
-def get_usuario_online(usr):     
+@usuarios_bp.route("check")  
+def get_usuario_online():     
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     cursor.execute("SELECT usuario FROM usuario_online WHERE id = 1")
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    return jsonify(usuario)
+    if usuario:
+        return jsonify(usuario,200)
+    return jsonify(usuario) 
 
-@usuarios_bp.route("logout/<usr>")
+@usuarios_bp.route("logout",  methods = ["DELETE"])
 def delete_usuario_online():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute("DELETE FROM usuario_online WHERE id = 1")
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify("Cerraste sesion correctamente",204)
