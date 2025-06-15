@@ -308,3 +308,40 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.reload();
     });
 });
+
+
+// Funcionalidad para JUEGO.HTML
+
+        const buyButton = document.getElementById('buyButton');
+        const buyPopup = document.getElementById('buyPopup');
+        const cancelBuyButton = document.getElementById('cancelBuyButton');
+
+        buyButton.addEventListener('click', () => {
+            buyPopup.classList.remove('hidden');
+        });
+
+        cancelBuyButton.addEventListener('click', () => {
+            buyPopup.classList.add('hidden');
+        });
+
+
+            // Aca agregué esto para ver si se podia poner una notificacion de que se compró algo, ver a lo ultimo
+            // const form = document.querySelector('form');
+            // const toast = document.getElementById('toast');
+
+            // form.addEventListener('submit', (e) => {
+            //     e.preventDefault(); // Evita que se recargue la página (opcional)
+
+            //     // Oculta popup
+            //     popup.classList.add('hidden');
+
+            //     // Muestra el toast
+            //     toast.classList.remove('hidden');
+
+            //     // Oculta el toast después de 3 segundos
+            //     setTimeout(() => {
+            //         toast.classList.add('hidden');
+            //     }, 3000);
+            // });
+
+// ---------------------------------------------------------------------------

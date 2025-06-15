@@ -25,15 +25,23 @@ def modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta):
     return None
 
 def obtener_ofertas():
-    response = requests.get(f"{API_BASE}/juegos/ofertas")
-    if response.status_code == 200:
-        return response.json()
+    try:
+        response = requests.get(f"{API_BASE}/juegos/ofertas")
+        if response.status_code == 200:
+            return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR] No se pudo conectar al backend: {e}")
     return None
   
 def obtener_juego(id):
-    response = requests.get(f"{API_BASE}/juegos/{id}")
-    if response.status_code == 200:
-        return response.json()
+    
+    try:
+        response = requests.get(f"{API_BASE}/juegos/{id}", timeout=4)
+        if response.status_code == 200:
+            return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"[ERROR EN OBTENER_JUEGO] {e}")
+        return None
     return None
 
       

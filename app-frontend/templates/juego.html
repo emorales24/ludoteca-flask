@@ -49,8 +49,8 @@
             </div>
 
             <!-- Popup oculto inicialmente -->
-            <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-                <form action="/procesar_compra" method="POST" class="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+            <div id="buyPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <form method="POST" class="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
                     <h2 class="text-lg font-semibold mb-4 text-gray-300">Cómo quiere recibir su juego?</h2>
 
                     <div class="mb-4">
@@ -67,7 +67,7 @@
                     </div>
 
                     <div class="flex justify-end space-x-2">
-                        <button id="cancelButton" type="button" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+                        <button id="cancelBuyButton" type="button" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
                             Cancelar
                         </button>
                         <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
@@ -79,44 +79,12 @@
         </section>
     </main>
 
+    
     <!-- Aca agregué esto para ver si se podia poner una notificacion de que se compró algo, ver a lo ultimo -->
     <!-- <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden z-50 transition duration-300 ease-in-out">
         ¡Compra realizada!
     </div> -->
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-    <script>
-
-            const buyButton = document.getElementById('buyButton');
-            const popup = document.getElementById('popup');
-            const cancelButton = document.getElementById('cancelButton');
-
-            buyButton.addEventListener('click', () => {
-                popup.classList.remove('hidden');
-            });
-
-            cancelButton.addEventListener('click', () => {
-                popup.classList.add('hidden');
-            });
-
-
-            // Aca agregué esto para ver si se podia poner una notificacion de que se compró algo, ver a lo ultimo
-            // const form = document.querySelector('form');
-            // const toast = document.getElementById('toast');
-
-            // form.addEventListener('submit', (e) => {
-            //     e.preventDefault(); // Evita que se recargue la página (opcional)
-
-            //     // Oculta popup
-            //     popup.classList.add('hidden');
-
-            //     // Muestra el toast
-            //     toast.classList.remove('hidden');
-
-            //     // Oculta el toast después de 3 segundos
-            //     setTimeout(() => {
-            //         toast.classList.add('hidden');
-            //     }, 3000);
-            // });
-
-    </script>
 {% endblock %}

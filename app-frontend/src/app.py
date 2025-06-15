@@ -15,7 +15,7 @@ static_dir = os.path.join(base_dir, "static")
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
-# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -105,12 +105,15 @@ def inicioAdmin():
 @app.route("/")
 def index():
 
-    juegosRecientes = requests.get(f"{API_BASE}/juegos/recientes")
-    juegosRebajados = requests.get(f"{API_BASE}/juegos/ofertas")
-    juegosRecomendados = requests.get(f"{API_BASE}/juegos/mas_valorados/{50}") 
-    #esto lo podriamos hacer un boton o similar como una constante igual a como manejamos los usuarios y setearlo para aprovecharlo -> es facil y rapido
 
-    return render_template("inicio.html", juegosRecientes=juegosRecientes,juegosRebajados=juegosRebajados,juegosRecomendados=juegosRecomendados)
+    # juegosRecientes = requests.get(f"{API_BASE}/juegos/recientes")
+    # juegosRebajados = requests.get(f"{API_BASE}/juegos/ofertas")
+    # juegosRecomendados = requests.get(f"{API_BASE}/juegos/mas_valorados/{50}") 
+    #esto lo podriamos hacer un boton o similar como una constante igual a como manejamos los usuarios y setearlo para aprovecharlo -> es facil y rapido
+    # if not juegosRecientes and not juegosRebajados and not juegosRecomendados:
+    #     flash("No se pudo obtener la lista de juegos. El servidor esta caido", "Error interno")    
+    #     redirect(url_for("index"))
+    return render_template("inicio.html", juegosRecientes=[],juegosRebajados=[],juegosRecomendados=[])
 
 #PAGINA DE LISTA DE JUEGOS
 @app.route("/juegos")
@@ -126,10 +129,10 @@ def buscador():
 def ver_juego(id):
 
     juego = obtener_juego(id)
-    if juego:
-        return render_template("juego.html", juego=juego)
-    
-    return render_template("inicio.html")
+    if not juego:
+        flash("No se puede obtener el juego. El servidor debe estar caido.", "Error interno")
+        return redirect(url_for("index"))
+    return render_template("juego.html", juego=juego)
 
 #PAGINA DE CARRITO
 @app.route("/carrito")
