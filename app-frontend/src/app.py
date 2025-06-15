@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, obtener_juego
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -94,10 +94,11 @@ def buscador():
 @app.route("/juego/<int:id>")
 def ver_juego(id):
 
-    juego = juegos.get(id)
+    juego = obtener_juego(id)
+    print("ACAA")
+    print(juego)
     if juego:
-        juego["nombre_genero"] = generos.get(juego["id_genero"], "desconocido")
-        return render_template("juego.html", juego= juego)
+        return render_template("juego.html", juego=juego)
     return render_template("inicio.html")
 
 #PAGINA DE CARRITO
@@ -133,6 +134,7 @@ def comprar_carrito():
     # reinicio el como veo la pantalla (aca podriamos agregar un mini mensaje por magia de javascript al apretar
     # comprar que le diga al usuario que ya compró para que no se vea tan brusco)
     return render_template("carrito.html", itemsCarrito=None)
+
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)

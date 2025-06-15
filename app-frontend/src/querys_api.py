@@ -29,3 +29,9 @@ def obtener_ofertas():
     if response.status_code == 200:
         return response.json()
     return None
+
+def obtener_juego(id):
+    response = requests.get(f"{API_BASE}/juegos/{id}")
+    if response.status_code == 200:
+        return response.json()
+    return None
