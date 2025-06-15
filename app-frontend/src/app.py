@@ -15,7 +15,7 @@ static_dir = os.path.join(base_dir, "static")
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -53,7 +53,7 @@ def login():
     return render_template("login.html", error = issue)
 
 #PAGINA DE PERFIL (agregar validacion de usuario online)
-@app.route("/perfil/<usr>", methods = ["GET", "POST", "DELETE"])
+@app.route("/perfil/<usr>", methods = ["GET", "POST"])
 def perfil(usr):
     datos_usr = obtener_usuario(usr)
 
