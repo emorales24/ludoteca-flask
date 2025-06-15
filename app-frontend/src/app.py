@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -15,7 +15,7 @@ static_dir = os.path.join(base_dir, "static")
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 
-# app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -53,7 +53,7 @@ def login():
     return render_template("login.html", error = issue)
 
 #PAGINA DE PERFIL (agregar validacion de usuario online)
-@app.route("/perfil/<usr>", methods = ["GET", "POST"])
+@app.route("/perfil/<usr>", methods = ["GET", "POST", "DELETE"])
 def perfil(usr):
     datos_usr = obtener_usuario(usr)
 
@@ -62,22 +62,26 @@ def perfil(usr):
         return redirect(url_for("index")) # CAMBIAR POR REGISTRARSE
     
     if request.method == "POST":
-        username = request.form["username"]
-        email = request.form["email"]
-        contraseña = request.form["contraseña"]
-        nombre = request.form["nombre"]
-        apellido = request.form["apellido"]
-        calle = request.form["calle"]
-        direccion = request.form["direccion"]
-        codigo_postal = request.form["cp"]
-        ciudad = request.form["ciudad"]
-        pais = request.form["pais"]
+        if request.form.get("eliminar"):
+            eliminar_usuario(datos_usr["usuario"])
+            flash("Perfil eliminado correctamente")
+            return redirect(url_for("index"))
+        else:
+            username = request.form["username"]
+            email = request.form["email"]
+            contraseña = request.form["contraseña"]
+            nombre = request.form["nombre"]
+            apellido = request.form["apellido"]
+            calle = request.form["calle"]
+            direccion = request.form["direccion"]
+            codigo_postal = request.form["cp"]
+            ciudad = request.form["ciudad"]
+            pais = request.form["pais"]
 
-        actualizar_usuario(username, email, contraseña, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
-        datos_usr = obtener_usuario(username)
-        
-        return redirect(url_for("perfil", usr = datos_usr["usuario"]))
-
+            actualizar_usuario(username, email, contraseña, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
+            datos_usr = obtener_usuario(username)
+            
+            return redirect(url_for("perfil", usr = datos_usr["usuario"]))
 
     return render_template("perfil.html", usuario = datos_usr)
 

@@ -105,6 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoSlide();
 });
 
+// Funcionalidad de las Flechas del Carrusel
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.overflow-x-auto');
+    const leftBtn = document.querySelector('button[aria-label="Anterior"]');
+    const rightBtn = document.querySelector('button[aria-label="Siguiente"]');
+    
+    rightBtn.addEventListener('click', () => {
+        container.scrollBy({ left: 650, behavior: 'smooth' });
+    });
+    
+    leftBtn.addEventListener('click', () => {
+        container.scrollBy({ left: -650, behavior: 'smooth' });
+    });
+});
+
 // Funcionalidad de CARRITO.HTML
 
 // Función de ejemplo para actualizar un ítem del carrito
@@ -262,21 +277,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Funcionalidad de las Flechas del Carrusel
-document.addEventListener('DOMContentLoaded', function() {
-    const container = document.querySelector('.overflow-x-auto');
-    const leftBtn = document.querySelector('button[aria-label="Anterior"]');
-    const rightBtn = document.querySelector('button[aria-label="Siguiente"]');
-    
-    rightBtn.addEventListener('click', () => {
-        container.scrollBy({ left: 650, behavior: 'smooth' });
-    });
-    
-    leftBtn.addEventListener('click', () => {
-        container.scrollBy({ left: -650, behavior: 'smooth' });
-    });
-});
-
 // Funcionalidad ADMIN.HTML
 function mostrarFormularioEditar(id, precio, porcentaje, en_oferta) {
     document.getElementById('formulario-editar').classList.remove('hidden');
@@ -294,7 +294,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const editarBtn = document.getElementById('editar-btn');
     const guardarBtn = document.getElementById('guardar-btn');
     const cancelarBtn = document.getElementById('cancelar-btn');
-    const eliminarBtn = document.getElementById('eliminar-btn'); // Falta funcionalidad
     const inputs = document.querySelectorAll('#perfil-form input');
 
     editarBtn.addEventListener('click', function() {
