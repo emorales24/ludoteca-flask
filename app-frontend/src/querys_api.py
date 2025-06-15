@@ -49,3 +49,9 @@ def actualizar_usuario(usuario, email, contra, nombre, apellido, calle, direccio
     if response.status_code == 200:
         return True
     return None
+
+def eliminar_usuario(usuario):
+    response = requests.delete(f"{API_BASE}/usuarios/delete/{usuario}")
+    if response.status_code == 200:
+        return response.text
+    return None
