@@ -70,3 +70,20 @@ def update_usuario(usr):
     cursor.close()
     conn.close()
     return ("Valores Modificados", 200)
+
+@usuarios_bp.route("/delete/<usr>", methods = ["DELETE"])
+def eliminar_perfil(usr):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    
+    cursor.execute(
+        """
+            DELETE
+            FROM usuarios
+            WHERE usuario = %s
+        """, (usr,)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return ("Valores Modificados", 200)
