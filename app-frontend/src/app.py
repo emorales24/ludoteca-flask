@@ -90,6 +90,12 @@ def buscador():
     juegos = requests.get(f"{API_BASE}/juegos") 
     return render_template("buscador.html", juegos=juegos) 
 
+#PAGINA DE BUSQUEDA
+@app.route("/buscar")
+def buscar():
+    query = request.args.get('q', '')
+    return render_template("buscador.html", query=query)
+
 #PAGINA DE DETALLE DE JUEGO
 @app.route("/juego/<int:id>")
 def ver_juego(id):
