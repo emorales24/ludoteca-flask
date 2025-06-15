@@ -2,20 +2,21 @@
 
 {% block body %}
     <!-- Contenido Principal del Detalle del Juego -->
-    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-8 min-h-screen-minus-nav-footer">
+    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-8 min-h-screen-minus-nav-footer items-center justify-center">
         <!-- Sección de Imagen del Juego -->
-        <section class="lg:w-3/5 bg-gray-900 p-6 rounded-lg shadow-xl flex items-center justify-center">
-            <div class="game-image-container rounded-lg overflow-hidden shadow-lg w-full">
+        <section class="lg:w-2/5 bg-gray-900 p-6 rounded-lg shadow-xl flex items-center justify-center h-[85vh]">
+            <div class="game-image-container rounded-lg overflow-hidden shadow-lg w-full h-full">
                 <img id="gameImage" src="{{ url_for('static', filename=juego['direccion_imagen']) }}" alt="Imagen del Juego" class="w-full h-full object-cover">
             </div>
         </section>
 
         <!-- Sección de Detalles y Compra -->
-        <section class="lg:w-2/5 bg-gray-900 p-8 rounded-lg shadow-xl flex flex-col justify-between">
+        <section class="lg:w-2/5 bg-gray-900 p-8 rounded-lg shadow-xl flex flex-col gap-4">
             <div>
                 <h2 id="gameName" class="text-4xl font-bold text-blue-400 mb-4">{{ juego.nombre }}</h2>
-                <p id="gameType" class="text-lg text-gray-300 mb-2">Tipo: <span class="font-semibold">{{ juego.tipo }}</span></p>
-                <p id="gameGenre" class="text-lg text-gray-300 mb-2">Género: <span class="font-semibold">{{ juego.nombre_genero }}</span></p>
+                <p class="text-lg text-gray-300 mb-2">{{ juego.descripcion }}</p>
+                <p id="gameType" class="text-lg text-gray-300 mb-2">Tipo: <span class="font-semibold">{{ juego.tipo.upper() }}</span></p>
+                <p id="gameGenre" class="text-lg text-gray-300 mb-2">Género: <span class="font-semibold">{{ juego.nombre_genero.upper() }}</span></p>
                 <p id="gameReleaseDate" class="text-lg text-gray-300 mb-2">Lanzamiento: <span class="font-semibold">{{ juego.fecha_lanzamiento }}</span></p>
                 <p id="gameScore" class="text-lg text-gray-300 mb-4">Puntuación: <span class="font-semibold">{{ juego.puntuacion }}</span> / 100</p>
 
@@ -46,75 +47,44 @@
                     Añadir al Carrito
                 </button>
             </div>
+
+            <!-- Popup oculto inicialmente -->
+            <div id="buyPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <form method="POST" class="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-300">Cómo quiere recibir su juego?</h2>
+
+                    <div class="mb-4">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="opcion1" value="1" class="form-checkbox text-purple-600">
+                            <span class="ml-2 text-gray-300">Version online: recibira un código para reclamar el juego</span>
+                        </label>
+                    </div>
+                    <div class="mb-6">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="opcion2" value="1" class="form-checkbox text-purple-600">
+                            <span class="ml-2 text-gray-300">Versión física: se realizará un envio a su domilicio</span>
+                        </label>
+                    </div>
+
+                    <div class="flex justify-end space-x-2">
+                        <button id="cancelBuyButton" type="button" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+                            Aceptar
+                        </button>
+                    </div>
+                </form>
+            </div>
         </section>
     </main>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Obtener el ID del juego de la URL
-            const pathSegments = window.location.pathname.split('/');
-            const gameId = pathSegments[pathSegments.length - 1]; // Asume que la URL es /juego/<id>
+    
+    <!-- Aca agregué esto para ver si se podia poner una notificacion de que se compró algo, ver a lo ultimo -->
+    <!-- <div id="toast" class="fixed bottom-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg hidden z-50 transition duration-300 ease-in-out">
+        ¡Compra realizada!
+    </div> -->
+    
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-            if (!gameId || isNaN(gameId)) {
-                console.error("ID de juego no válido en la URL.");
-                document.getElementById('gameName').textContent = "Juego no encontrado";
-                // Podrías redirigir o mostrar un mensaje de error más amigable
-                return;
-            }
-
-            // try {
-            //     // Realizar la solicitud al backend para obtener los detalles del juego
-            //     const response = await fetch(`/api/juegos/${gameId}`);
-            //     if (!response.ok) {
-            //         throw new Error(`Error HTTP: ${response.status}`);
-            //     }
-            //     const game = await response.json();
-
-            //     if (game) {
-            //         // Actualizar elementos HTML con los datos del juego
-            //         document.getElementById('gameImage').src = game.direccion_imagen || 'https://placehold.co/1200x675/CCCCCC/000000?text=Imagen+No+Disponible';
-            //         document.getElementById('gameImage').alt = game.nombre;
-            //         document.getElementById('gameName').textContent = game.nombre;
-            //         document.getElementById('gameType').querySelector('span').textContent = game.tipo || 'N/A';
-            //         document.getElementById('gameGenre').querySelector('span').textContent = game.nombre_genero || 'N/A';
-            //         document.getElementById('gameReleaseDate').querySelector('span').textContent = game.fecha_lanzamiento ? new Date(game.fecha_lanzamiento).toLocaleDateString('es-ES') : 'N/A';
-            //         document.getElementById('gameScore').querySelector('span').textContent = game.puntuacion || 'N/A';
-
-            //         const priceElement = document.getElementById('gamePrice');
-            //         const originalPriceElement = document.getElementById('gameOriginalPrice');
-            //         const offerBadgeElement = document.getElementById('gameOfferBadge');
-
-            //         if (game.en_oferta && game.porcentaje_oferta > 0) {
-            //             const discountedPrice = game.precio * (1 - game.porcentaje_oferta / 100);
-            //             priceElement.textContent = `$${discountedPrice.toFixed(2)}`;
-            //             originalPriceElement.textContent = `$${game.precio.toFixed(2)}`;
-            //             originalPriceElement.classList.remove('hidden');
-            //             offerBadgeElement.textContent = `-${game.porcentaje_oferta}%`;
-            //             offerBadgeElement.classList.remove('hidden');
-            //         } else {
-            //             priceElement.textContent = `$${game.precio.toFixed(2)}`;
-            //             originalPriceElement.classList.add('hidden');
-            //             offerBadgeElement.classList.add('hidden');
-            //         }
-
-            //         // Lógica del botón de compra (ejemplo)
-            //         document.getElementById('buyButton').addEventListener('click', () => {
-            //             // Aquí se añadiría la lógica para añadir el juego al carrito
-            //             console.log(`Añadir "${game.nombre}" al carrito`);
-            //             // Una llamada a la API del backend para añadir el ítem al carrito.
-            //             // Posiblemente redirigir a la página del carrito o mostrar una confirmación.
-            //         });
-
-            //     } else {
-            //         document.getElementById('gameName').textContent = "Juego no encontrado";
-            //         console.warn("No se encontraron datos para el juego.");
-            //     }
-
-            // } catch (error) {
-            //     console.error("Error al cargar los detalles del juego:", error);
-            //     document.getElementById('gameName').textContent = "Error al cargar los detalles";
-            //     // Muestra un mensaje de error al usuario
-            // }
-        });
-    </script>
 {% endblock %}

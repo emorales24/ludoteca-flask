@@ -66,3 +66,14 @@ def get_juegos_mas_valorados(puntaje):
     conn.close()
     cursor.close()
     return jsonify(mas_valorados)
+
+
+@juegos_bp.route("/<int:id>")
+def get_juego(id):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT juegos.*, generos.nombre_genero FROM juegos JOIN generos on juegos.id_genero = generos.id WHERE juegos.id = %s ", (id,))
+    juego = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return jsonify(juego)
