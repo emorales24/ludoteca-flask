@@ -8,10 +8,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style_nuevo.css', _external=True) }}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body class="bg-slate-700 text-gray-800">
     {% include 'header.html' %}
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class=flashes>
+            {% for message in messages %}
+                <li class="mx-auto my-4 max-w-md rounded-lg bg-red-100 border border-red-400 text-red-700 text-center p-4">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
 
     {% block body %}{% endblock %}
 
