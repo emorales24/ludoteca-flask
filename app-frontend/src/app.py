@@ -95,10 +95,9 @@ def buscador():
 def ver_juego(id):
 
     juego = obtener_juego(id)
-    print("ACAA")
-    print(juego)
     if juego:
         return render_template("juego.html", juego=juego)
+    
     return render_template("inicio.html")
 
 #PAGINA DE CARRITO
