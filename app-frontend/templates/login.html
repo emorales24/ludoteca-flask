@@ -11,11 +11,7 @@
     <div class="login-container">
         <h2 class="login-title">Iniciar Sesión</h2>
         <form id="loginForm" class="login-form" method="POST">
-            <!--  se muestra el error si lo hay (revisar)-->
-            {% if error %}
-                <div class="login-error">{{ error }}</div>
-            {% endif %}
-
+            <!--  se muestra el error si lo hay -->
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <ul class=flashes>

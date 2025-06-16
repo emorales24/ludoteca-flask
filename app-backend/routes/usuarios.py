@@ -38,7 +38,7 @@ def get_rol_usuario_clave(usr):
     conn.close()
     return jsonify(usuario)
 
-@usuarios_bp.route("/update/<usr>", methods = ["POST"])
+@usuarios_bp.route("/update/<usr>", methods = ["PUT"])
 def update_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
@@ -77,7 +77,7 @@ def update_usuario(usr):
     return ("Valores Modificados", 200)
 
 @usuarios_bp.route("/delete/<usr>", methods = ["DELETE"])
-def eliminar_perfil(usr):
+def delete_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     
@@ -120,7 +120,7 @@ def post_usuario_online(usr):
 def get_usuario_online():     
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT usuario FROM usuario_online WHERE id = 1")
+    cursor.execute("SELECT id, usuario, rol FROM usuario_online WHERE id = 1")
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -137,3 +137,23 @@ def delete_usuario_online():
     cursor.close()
     conn.close()
     return jsonify("Cerraste sesion correctamente",204)
+
+@usuarios_bp.route("update_online", methods = ["PUT"])
+def update_usuario_online():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute(
+        """
+            UPDATE usuario_online
+            JOIN usuarios ON usuario_online.usuario_id = usuarios.id
+            SET 
+            usuario_online.usuario_id = usuarios.id,
+                usuario_online.usuario = usuarios.usuario,
+                usuario_online.email = usuarios.email,
+                usuario_online.rol = usuarios.rol
+        """
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return ("Valores Modificados", 200)

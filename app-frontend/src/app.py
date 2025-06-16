@@ -5,7 +5,8 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online,
+obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -33,15 +34,20 @@ API_BASE = "http://localhost:5000"
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    issue = None
+    usuario_online = buscar_usuario_online()
+
+    if usuario_online:
+        flash("Error, ya hay sesion iniciada")
+        return redirect(url_for("index"))
 
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contraseña"]
         
         usuario = validar_usuario(user)
-        if usuario == None:                         # Si la query return None, se modifica la variable issue
-            issue = "Usuario no encontrado"
+        if usuario == None:
+            flash("Usuario no encontrado")
+            return redirect(url_for("login"))
         elif usuario["contraseña"] == contra:  
             loguear_usuario(user)
             if usuario["rol"] == "admin":
@@ -49,9 +55,10 @@ def login():
             else:
                 return redirect(url_for("index"))
         else:
-            issue = "Contaseña Invalida."
+            flash("Contaseña Invalida.")
+            return redirect(url_for("login"))
     
-    return render_template("login.html", error = issue)
+    return render_template("login.html")
 
 #PAGINA DE PERFIL
 @app.route("/verificar_login")
@@ -60,12 +67,12 @@ def redirigir_perfil():
 
     if not usuario_online:
         flash("Necesitás iniciar sesión para acceder a tu perfil.", "error")
-        return redirect(url_for("login"))
+        return redirect(url_for("index"))
     
     return redirect(url_for("perfil", usr=usuario_online["usuario"]))
 
 
-@app.route("/perfil/<usr>", methods = ["GET", "POST", "DELETE"])
+@app.route("/perfil/<usr>", methods = ["GET", "POST"])
 def perfil(usr):
         
     datos_usr = obtener_usuario(usr)
@@ -92,6 +99,9 @@ def perfil(usr):
             pais = request.form["pais"]
 
             actualizar_usuario(username, email, contraseña, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
+            
+            actualizar_usuario_online()
+
             datos_usr = obtener_usuario(username)
             
             return redirect(url_for("perfil", usr = datos_usr["usuario"]))
@@ -111,9 +121,8 @@ def inicioAdmin():
 
     usuario_online = buscar_usuario_online()
 
-    if usuario_online:  
+    if usuario_online:
         if usuario_online["rol"] == "admin":
-
             ofertas = obtener_ofertas()
 
             if request.method == "POST":
@@ -126,9 +135,12 @@ def inicioAdmin():
                 return redirect(url_for("inicioAdmin", juegos = ofertas))
 
             return render_template("admin.html", juegos = ofertas)
+        else:
+            flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
+            return redirect(url_for("index"))
     
     else:
-        flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
+        flash("Error, necesitas iniciar sesion.")
         return redirect(url_for("index"))
 
 #INICIO DE PAG USUARIO FINAL
