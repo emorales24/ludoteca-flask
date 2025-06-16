@@ -3,7 +3,7 @@ from db import get_connection
 
 admin_bp = Blueprint("admin",__name__)
 
-@admin_bp.route("/modificar_juego/<int:id_juego>", methods = ["POST"])
+@admin_bp.route("/modificar_juego/<int:id_juego>", methods = ["PUT"])
 def modificar_juego(id_juego):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
