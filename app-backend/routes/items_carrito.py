@@ -3,21 +3,18 @@ from db import get_connection
 
 items_carrito_bp = Blueprint("carrito",__name__)
 
-
-@items_carrito_bp.route("/<int:id>/<tipo_envio>",  methods = ["POST"])
-def post_item_carrito(id, tipo_envio):
+@items_carrito_bp.route("/<int:id>/<tipo_envio>/<float:precio>",  methods = ["POST"])
+def post_item_carrito(id, tipo_envio,precio):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-
     # falta agregar un get para obtener el precio en oferta en caso de que este en oferta y sbir ese como variable
+    #o que lo reciba por url
     cursor.execute("""
         INSERT INTO items_carrito (estado, usuario_id, juego_id, precio, tipo_envio)
-        SELECT 'pendiente', usuario_id, %s, 
-            (SELECT precio FROM juegos WHERE id = %s), 
-            %s
+        SELECT 'pendiente', usuario_id, %s, %s, %s
         FROM usuario_online
         WHERE id = 1;
-    """, (id,id,tipo_envio)) 
+    """, (id,precio,tipo_envio)) 
     conn.commit()
     cursor.close()
     conn.close()
@@ -38,7 +35,7 @@ def delete_item_carrito(id):
     return jsonify("Se elimino correctamente"), 204
 
 @items_carrito_bp.route("/comprar_carrito",  methods = ["PUT"])
-def put_item_carrito(id):
+def put_item_carrito():
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     cursor.execute("""

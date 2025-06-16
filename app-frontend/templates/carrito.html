@@ -24,7 +24,7 @@
                             <div class="text-right">
                                 <p class="text-lg font-bold text-blue-300">{{ item.precio }}</p>
                                 <button class="text-red-400 hover:text-red-500 transition duration-200 ease-in-out mt-2 text-sm">
-                                    <a href="">Eliminar</a>
+                                    <a href="{{ url_for('eliminar_itemCarrito', id=item.id) }}">Eliminar</a>
                                 </button>
                             </div>
                         </div>
@@ -47,20 +47,21 @@
             
             <div class="flex justify-between text-lg">
                 <span>Subtotal:</span>
-                <span id="subtotalAmount" class="font-bold">{{ total }}</span>
+                <span id="subtotalAmount" class="font-bold">{{ total | round(2) }}</span>
             </div>
             <div class="flex justify-between text-lg">
-                <span>Impuestos:</span>
-                <span id="shippingAmount" class="font-bold">$0.00</span> <!-- O un valor si aplica -->
+                <span>Servicio:</span>
+                <span id="shippingAmount" class="font-bold">$10.00</span> <!-- O un valor si aplica -->
             </div>
             <div class="border-t border-gray-700 pt-4 flex justify-between text-2xl font-bold text-blue-300">
                 <span>Total:</span>
-                <span id="totalAmount">{{ total }}</span>
+                <span id="totalAmount">{{ total+10 | round(2) }}</span>
             </div>
 
-            <button class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-200 ease-in-out text-lg">
-                Finalizar Compra
-            </button>
+            <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-200 ease-in-out text-lg">
+                <a href="{{ url_for("comprar_carrito") }}">Finalizar Compra</a>
+            </button>              
+
             <a href="{{ url_for('index')}}" class="w-full text-center py-3 border border-blue-600 text-blue-400 font-semibold rounded-md hover:bg-blue-700 hover:text-white transition duration-200 ease-in-out text-lg">
                 Continuar Comprando
             </a>

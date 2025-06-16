@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online,obtener_carrito
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -185,24 +185,38 @@ def carrito():
 
 # es mejor que el boton solo agregue y no modifique la pagina (en nuestro
 # caso deberia estar el boton de comprar solo en la pantalla donde se ve un juego unico)
-@app.route("/carrito/agregar/<int:id>")
-def post_itemCarrito(id): 
+@app.route("/carrito/agregar", methods=['POST'])
+def post_itemCarrito(): 
+    # usuario = buscar_usuario_online()
 
-    #obtengo el id del user o hago un create basandome solo en el nombre de usuario que
-    #ya tengo en el dato global usuario_online
-        #<codigo>
-    #guarda el item en bd creando un dato itemCarrito enlazando el id del juego y el del user actual
-        #<codigo>
-    
+    # if usuario:
+    id = int(request.form['id_juego'])
+    tipo_envio = 'digital' if 'opcion_digital' in request.form else 'fisico'
+    precio = float(request.form['precio'])
+
+    response = colocar_item_carrito(id, tipo_envio, precio)
+    flash("Juego agregado a tu carrito!")
     return redirect(url_for('ver_juego', id=id))
+    
+    # flash("Para ver tu carrito necesitas iniciar sesión.")
+    # return redirect(url_for('index'))
+
+@app.route("/carrito/eliminar/<int:id>")
+def eliminar_itemCarrito(id):
+    # usuario = buscar_usuario_online()
+
+    # if usuario:
+    response = sacar_item_carrito(id)
+    return redirect(url_for('carrito'))
+
+    # flash("Para ver tu carrito necesitas iniciar sesión.")
+    # return redirect(url_for('index'))  
 
 
-## falta el borrar item carrito pero es un delete nada mas y podriamos no agregarlo (dejar para el final)
-
+# todos los items de carrito que esten en estado de proceso de compra a "comprados" (no me acuerdo como era el nombre de estado)
 @app.route("/carrito/comprar")
 def comprar_carrito():
     # a partir del nombre del user genero un script de UPDATE para pasar
-    # todos los items de carrito que esten en estado de proceso de compra a "comprados" (no me acuerdo como era el nombre de estado)
 
     # reinicio el como veo la pantalla (aca podriamos agregar un mini mensaje por magia de javascript al apretar
     # comprar que le diga al usuario que ya compró para que no se vea tan brusco)
