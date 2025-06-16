@@ -76,4 +76,6 @@ def get_juego(id):
     juego = cursor.fetchone()
     cursor.close()
     conn.close()
+    if juego and juego['fecha_lanzamiento']:
+        juego['fecha_lanzamiento'] = juego['fecha_lanzamiento'].strftime('%d %b %Y')
     return jsonify(juego)
