@@ -44,7 +44,7 @@ def obtener_ofertas():
 
 def obtener_juegos_rescientes():
     try:
-        response = requests.get(f"{API_BASE}/juegos/recientes{2024}")
+        response = requests.get(f"{API_BASE}/juegos/recientes/{2024}")
         if response.status_code == 200:
             return response.json()
     except requests.exceptions.RequestException as e:
