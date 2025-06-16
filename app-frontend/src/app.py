@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online,obtener_carrito
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -173,10 +173,15 @@ def ver_juego(id):
 @app.route("/carrito")
 def carrito():
 
-    #el carrito lo puedo obtener
-    itemsCarrito = requests.get(f"{API_BASE}/itemsCarrito/{usuario_online['usuario']}")
-    return render_template("carrito.html", itemsCarrito=itemsCarrito)
+    usuario = buscar_usuario_online()
 
+    if usuario:
+        itemsCarrito = obtener_carrito()
+        total = sum(item['precio'] for item in itemsCarrito)
+        return render_template("carrito.html", carrito=itemsCarrito, total=total)
+    
+    flash("Para ver tu carrito necesitas iniciar sesión.")
+    return redirect(url_for('index'))
 
 # es mejor que el boton solo agregue y no modifique la pagina (en nuestro
 # caso deberia estar el boton de comprar solo en la pantalla donde se ve un juego unico)
