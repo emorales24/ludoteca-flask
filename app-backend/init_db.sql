@@ -51,6 +51,18 @@ CREATE TABLE items_carrito (
     FOREIGN KEY (juego_id) REFERENCES juegos(id) ON DELETE CASCADE
 );
 
+
+CREATE TABLE usuario_online (
+    id INT PRIMARY KEY CHECK (id = 1), -- esto es para que la tabla solo tenga un registro
+    usuario_id INT NOT NULL, 
+    rol VARCHAR(8),
+    usuario VARCHAR(50),
+    email VARCHAR(100),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE 
+    -- DELETE CASCADE es para que se elimine el dato de aca automaticamente cuando el usuario original
+    -- en la tabla 'usuarios' es eliminado con DELETE
+);
+
 INSERT INTO generos (nombre_genero) VALUES 
 ('rpg'), 
 ('aventura'), 
@@ -122,3 +134,9 @@ El lugar entero se encuentra lleno de maleza y árboles, y la única construcci�
 INSERT INTO usuarios (rol, usuario, contraseña, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal) VALUES
 ('admin', 'admin', '1234', 'admin@example.com', 'Admin', 'Root', 'Argentina', 'CABA', 'Avenida Central', '123 Piso 1', '1000'),
 ('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Argentina','AVELLANEDA', 'Mitre', '4325 Dto 3', '1407');
+
+
+INSERT INTO items_carrito (estado, usuario_id, juego_id, precio, tipo_envio) VALUES
+('pendiente', 2, 1, 59.99, 'digital'),
+('pendiente', 2, 2, 79.99, 'fisico'),
+('comprado', 2, 3, 49.99, 'digital')

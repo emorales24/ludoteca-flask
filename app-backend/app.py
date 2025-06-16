@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.register_blueprint(usuarios_bp, url_prefix="/usuarios") #podria cambiarse por login o dividirse con login
 app.register_blueprint(juegos_bp, url_prefix="/juegos")
 app.register_blueprint(admin_bp, url_prefix="/admin")
-app.register_blueprint(items_carrito_bp, url_prefix="/items_carrito")
+app.register_blueprint(items_carrito_bp, url_prefix="/carrito")
 
 # Esto sirve para ver todos los url de los endpoints ya configurados
 # descomentar en caso de querer chequear si la nueva peticion fue agregada
