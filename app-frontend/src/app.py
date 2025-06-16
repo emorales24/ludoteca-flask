@@ -108,18 +108,28 @@ def desloguear():
 #PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])
 def inicioAdmin():
-    ofertas = obtener_ofertas()
 
-    if request.method == "POST":
-        id_juego = request.form["id_juego"]
-        precio = request.form["precio"]
-        porcentaje_oferta = request.form["porcentaje_oferta"]
-        en_oferta = request.form["en_oferta"]
+    usuario_online = buscar_usuario_online()
 
-        modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
-        return redirect(url_for("inicioAdmin", juegos = ofertas))
+    if usuario_online:  
+        if usuario_online["rol"] == "admin":
 
-    return render_template("admin.html", juegos = ofertas)
+            ofertas = obtener_ofertas()
+
+            if request.method == "POST":
+                id_juego = request.form["id_juego"]
+                precio = request.form["precio"]
+                porcentaje_oferta = request.form["porcentaje_oferta"]
+                en_oferta = request.form["en_oferta"]
+
+                modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
+                return redirect(url_for("inicioAdmin", juegos = ofertas))
+
+            return render_template("admin.html", juegos = ofertas)
+    
+    else:
+        flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
+        return redirect(url_for("index"))
 
 #INICIO DE PAG USUARIO FINAL
 @app.route("/")
