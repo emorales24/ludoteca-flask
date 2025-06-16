@@ -28,25 +28,6 @@
             </div>
         </section>
 
-        <!-- Sección 2: Los más populares -->
-        <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h3 class="estilo-h3">Los más Populares</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">                
-                {% for juego in juegosRecomendados %}
-                    <div class="bg-slate-700 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                        <img src="{{ url_for('static', filename=juego.direccion_imagen) }}" alt="{{ juego.nombre }}" class="w-full h-48 object-cover">
-                        <div class="p-4">
-                            <a href="#"></a>
-                                <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
-                                <p class="text-gray-200">{{ juego.descripcion }}</p>
-
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>            
-        </section>
-
         <!-- Sección 1: Ofertas -->
         <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
             <h3 class="estilo-h3 mb-6">Recomendaciones para ti</h3>
@@ -61,22 +42,27 @@
                 </button>
                 
                 <!-- Contenedor del carrusel -->
-                <div class="pb-4 scrollbar-hide">
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
                     <div class="flex space-x-6 w-max">
-                        <!-- Item 1 -->
+                        <!-- Items-->
+                        {% for juego in juegosRecomendados %}
                         <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
                             <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
-                                <img src="#" alt="Oferta 1" class="w-full h-full object-cover"> <!-- Rellenar con las imagenes -->
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
                             </div>
                             <div class="p-4 flex-grow bg-slate-700">
                                 <a href="#" class="block">
-                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">Titulo Oferta 1</h4>
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
                                 </a>
-                                <p class="text-stone-200">Adéntrate en un mundo mágico lleno de misterios.</p>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
                             </div>
                         </div>
-                        
-                        <!-- Puedes agregar más items aquí -->
+                        {% endfor %}
+                       
+                    
                     </div>
                 </div>
                 
@@ -88,5 +74,7 @@
                 </button>
             </div>
         </section>
+
+        
     </main>
 {% endblock %}
