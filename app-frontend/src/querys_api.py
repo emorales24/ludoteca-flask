@@ -78,8 +78,8 @@ def loguear_usuario(usuario):
         return response.text
     return None
 
-def desloguear_usuario(usuario):
-    response = requests.delete(f"{API_BASE}/usuarios/logout/{usuario}")
+def desloguear_usuario():
+    response = requests.delete(f"{API_BASE}/usuarios/logout")
     if response.status_code == 204:
         return response.text
     return None
@@ -87,5 +87,5 @@ def desloguear_usuario(usuario):
 def buscar_usuario_online():
     response = requests.get(f"{API_BASE}/usuarios/check")
     if response.status_code == 200:
-        return response
+        return response.json()
     return None

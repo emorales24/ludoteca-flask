@@ -17,7 +17,12 @@ def get_usuarios():
 def get_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (usr,))
+    cursor.execute("""
+                   SELECT * FROM usuarios 
+                   INNER JOIN usuario_online
+                   ON usuario_online.usuario = usuarios.usuario
+                   WHERE usuarios.usuario = %s
+                   """, (usr,))
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -120,8 +125,8 @@ def get_usuario_online():
     cursor.close()
     conn.close()
     if usuario:
-        return jsonify(usuario,200)
-    return jsonify(usuario) 
+        return jsonify(usuario), 200
+    return jsonify(usuario) , 404
 
 @usuarios_bp.route("logout",  methods = ["DELETE"])
 def delete_usuario_online():

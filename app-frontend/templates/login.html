@@ -15,6 +15,18 @@
             {% if error %}
                 <div class="login-error">{{ error }}</div>
             {% endif %}
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul class=flashes>
+                    {% for message in messages %}
+                        
+                        <div class="login-error">{{ message }}</div>
+                        
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
             <div>
                 <label for="usuario" class="login-label">Nombre de Usuario</label>
                 <input type="text" id="usuario" name="usuario" required class="login-input">
