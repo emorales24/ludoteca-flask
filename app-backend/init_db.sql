@@ -51,6 +51,18 @@ CREATE TABLE items_carrito (
     FOREIGN KEY (juego_id) REFERENCES juegos(id) ON DELETE CASCADE
 );
 
+
+CREATE TABLE usuario_online (
+    id INT PRIMARY KEY CHECK (id = 1), -- esto es para que la tabla solo tenga un registro
+    usuario_id INT NOT NULL, 
+    rol VARCHAR(8),
+    usuario VARCHAR(50),
+    email VARCHAR(100),
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE 
+    -- DELETE CASCADE es para que se elimine el dato de aca automaticamente cuando el usuario original
+    -- en la tabla 'usuarios' es eliminado con DELETE
+);
+
 INSERT INTO generos (nombre_genero) VALUES 
 ('rpg'), 
 ('aventura'), 

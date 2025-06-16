@@ -17,7 +17,12 @@ def get_usuarios():
 def get_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (usr,))
+    cursor.execute("""
+                   SELECT * FROM usuarios 
+                   INNER JOIN usuario_online
+                   ON usuario_online.usuario = usuarios.usuario
+                   WHERE usuarios.usuario = %s
+                   """, (usr,))
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -33,7 +38,7 @@ def get_rol_usuario_clave(usr):
     conn.close()
     return jsonify(usuario)
 
-@usuarios_bp.route("/update/<usr>", methods = ["POST"])
+@usuarios_bp.route("/update/<usr>", methods = ["PUT"])
 def update_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
@@ -72,7 +77,7 @@ def update_usuario(usr):
     return ("Valores Modificados", 200)
 
 @usuarios_bp.route("/delete/<usr>", methods = ["DELETE"])
-def eliminar_perfil(usr):
+def delete_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     
@@ -82,6 +87,71 @@ def eliminar_perfil(usr):
             FROM usuarios
             WHERE usuario = %s
         """, (usr,)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return ("Valores Modificados", 200)
+
+@usuarios_bp.route("login/<usr>",  methods = ["POST"])
+def post_usuario_online(usr):
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute("""
+        INSERT INTO usuario_online (id, usuario_id, rol, usuario, email)
+        SELECT 1, id, rol, usuario, email
+        FROM usuarios
+        WHERE usuario = %s
+    """, (usr,)) 
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify("Se inició sesión correctamente", 204)
+
+
+# este es borrable pero lo dejo para no modificar el del perfil
+# este  nos sirve para 
+# OBJETIVO: TRAEMOS EL USUARIO ONLINE 
+# CONSECUENCIA EN EL FRONT 1: Si existe, lo mostramos trayendolo con get_usuario
+# CONSECUENTA EN EL FRONT 2: Si no hay dato, lo redirigimos al login
+# (este comentario es mejor moverlo al app.py de front)
+@usuarios_bp.route("check")  
+def get_usuario_online():     
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute("SELECT id, usuario, rol FROM usuario_online WHERE id = 1")
+    usuario = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if usuario:
+        return jsonify(usuario), 200
+    return jsonify(usuario) , 404
+
+@usuarios_bp.route("logout",  methods = ["DELETE"])
+def delete_usuario_online():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute("DELETE FROM usuario_online WHERE id = 1")
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify("Cerraste sesion correctamente",204)
+
+@usuarios_bp.route("update_online", methods = ["PUT"])
+def update_usuario_online():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute(
+        """
+            UPDATE usuario_online
+            JOIN usuarios ON usuario_online.usuario_id = usuarios.id
+            SET 
+            usuario_online.usuario_id = usuarios.id,
+                usuario_online.usuario = usuarios.usuario,
+                usuario_online.email = usuarios.email,
+                usuario_online.rol = usuarios.rol
+        """
     )
     conn.commit()
     cursor.close()

@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -33,34 +33,53 @@ API_BASE = "http://localhost:5000"
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    issue = None
+    usuario_online = buscar_usuario_online()
+
+    if usuario_online:
+        flash("Error, ya hay sesion iniciada")
+        return redirect(url_for("index"))
 
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contraseña"]
         
         usuario = validar_usuario(user)
-        if usuario == None:                         # Si la query return None, se modifica la variable issue
-            issue = "Usuario no encontrado"
-        elif usuario["contraseña"] == contra:       # Evalua si son iguales los campos
+        if usuario == None:
+            flash("Usuario no encontrado")
+            return redirect(url_for("login"))
+        elif usuario["contraseña"] == contra:  
+            loguear_usuario(user)
             if usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))
             else:
-                return redirect(url_for("perfil", usr = usuario["usuario"]))
+                return redirect(url_for("index"))
         else:
-            issue = "Contaseña Invalida."
+            flash("Contaseña Invalida.")
+            return redirect(url_for("login"))
     
-    return render_template("login.html", error = issue)
+    return render_template("login.html")
 
-#PAGINA DE PERFIL (agregar validacion de usuario online)
+#PAGINA DE PERFIL
+@app.route("/verificar_login")
+def redirigir_perfil():
+    usuario_online = buscar_usuario_online()
+
+    if not usuario_online:
+        flash("Necesitás iniciar sesión para acceder a tu perfil.", "error")
+        return redirect(url_for("index"))
+    
+    return redirect(url_for("perfil", usr=usuario_online["usuario"]))
+
+
 @app.route("/perfil/<usr>", methods = ["GET", "POST"])
 def perfil(usr):
+        
     datos_usr = obtener_usuario(usr)
 
     if datos_usr == None:
-        flash("Usuario no Encontrado")
+        flash("Usuario no Encontrado. Si no tenes cuenta, completa el registro para comenzar a comprar juegos!")
         return redirect(url_for("index")) # CAMBIAR POR REGISTRARSE
-    
+
     if request.method == "POST":
         if request.form.get("eliminar"):
             eliminar_usuario(datos_usr["usuario"])
@@ -79,27 +98,49 @@ def perfil(usr):
             pais = request.form["pais"]
 
             actualizar_usuario(username, email, contraseña, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
+            
+            actualizar_usuario_online()
+
             datos_usr = obtener_usuario(username)
             
             return redirect(url_for("perfil", usr = datos_usr["usuario"]))
 
     return render_template("perfil.html", usuario = datos_usr)
+    
+
+@app.route("/desloguear", methods=['POST'])
+def desloguear():
+    
+    response = desloguear_usuario() # falta manejar posibles errores aca nada mas
+    return redirect(url_for("index"))
 
 #PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])
 def inicioAdmin():
-    ofertas = obtener_ofertas()
 
-    if request.method == "POST":
-        id_juego = request.form["id_juego"]
-        precio = request.form["precio"]
-        porcentaje_oferta = request.form["porcentaje_oferta"]
-        en_oferta = request.form["en_oferta"]
+    usuario_online = buscar_usuario_online()
 
-        modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
-        return redirect(url_for("inicioAdmin", juegos = ofertas))
+    if usuario_online:
+        if usuario_online["rol"] == "admin":
+            ofertas = obtener_ofertas()
 
-    return render_template("admin.html", juegos = ofertas)
+            if request.method == "POST":
+                id_juego = request.form["id_juego"]
+                precio = request.form["precio"]
+                porcentaje_oferta = request.form["porcentaje_oferta"]
+                en_oferta = request.form["en_oferta"]
+
+                modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
+                return redirect(url_for("inicioAdmin", juegos = ofertas))
+
+            return render_template("admin.html", juegos = ofertas)
+        else:
+            flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
+            return redirect(url_for("index"))
+    
+    else:
+        flash("Error, necesitas iniciar sesion.")
+        return redirect(url_for("index"))
 
 #INICIO DE PAG USUARIO FINAL
 @app.route("/")
@@ -128,11 +169,16 @@ def buscador():
 @app.route("/juego/<int:id>")
 def ver_juego(id):
 
-    juego = obtener_juego(id)
-    if not juego:
-        flash("No se puede obtener el juego. El servidor debe estar caido.", "Error interno")
-        return redirect(url_for("index"))
-    return render_template("juego.html", juego=juego)
+    usuario_online = buscar_usuario_online()
+    if usuario_online:
+        juego = obtener_juego(id)
+        if not juego:
+            flash("No se puede obtener el juego. El servidor debe estar caido.", "Error interno")
+            return redirect(url_for("index"))
+        return render_template("juego.html", juego=juego)
+    
+    flash("Necesitás iniciar sesión para ver juegos!")
+    return redirect(url_for("login"))
 
 #PAGINA DE CARRITO
 @app.route("/carrito")
