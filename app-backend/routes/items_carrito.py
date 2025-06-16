@@ -54,9 +54,12 @@ def get_items_carrito():
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     cursor.execute("""
-        SELECT items_carrito.*,juegos.nombre, juegos.direccion_imagen from items_carrito
+        SELECT items_carrito.*,juegos.nombre, juegos.direccion_imagen, generos.nombre_genero as genero
+        from items_carrito
         inner join juegos
         on juegos.id = items_carrito.juego_id
+        inner join generos
+        on generos.id = juegos.id_genero
         WHERE items_carrito.estado = 'pendiente'
         AND items_carrito.usuario_id = (SELECT usuario_id FROM usuario_online WHERE id = 1);
     """)
