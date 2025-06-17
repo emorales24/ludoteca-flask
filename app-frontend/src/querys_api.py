@@ -168,4 +168,4 @@ def buscar_juegos(query):
     response = requests.get(f"{API_BASE}/buscar?q={query}")
     if response.status_code == 200:
         return response.json()
-    return []
+    return None
