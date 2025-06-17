@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito,obtener_historial_compras
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -226,6 +226,12 @@ def comprar_itemsCarrito():
     flash("Carrito comprado!")
     return redirect(url_for('carrito'))
 
+
+@app.route("/carrito/historial")
+def ver_historial_compras():
+
+    historial_compras = obtener_historial_compras()
+    return render_template("historial_compras.html", compras=historial_compras)
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)
