@@ -6,7 +6,7 @@ with open("init_db.sql", encoding="utf-8") as f:
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="1234",
+    password="root",
     charset='utf8mb4',
 )
 
