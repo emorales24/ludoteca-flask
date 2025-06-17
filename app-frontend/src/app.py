@@ -191,7 +191,7 @@ def index():
 def buscar():
     query = request.args.get('q', '')
     busqueda = buscar_juegos(query)
-    if busqueda == None:
+    if not busqueda:
         flash("No se han encontrado resultado para la busqueda")
         return redirect(url_for("index"))
     
