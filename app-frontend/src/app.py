@@ -24,7 +24,8 @@ from querys_api import (
     obtener_carrito,
     colocar_item_carrito,
     sacar_item_carrito,
-    comprar_carrito
+    comprar_carrito,
+    buscar_juegos
 )
 
 # Base dir es la ra�z del proyecto
@@ -185,11 +186,16 @@ def index():
     )
 
 
-# PAGINA DE LISTA DE JUEGOS
-@app.route("/juegos")
-def buscador():
-    juegos = requests.get(f"{API_BASE}/juegos") 
-    return render_template("buscador.html", juegos=juegos) 
+#PAGINA DE BUSQUEDA
+@app.route("/buscar")
+def buscar():
+    query = request.args.get('q', '')
+    busqueda = buscar_juegos(query)
+    if not busqueda:
+        flash("No se han encontrado resultado para la busqueda")
+        return redirect(url_for("index"))
+    
+    return render_template("buscador.html", busqueda=busqueda)
 
 
 # PAGINA DE DETALLE DE JUEGO
