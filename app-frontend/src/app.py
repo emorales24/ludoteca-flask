@@ -14,7 +14,7 @@ from querys_api import (
     actualizar_usuario,
     eliminar_usuario,
     obtener_juego,
-    obtener_juegos_rescientes,
+    obtener_juegos_recientes,
     obtener_recomendados,
     obtener_rebajados,
     loguear_usuario,
@@ -25,7 +25,9 @@ from querys_api import (
     colocar_item_carrito,
     sacar_item_carrito,
     comprar_carrito,
-    buscar_juegos
+    buscar_juegos,
+    obtener_historial_compras,
+    obtener_metodos_pago
 )
 
 # Base dir es la ra�z del proyecto
@@ -168,7 +170,7 @@ def inicioAdmin():
 @app.route("/")
 def index():
     try:
-        juegosRecientes = obtener_juegos_rescientes()
+        juegosRecientes = obtener_juegos_recientes()
         juegosRebajados = obtener_rebajados()
         juegosRecomendados = obtener_recomendados()
     except:
@@ -178,12 +180,7 @@ def index():
         )
         return redirect(url_for("index"))
 
-    return render_template(
-        "inicio.html",
-        juegosRecientes=juegosRecientes,
-        juegosRebajados=juegosRebajados,
-        juegosRecomendados=juegosRecomendados,
-    )
+    return render_template("inicio.html", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados)
 
 
 #PAGINA DE BUSQUEDA
@@ -263,6 +260,24 @@ def comprar_itemsCarrito():
     flash("Carrito comprado!")
     return redirect(url_for('carrito'))
 
+
+@app.route("/perfil/historial_carrito")
+def ver_historial_compras():
+
+    historial_compras = obtener_historial_compras()
+    return render_template("historial_compras.html", compras = historial_compras)
+
+@app.route("/perfil/metodos_pago")
+def ver_metodos_pago():
+    usuario_online = buscar_usuario_online()
+
+    if not usuario_online:
+        flash("Necesitás iniciar sesión para acceder a tu perfil.")
+        return redirect(url_for("index"))
+    else: 
+        metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
+        print(metodos_pago)
+        return render_template("metodos_pago.html", metodos_pago = metodos_pago)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

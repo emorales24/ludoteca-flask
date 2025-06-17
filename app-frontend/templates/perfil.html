@@ -7,8 +7,8 @@
         <aside class="lg:w-1/4 bg-gray-900 p-6 rounded-lg shadow-xl flex flex-col space-y-4">
             <h3 class="text-2xl font-bold text-blue-400 mb-4">Menú de Perfil</h3>
             <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg bg-blue-700 hover:bg-blue-800 transition duration-200 ease-in-out font-semibold">Mis Datos</a>
-            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
-            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Métodos de Pago</a>
+            <a href="{{ url_for('ver_historial_compras') }}" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
+            <a href="{{ url_for('ver_metodos_pago') }}" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Métodos de Pago</a>
         </aside>
 
         <!-- Sección de Contenido Principal del Perfil -->
@@ -110,5 +110,7 @@
                 </div>
             </form>
         </section>
+
+
     </main>
 {% endblock %}
