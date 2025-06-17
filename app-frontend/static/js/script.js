@@ -121,78 +121,72 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
-// Funcionaliadad BUSCADOR.HTML
-document.addEventListener('DOMContentLoaded', () => {
+// Funcionalidad de BUSCADOR.HTML
+document.addEventListener('DOMContentLoaded', async () => {
     const searchParams = new URLSearchParams(window.location.search);
-    const query = searchParams.get('q'); // Obtiene el término de búsqueda de la URL
+    const query = searchParams.get('q') || '';
     const searchResultsContainer = document.getElementById('searchResults');
     const noResultsMessage = document.getElementById('noResults');
     const searchQueryDisplay = document.getElementById('searchQueryDisplay');
-    const searchInput = document.getElementById('searchInput'); // Obtener el input de búsqueda en esta página
 
-    // Rellenar el input de búsqueda con la query actual si existe
-    if (query) {
-        searchInput.value = query;
-        searchQueryDisplay.textContent = `Mostrando resultados para: "${query}"`;
-        fetchGames(query); // Llama a la función para obtener y mostrar los juegos
-    } else {
-        searchQueryDisplay.textContent = 'Por favor, introduce un término de búsqueda.';
+    // Mostrar la query en la página
+    searchQueryDisplay.textContent = query ? `Mostrando resultados para: "${query}"` : 'Por favor, introduce un término de búsqueda.';
+    if (!query) {
         noResultsMessage.textContent = 'Introduce un término de búsqueda para ver resultados.';
         noResultsMessage.classList.remove('hidden');
+        return;
     }
 
     async function fetchGames(searchQuery) {
         try {
-            // Realiza la solicitud al endpoint API de tu backend
-            const response = await fetch(`/api/juegos/buscar?q=${encodeURIComponent(searchQuery)}`);
-            const games = await response.json(); // Parsea la respuesta JSON
+            const response = await fetch(`/buscar?q=${encodeURIComponent(searchQuery)}`);
+            const games = await response.json();
 
             searchResultsContainer.innerHTML = ''; // Limpiar resultados anteriores
             if (games.length > 0) {
-                noResultsMessage.classList.add('hidden'); // Ocultar mensaje de "no resultados"
+                noResultsMessage.classList.add('hidden');
                 games.forEach(game => {
                     const gameCard = document.createElement('div');
-                    gameCard.className = 'bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition duration-300 ease-in-out relative';
+                    gameCard.className = 'bg-slate-700 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out relative';
 
                     let offerBadge = '';
                     let displayPrice = game.precio;
                     if (game.en_oferta && game.porcentaje_oferta > 0) {
-                        // Calcula el precio con descuento
                         const discountedPrice = game.precio * (1 - game.porcentaje_oferta / 100);
                         offerBadge = `
                             <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
                                 -${game.porcentaje_oferta}%
                             </span>
                         `;
-                        displayPrice = discountedPrice.toFixed(2); // Formatear a 2 decimales
+                        displayPrice = discountedPrice.toFixed(2);
                     }
 
-                    // Construye el HTML para cada tarjeta de juego
                     gameCard.innerHTML = `
                         ${offerBadge}
-                        <img src="${game.direccion_imagen || 'https://placehold.co/600x400/CCCCCC/000000?text=Imagen+No+Disponible'}"
-                                alt="${game.nombre}" class="w-full h-48 object-cover">
+                        <img src="${game.direccion_imagen || 'https://placehold.co/600x400/FFD700/000000?text=' + game.nombre}"
+                             alt="${game.nombre}" class="w-full h-48 object-cover">
                         <div class="p-4">
-                            <h3 class="text-xl font-semibold mb-2">${game.nombre}</h3>
-                            <p class="text-gray-700 font-bold text-lg">
+                            <h4 class="text-xl font-semibold mb-2 text-gray-300">${game.nombre}</h4>
+                            <p class="text-gray-200 font-bold text-lg">
                                 Precio: $${displayPrice}
                                 ${game.en_oferta && game.porcentaje_oferta > 0 ? `<span class="line-through text-gray-500 text-sm ml-2">$${game.precio.toFixed(2)}</span>` : ''}
                             </p>
-                            <p class="text-gray-600 text-sm mt-2">Género: ${game.nombre_genero || 'N/A'}</p>
-                            <p class="text-gray-600 text-sm">Tipo: ${game.tipo || 'N/A'}</p>
+                            <p class="text-gray-200 text-sm mt-2">Género: ${game.nombre_genero || 'N/A'}</p>
+                            <p class="text-gray-200 text-sm">Tipo: ${game.tipo || 'N/A'}</p>
                         </div>
                     `;
-                    searchResultsContainer.appendChild(gameCard); // Añade la tarjeta al contenedor de resultados
+                    searchResultsContainer.appendChild(gameCard);
                 });
             } else {
-                noResultsMessage.classList.remove('hidden'); // Muestra mensaje de "no resultados"
+                noResultsMessage.classList.remove('hidden');
             }
         } catch (error) {
             console.error('Error al obtener juegos:', error);
             searchResultsContainer.innerHTML = '<p class="text-red-500 text-center">Ocurrió un error al cargar los juegos. Por favor, inténtalo de nuevo más tarde.</p>';
         }
     }
+
+    await fetchGames(query);
 });
 
 // Funcionalidad ADMIN.HTML

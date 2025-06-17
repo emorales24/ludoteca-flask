@@ -79,3 +79,43 @@ def get_juego(id):
     if juego and juego['fecha_lanzamiento']:
         juego['fecha_lanzamiento'] = juego['fecha_lanzamiento'].strftime('%d %b %Y')
     return jsonify(juego)
+
+
+@juegos_bp.route("/buscar", methods=["GET"])
+def buscar():
+    query = request.args.get('q', '').lower()
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    juegos = []
+
+    cursor.execute(
+        """
+        SELECT
+            generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
+        FROM juegos
+        JOIN generos ON generos.id = juegos.id_genero
+        WHERE LOWER(juegos.nombre) LIKE %s OR LOWER(generos.nombre_genero) LIKE %s
+        """,
+        (f'%{query}%', f'%{query}%')
+    )
+    juegos = cursor.fetchall()
+
+    if not juegos and len(query) > 2:
+        reduced_query = query[:len(query)-1]
+        while not juegos and len(reduced_query) >= 2:
+            cursor.execute(
+                """
+                SELECT
+                    generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
+                FROM juegos
+                JOIN generos ON generos.id = juegos.id_genero
+                WHERE LOWER(juegos.nombre) LIKE %s OR LOWER(generos.nombre_genero) LIKE %s
+                """,
+                (f'%{reduced_query}%', f'%{reduced_query}%')
+            )
+            juegos = cursor.fetchall()
+            reduced_query = reduced_query[:len(reduced_query)-1]
+
+    cursor.close()
+    conn.close()
+    return jsonify(juegos)

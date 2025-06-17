@@ -3,9 +3,32 @@ from flask import Flask, render_template, jsonify, request, redirect, url_for, f
 from flask_mail import Mail, Message
 import requests
 
-from datos_auxiliares import generos,juegos
+from datos_auxiliares import generos, juegos
+
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito, obtener_historial_compras, obtener_metodos_pago
+from querys_api import (
+    obtener_usuario,
+    validar_usuario,
+    modificar_juego,
+    obtener_ofertas,
+    actualizar_usuario,
+    eliminar_usuario,
+    obtener_juego,
+    obtener_juegos_rescientes,
+    obtener_recomendados,
+    obtener_rebajados,
+    loguear_usuario,
+    desloguear_usuario,
+    buscar_usuario_online,
+    actualizar_usuario_online,
+    obtener_carrito,
+    colocar_item_carrito,
+    sacar_item_carrito,
+    comprar_carrito,
+    buscar_juegos,
+    obtener_historial_compras,
+    obtener_metodos_pago
+)
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -18,17 +41,18 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 # (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
-app.config['MAIL_USERNAME'] = 'mail'
-app.config['MAIL_PASSWORD'] = 'clave-temporal'  # Contrase�a de aplicaci�n
-app.config['MAIL_DEFAULT_SENDER'] = 'mail'
+app.config["MAIL_SERVER"] = "smtp.gmail.com"
+app.config["MAIL_PORT"] = 587
+app.config["MAIL_USE_TLS"] = True
+app.config["MAIL_USE_SSL"] = False
+app.config["MAIL_USERNAME"] = "mail"
+app.config["MAIL_PASSWORD"] = "clave-temporal"  # Contrase�a de aplicaci�n
+app.config["MAIL_DEFAULT_SENDER"] = "mail"
 mail = Mail(app)
 
 # API Backend (ver de quitar)
 API_BASE = "http://localhost:5000"
+
 
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
@@ -42,7 +66,7 @@ def login():
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contraseña"]
-        
+
         usuario = validar_usuario(user)
         if usuario == None:
             flash("Usuario no encontrado")
@@ -102,8 +126,8 @@ def perfil(usr):
             actualizar_usuario_online()
 
             datos_usr = obtener_usuario(username)
-            
-            return redirect(url_for("perfil", usr = datos_usr["usuario"]))
+
+            return redirect(url_for("perfil", usr=datos_usr["usuario"]))
 
     return render_template("perfil.html", usuario = datos_usr)
     
@@ -142,27 +166,41 @@ def inicioAdmin():
         flash("Error, necesitas iniciar sesion.")
         return redirect(url_for("index"))
 
-#INICIO DE PAG USUARIO FINAL
+# PAGINA DE INICIO USUARIO FINAL
 @app.route("/")
 def index():
+    try:
+        juegosRecientes = obtener_juegos_rescientes()
+        juegosRebajados = obtener_rebajados()
+        juegosRecomendados = obtener_recomendados()
+    except:
+        flash(
+            "No se pudo obtener la lista de juegos. El servidor está caído",
+            "Error interno",
+        )
+        return redirect(url_for("index"))
+
+    return render_template(
+        "inicio.html",
+        juegosRecientes=juegosRecientes,
+        juegosRebajados=juegosRebajados,
+        juegosRecomendados=juegosRecomendados,
+    )
 
 
-    # juegosRecientes = requests.get(f"{API_BASE}/juegos/recientes")
-    # juegosRebajados = requests.get(f"{API_BASE}/juegos/ofertas")
-    # juegosRecomendados = requests.get(f"{API_BASE}/juegos/mas_valorados/{50}") 
-    #esto lo podriamos hacer un boton o similar como una constante igual a como manejamos los usuarios y setearlo para aprovecharlo -> es facil y rapido
-    # if not juegosRecientes and not juegosRebajados and not juegosRecomendados:
-    #     flash("No se pudo obtener la lista de juegos. El servidor esta caido", "Error interno")    
-    #     redirect(url_for("index"))
-    return render_template("inicio.html", juegosRecientes=[],juegosEnOferta=[],juegosRecomendados=[])
+#PAGINA DE BUSQUEDA
+@app.route("/buscar")
+def buscar():
+    query = request.args.get('q', '')
+    busqueda = buscar_juegos(query)
+    if not busqueda:
+        flash("No se han encontrado resultado para la busqueda")
+        return redirect(url_for("index"))
+    
+    return render_template("buscador.html", busqueda=busqueda)
 
-#PAGINA DE LISTA DE JUEGOS
-@app.route("/juegos")
-def buscador():
-    juegos = requests.get(f"{API_BASE}/juegos") 
-    return render_template("buscador.html", juegos=juegos) 
 
-#PAGINA DE DETALLE DE JUEGO
+# PAGINA DE DETALLE DE JUEGO
 @app.route("/juego/<int:id>")
 def ver_juego(id):
 
@@ -219,6 +257,7 @@ def eliminar_itemCarrito(id):
     # flash("Para ver tu carrito necesitas iniciar sesión.")
     # return redirect(url_for('index'))  
 
+
 @app.route("/carrito/comprar")
 def comprar_itemsCarrito():
 
@@ -245,5 +284,5 @@ def ver_metodos_pago():
 
         return render_template("metodos_pago.html", metodos_pago = metodos_pago)
 
-if __name__ == '__main__':
-    app.run(debug = True, port = 5001)
+if __name__ == "__main__":
+    app.run(debug=True, port=5001)
