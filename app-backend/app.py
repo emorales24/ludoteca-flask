@@ -7,8 +7,6 @@ from routes.items_carrito import items_carrito_bp
 from routes.metodos_pago import metodos_pago_bp
 from flasgger import Swagger # usar pip install flasgger
 
-
-
 app = Flask(__name__)
 
 swagger_template = {

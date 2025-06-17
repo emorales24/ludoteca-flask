@@ -1,45 +1,28 @@
 import os
-from flask import Flask, render_template, jsonify, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
-import requests
-
-from datos_auxiliares import generos, juegos
 
 # Importo funciones de peticiones a la API
-from querys_api import (
+from queries_api_juegos import obtener_juego, obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos
+from queries_api_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
+from queries_api_usuarios import (
     obtener_usuario,
-    validar_usuario,
-    modificar_juego,
-    obtener_ofertas,
+    validar_usuario, 
     actualizar_usuario,
+    obtener_metodos_pago,
     eliminar_usuario,
-    obtener_juego,
-    obtener_juegos_recientes,
-    obtener_recomendados,
-    obtener_rebajados,
     loguear_usuario,
     desloguear_usuario,
     buscar_usuario_online,
-    actualizar_usuario_online,
-    obtener_carrito,
-    colocar_item_carrito,
-    sacar_item_carrito,
-    comprar_carrito,
-    buscar_juegos,
-    obtener_historial_compras,
-    obtener_metodos_pago
+    actualizar_usuario_online
 )
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
-template_dir = os.path.join(base_dir, "templates")
-static_dir = os.path.join(base_dir, "static")
-
-app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+app = Flask(__name__, root_path=base_dir)
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-# (descomentar esto para poder usar lo de los flash pasar a archivo env quizas)
 
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
@@ -49,10 +32,6 @@ app.config["MAIL_USERNAME"] = "mail"
 app.config["MAIL_PASSWORD"] = "clave-temporal"  # Contrase�a de aplicaci�n
 app.config["MAIL_DEFAULT_SENDER"] = "mail"
 mail = Mail(app)
-
-# API Backend (ver de quitar)
-API_BASE = "http://localhost:5000"
-
 
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
@@ -171,8 +150,8 @@ def inicioAdmin():
 def index():
     try:
         juegosRecientes = obtener_juegos_recientes()
-        juegosRebajados = obtener_rebajados()
-        juegosRecomendados = obtener_recomendados()
+        juegosRebajados = obtener_juegos_rebajados()
+        juegosRecomendados = obtener_juegos_recomendados()
     except:
         flash(
             "No se pudo obtener la lista de juegos. El servidor está caído",
