@@ -3,31 +3,6 @@
 {% block body %}
 <!-- Contenido Principal -->
     <main id="main-content" class="container mx-auto p-6 space-y-12">
-        <!-- Sección 1: Novedades - Carrusel Vertical -->
-        <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h2 class="text-gray-50 text-3xl">Novedades</h2>
-            <div class="flex flex-col lg:flex-row gap-6">
-                <!-- Carrusel Principal (Imagen Grande y Texto) -->
-                <div id="mainCarouselDisplay" class="relative lg:w-3/4 bg-gray-900 rounded-lg overflow-hidden shadow-xl aspect-w-16 aspect-h-9 sm:aspect-h-10 lg:aspect-h-9 xl:aspect-h-7">
-                    <!-- Ítems del carrusel (inicialmente ocultos, controlados por JS) -->
-                    <!-- Estos elementos se llenarán dinámicamente con JavaScript -->
-                </div>
-
-                <!-- Navegación de Thumbnails Vertical -->
-                <div class="lg:w-1/4 flex flex-col items-center space-y-3 p-2 bg-gray-100 rounded-lg shadow-inner no-scrollbar overflow-y-auto max-h-96 lg:max-h-full">
-                    <button id="carouselUpBtn" class="p-2 text-blue-600 hover:text-blue-800 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-                    </button>
-                    <div id="carouselThumbnails" class="flex flex-col space-y-3 w-full">
-                        <!-- Thumbnails se cargarán aquí con JavaScript -->
-                    </div>
-                    <button id="carouselDownBtn" class="p-2 text-blue-600 hover:text-blue-800 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </section>
-
         <!-- Sección 1: Ofertas -->
         <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
             <h2 class="text-gray-50 text-2xl">Ofertas</h2>
