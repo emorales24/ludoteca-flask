@@ -32,7 +32,7 @@ def get_usuario(usr):
 def get_rol_usuario_clave(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT rol, usuario, contraseña FROM usuarios WHERE usuario = %s", (usr,))
+    cursor.execute("SELECT rol, usuario, contra FROM usuarios WHERE usuario = %s", (usr,))
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -45,7 +45,7 @@ def update_usuario(usr):
     data = request.json
     usuario = data.get("usuario")
     email = data.get("email")
-    contraseña = data.get("contraseña")
+    contra = data.get("contra")
     nombre = data.get("nombre")
     apellido = data.get("apellido")
     calle = data.get("calle")
@@ -59,7 +59,7 @@ def update_usuario(usr):
             UPDATE usuarios
             SET 
                 usuario = %s,
-                contraseña = %s,
+                contra = %s,
                 email = %s,
                 nombre = %s,
                 apellido = %s,
@@ -69,7 +69,7 @@ def update_usuario(usr):
                 direccion = %s,
                 codigo_postal = %s
             WHERE usuario = %s
-        """, (usuario, contraseña, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal, usr,)
+        """, (usuario, contra, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal, usr,)
     )
     conn.commit()
     cursor.close()

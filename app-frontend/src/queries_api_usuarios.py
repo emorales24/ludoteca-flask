@@ -22,7 +22,7 @@ def actualizar_usuario(usuario, email, contra, nombre, apellido, calle, direccio
         json={
             "usuario": usuario,
             "email": email,
-            "contraseña": contra,
+            "contra": contra,
             "nombre": nombre,
             "apellido": apellido,
             "calle": calle,

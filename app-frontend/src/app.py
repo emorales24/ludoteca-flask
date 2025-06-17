@@ -44,13 +44,13 @@ def login():
 
     if request.method == "POST":
         user = request.form["usuario"]
-        contra = request.form["contraseña"]
+        contra = request.form["contra"]
 
         usuario = validar_usuario(user)
         if usuario == None:
             flash("Usuario no encontrado")
             return redirect(url_for("login"))
-        elif usuario["contraseña"] == contra:  
+        elif usuario["contra"] == contra:  
             loguear_usuario(user)
             if usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))
@@ -91,7 +91,7 @@ def perfil(usr):
         else:
             username = request.form["username"]
             email = request.form["email"]
-            contraseña = request.form["contraseña"]
+            contra = request.form["contra"]
             nombre = request.form["nombre"]
             apellido = request.form["apellido"]
             calle = request.form["calle"]
@@ -100,7 +100,7 @@ def perfil(usr):
             ciudad = request.form["ciudad"]
             pais = request.form["pais"]
 
-            actualizar_usuario(username, email, contraseña, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
+            actualizar_usuario(username, email, contra, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
             
             actualizar_usuario_online()
 
@@ -125,7 +125,9 @@ def inicioAdmin():
 
     if usuario_online:
         if usuario_online["rol"] == "admin":
-            ofertas = obtener_ofertas()
+            juegosRecientes = obtener_juegos_recientes()
+            juegosRebajados = obtener_juegos_rebajados()
+            juegosRecomendados = obtener_juegos_recomendados()
 
             if request.method == "POST":
                 id_juego = request.form["id_juego"]
@@ -134,9 +136,9 @@ def inicioAdmin():
                 en_oferta = request.form["en_oferta"]
 
                 modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
-                return redirect(url_for("inicioAdmin", juegos = ofertas))
+                return redirect(url_for("inicioAdmin", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados))
 
-            return render_template("admin.html", juegos = ofertas)
+            return render_template("admin.html", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados)
         else:
             flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
             return redirect(url_for("index"))

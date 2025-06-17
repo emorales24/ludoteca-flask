@@ -29,7 +29,7 @@ CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     rol VARCHAR(8) NOT NULL,
     usuario VARCHAR(50) NOT NULL UNIQUE,
-    contraseña VARCHAR(20) NOT NULL,
+    contra VARCHAR(20) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
@@ -142,7 +142,7 @@ El lugar entero se encuentra lleno de maleza y árboles, y la única construcci�
 ('Looney Tunes: Wacky World of Sports', 'BASE', 3, '2024-09-27', 49.99, 50, FALSE, 60, 'images/looney_tunes_1.jpg', "Descripcion"),
 ('NBA 2K21', 'BASE', 3, '2020-09-03', 50.00, 30, FALSE, 50, 'images/nba_2k21_1.jpg', "Descripcion");
 
-INSERT INTO usuarios (rol, usuario, contraseña, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal) VALUES
+INSERT INTO usuarios (rol, usuario, contra, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal) VALUES
 ('admin', 'admin', '1234', 'admin@example.com', 'Admin', 'Root', 'Argentina', 'CABA', 'Avenida Central', '123 Piso 1', '1000'),
 ('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Argentina','AVELLANEDA', 'Mitre', '4325 Dto 3', '1407');
 
