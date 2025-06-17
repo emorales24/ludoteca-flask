@@ -165,7 +165,7 @@ def sacar_item_carrito(id_item):
     return None
 
 def buscar_juegos(query):
-    response = requests.get(f"{API_BASE}/buscar?q={query}")
+    response = requests.get(f"{API_BASE}/juegos/buscar?q={query}")
     if response.status_code == 200:
         return response.json()
     return None
