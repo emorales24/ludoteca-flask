@@ -14,7 +14,7 @@ from querys_api import (
     actualizar_usuario,
     eliminar_usuario,
     obtener_juego,
-    obtener_juegos_rescientes,
+    obtener_juegos_recientes,
     obtener_recomendados,
     obtener_rebajados,
     loguear_usuario,
@@ -170,7 +170,7 @@ def inicioAdmin():
 @app.route("/")
 def index():
     try:
-        juegosRecientes = obtener_juegos_rescientes()
+        juegosRecientes = obtener_juegos_recientes()
         juegosRebajados = obtener_rebajados()
         juegosRecomendados = obtener_recomendados()
     except:
@@ -180,12 +180,7 @@ def index():
         )
         return redirect(url_for("index"))
 
-    return render_template(
-        "inicio.html",
-        juegosRecientes=juegosRecientes,
-        juegosRebajados=juegosRebajados,
-        juegosRecomendados=juegosRecomendados,
-    )
+    return render_template("inicio.html", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados)
 
 
 #PAGINA DE BUSQUEDA
@@ -281,7 +276,7 @@ def ver_metodos_pago():
         return redirect(url_for("index"))
     else: 
         metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
-
+        print(metodos_pago)
         return render_template("metodos_pago.html", metodos_pago = metodos_pago)
 
 if __name__ == "__main__":

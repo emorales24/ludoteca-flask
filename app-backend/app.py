@@ -20,7 +20,8 @@ swagger_template = {
         "contact": {
             "name": "Equipo Soporte Flask and Furious",
             "email": "calle_falsa_123@fi.uba.ar"
-        }
+        },
+        "basePath": "/"
     },
 }
 swagger = Swagger(app, template=swagger_template)

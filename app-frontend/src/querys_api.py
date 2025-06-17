@@ -42,7 +42,7 @@ def obtener_ofertas():
     return None
 
 
-def obtener_juegos_rescientes():
+def obtener_juegos_recientes():
     try:
         response = requests.get(f"{API_BASE}/juegos/recientes/{2024}")
         if response.status_code == 200:
