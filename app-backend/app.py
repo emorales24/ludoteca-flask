@@ -4,6 +4,7 @@ from routes.usuarios import usuarios_bp
 from routes.juegos import juegos_bp
 from routes.admin import admin_bp
 from routes.items_carrito import items_carrito_bp
+from routes.metodos_pago import metodos_pago_bp
 
 app = Flask(__name__)
 
@@ -11,6 +12,7 @@ app.register_blueprint(usuarios_bp, url_prefix="/usuarios") #podria cambiarse po
 app.register_blueprint(juegos_bp, url_prefix="/juegos")
 app.register_blueprint(admin_bp, url_prefix="/admin")
 app.register_blueprint(items_carrito_bp, url_prefix="/carrito")
+app.register_blueprint(metodos_pago_bp, url_prefix="/metodos_pago")
 
 # Esto sirve para ver todos los url de los endpoints ya configurados
 # descomentar en caso de querer chequear si la nueva peticion fue agregada

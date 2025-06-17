@@ -5,7 +5,7 @@ import requests
 
 from datos_auxiliares import generos,juegos
 # Importo funciones de peticiones a la API
-from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito,obtener_historial_compras
+from querys_api import obtener_usuario, validar_usuario, modificar_juego, obtener_ofertas, actualizar_usuario, eliminar_usuario,obtener_juego, loguear_usuario, desloguear_usuario, buscar_usuario_online, actualizar_usuario_online,obtener_carrito, colocar_item_carrito, sacar_item_carrito, comprar_carrito, obtener_historial_compras, obtener_metodos_pago
 
 # Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -227,11 +227,23 @@ def comprar_itemsCarrito():
     return redirect(url_for('carrito'))
 
 
-@app.route("/carrito/historial")
+@app.route("/perfil/historial_carrito")
 def ver_historial_compras():
 
     historial_compras = obtener_historial_compras()
-    return render_template("historial_compras.html", compras=historial_compras)
+    return render_template("historial_compras.html", compras = historial_compras)
+
+@app.route("/perfil/metodos_pago")
+def ver_metodos_pago():
+    usuario_online = buscar_usuario_online()
+
+    if not usuario_online:
+        flash("Necesitás iniciar sesión para acceder a tu perfil.")
+        return redirect(url_for("index"))
+    else: 
+        metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
+
+        return render_template("metodos_pago.html", metodos_pago = metodos_pago)
 
 if __name__ == '__main__':
     app.run(debug = True, port = 5001)

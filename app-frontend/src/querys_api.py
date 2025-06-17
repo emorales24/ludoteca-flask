@@ -127,3 +127,9 @@ def obtener_historial_compras():
     if response.status_code == 200:
         return response.json()
     return None
+
+def obtener_metodos_pago(usuario_id):
+    response = requests.get(f"{API_BASE}/metodos_pago/{usuario_id}")
+    if response.status_code == 200:
+        return response.json()
+    return None

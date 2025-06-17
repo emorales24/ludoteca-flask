@@ -40,6 +40,17 @@ CREATE TABLE usuarios (
     codigo_postal VARCHAR(15)
 );
 
+CREATE TABLE metodos_pago (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    tipo VARCHAR(25) NOT NULL,
+    marca VARCHAR(25) NOT NULL,
+    numero_tarjeta INT NOT NULL,
+    fecha_vencimiento DATE NOT NULL,
+    codigo_cvv INT NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+)
+
 CREATE TABLE items_carrito (
     id INT AUTO_INCREMENT PRIMARY KEY,
     estado VARCHAR(20) NOT NULL,
@@ -137,6 +148,9 @@ INSERT INTO usuarios (rol, usuario, contraseña, email, nombre, apellido, pais, 
 
 
 INSERT INTO items_carrito (estado, usuario_id, juego_id, precio, tipo_envio) VALUES
-('pendiente', 2, 1, 59.99, 'digital'),
-('pendiente', 2, 2, 79.99, 'fisico'),
-('comprado', 2, 3, 49.99, 'digital')
+('pendiente', 7, 1, 59.99, 'digital'),
+('pendiente', 7, 2, 79.99, 'fisico'),
+('comprado', 7, 3, 49.99, 'digital')
+
+INSERT INTO metodos_pago (usuario_id, tipo, marca, numero_tarjeta, fecha_vencimiento, codigo_cvv) VALUES
+(7, "TARJETA DEBITO", "VISA", "12345687", "2028-12-12", "321");
