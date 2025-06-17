@@ -68,6 +68,19 @@ def get_juegos_mas_valorados(puntaje):
     return jsonify(mas_valorados)
 
 
+@juegos_bp.route("/<int:id>")
+def get_juego(id):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT juegos.*, generos.nombre_genero FROM juegos JOIN generos on juegos.id_genero = generos.id WHERE juegos.id = %s ", (id,))
+    juego = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if juego and juego['fecha_lanzamiento']:
+        juego['fecha_lanzamiento'] = juego['fecha_lanzamiento'].strftime('%d %b %Y')
+    return jsonify(juego)
+
+
 @juegos_bp.route("/buscar", methods=["GET"])
 def buscar():
     query = request.args.get('q', '').lower()

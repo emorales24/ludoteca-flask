@@ -3,93 +3,112 @@
 {% block body %}
     <!-- Contenido Principal del Perfil -->
     <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-6 min-h-screen-minus-nav">
-        <!-- Panel Lateral (Sidebar) -->
+        <!-- Panel Lateral -->
         <aside class="lg:w-1/4 bg-gray-900 p-6 rounded-lg shadow-xl flex flex-col space-y-4">
             <h3 class="text-2xl font-bold text-blue-400 mb-4">Menú de Perfil</h3>
-            <a href="#" class="block p-3 rounded-lg text-lg bg-blue-700 hover:bg-blue-800 transition duration-200 ease-in-out font-semibold">Mis Datos</a>
-            <a href="#" class="block p-3 rounded-lg text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
-            <a href="#" class="block p-3 rounded-lg text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Métodos de Pago</a>
+            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg bg-blue-700 hover:bg-blue-800 transition duration-200 ease-in-out font-semibold">Mis Datos</a>
+            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
+            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Métodos de Pago</a>
         </aside>
 
         <!-- Sección de Contenido Principal del Perfil -->
         <section class="lg:w-3/4 bg-gray-900 p-8 rounded-lg shadow-xl">
-            <h2 class="text-3xl font-bold text-blue-400 mb-8">Información de la Cuenta</h2>
+            <form id="perfil-form" method="POST" action="{{ url_for("perfil", usr = usuario.usuario) }}">
 
-            <!-- Información de la Cuenta -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div>
-                    <label for="username" class="block text-gray-400 text-sm font-medium mb-1">Nombre de Usuario</label>
-                    <input type="text" id="username" value="pepegamer" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
+                <h2 class="text-3xl font-bold text-blue-400 mb-8">Información de la Cuenta</h2>
+                <!-- Información de la Cuenta -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="username" class="block text-gray-400 text-sm font-medium mb-1">Nombre de Usuario</label>
+                        <input type="text" name="username" id="username" value="{{ usuario.usuario }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-gray-400 text-sm font-medium mb-1">Correo</label>
+                        <input type="email" name="email" id="email" value="{{ usuario.email }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="password" class="block text-gray-400 text-sm font-medium mb-1">Contraseña</label>
+                        <input type="password" name="contraseña" id="password" value="{{ usuario.contraseña }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
                 </div>
-                <div>
-                    <label for="email" class="block text-gray-400 text-sm font-medium mb-1">Correo</label>
-                    <input type="email" id="email" value="Pepe@gmail.com" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-                <div class="md:col-span-2">
-                    <label for="password" class="block text-gray-400 text-sm font-medium mb-1">Contraseña</label>
-                    <input type="password" id="password" value="*********" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-            </div>
 
-            <h2 class="text-3xl font-bold text-blue-400 mb-8">Datos Personales</h2>
+                <h2 class="text-3xl font-bold text-blue-400 mb-8">Datos Personales</h2>
+                <!-- Datos Personales -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label for="nombre" class="block text-gray-400 text-sm font-medium mb-1">Nombre</label>
+                        <input type="text" name="nombre" id="nombre" value="{{ usuario.nombre }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div>
+                        <label for="apellido" class="block text-gray-400 text-sm font-medium mb-1">Apellido</label>
+                        <input type="text" name="apellido" id="apellido" value="{{ usuario.apellido }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                </div>
 
-            <!-- Datos Personales -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div>
-                    <label for="nombre" class="block text-gray-400 text-sm font-medium mb-1">Nombre</label>
-                    <input type="text" id="nombre" value="Pepe" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
+                <h2 class="text-3xl font-bold text-blue-400 mb-8">Dirección</h2>
+                <!-- Dirección -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div>
+                        <label for="calle" class="block text-gray-400 text-sm font-medium mb-1">Calle</label>
+                        <input type="text" name="calle" id="calle" value="{{ usuario.calle }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div>
+                        <label for="numero" class="block text-gray-400 text-sm font-medium mb-1">Número</label>
+                        <input type="text" name="direccion" id="numero" value="{{ usuario.direccion }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div>
+                        <label for="codigo_postal" class="block text-gray-400 text-sm font-medium mb-1">Código Postal</label>
+                        <input type="text" name="cp" id="codigo_postal" value="{{ usuario.codigo_postal }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div>
+                        <label for="ciudad" class="block text-gray-400 text-sm font-medium mb-1">Ciudad</label>
+                        <input type="text" name="ciudad" id="ciudad" value="{{ usuario.ciudad }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
+                    <div>
+                        <label for="pais" class="block text-gray-400 text-sm font-medium mb-1">País</label>
+                        <input type="text" name="pais" id="pais" value="{{ usuario.pais }}" disabled
+                            class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                    </div>
                 </div>
-                <div>
-                    <label for="apellido" class="block text-gray-400 text-sm font-medium mb-1">Apellido</label>
-                    <input type="text" id="apellido" value="Gomez" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-            </div>
 
-            <h2 class="text-3xl font-bold text-blue-400 mb-8">Dirección</h2>
+                <!-- Botones de Acción -->
+                <div class="flex justify-end space-x-4 mt-8">
+                    <form method="POST" action="{{ url_for('perfil', usr=usuario.usuario) }}"></form>
+                        <button type="button" id="editar-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            Editar
+                        </button>
+                        <button type="submit" id="guardar-btn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded hidden">Guardar</button>
+                        <button type="button" id="cancelar-btn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded hidden">Cancelar</button>
+                    </form>
+                    
+                    <form method="POST" action="{{ url_for("perfil", usr = usuario.usuario) }}" 
+                        onsubmit="return confirm('¿Estás seguro de que deseas eliminar tu perfil?')">
+                        
+                        <input type="hidden" name="eliminar" value="1">
+                        <button type="submit" id="eliminar-btn" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded ml-2">
+                            Eliminar
+                        </button>                 
+                    </form>
 
-            <!-- Dirección -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div>
-                    <label for="calle" class="block text-gray-400 text-sm font-medium mb-1">Calle</label>
-                    <input type="text" id="calle" value="Paseo Colon" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
+                    <form method="POST" action="{{ url_for("desloguear") }}" 
+                        onsubmit="return confirm('¿Estás seguro de que deseas cerrar sesión?')">
+                        
+                        <input type="hidden" name="eliminar" value="1">
+                        <button type="submit" id="eliminar-btn" class="bg-violet-600 hover:bg-violet-800 text-white font-bold py-2 px-4 rounded ml-2">
+                            Cerrar Sesión
+                        </button>                 
+                    </form>
                 </div>
-                <div>
-                    <label for="numero" class="block text-gray-400 text-sm font-medium mb-1">Número</label>
-                    <input type="text" id="numero" value="850" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-                <div>
-                    <label for="codigo_postal" class="block text-gray-400 text-sm font-medium mb-1">Código Postal</label>
-                    <input type="text" id="codigo_postal" value="1063" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-                <div>
-                    <label for="ciudad" class="block text-gray-400 text-sm font-medium mb-1">Ciudad</label>
-                    <input type="text" id="ciudad" value="CABA" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-                <div>
-                    <label for="pais" class="block text-gray-400 text-sm font-medium mb-1">País</label>
-                    <input type="text" id="pais" value="ARGENTINA" readonly
-                           class="w-full p-3 rounded-md bg-gray-700 text-gray-200 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-default">
-                </div>
-            </div>
-
-            <!-- Botones de Acción -->
-            <div class="flex justify-end space-x-4 mt-8">
-                <button class="px-6 py-3 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 transition duration-200 ease-in-out">
-                    Editar
-                </button>
-                <button class="px-6 py-3 bg-red-600 text-white font-semibold rounded-md shadow-md hover:bg-red-700 transition duration-200 ease-in-out">
-                    Eliminar
-                </button>
-            </div>
+            </form>
         </section>
     </main>
 {% endblock %}

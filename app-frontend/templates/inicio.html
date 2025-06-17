@@ -5,7 +5,7 @@
     <main id="main-content" class="container mx-auto p-6 space-y-12">
         <!-- Sección 1: Novedades - Carrusel Vertical -->
         <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h3 class="estilo-h3">Novedades</h3>
+            <h2 class="text-gray-50 text-3xl">Novedades</h2>
             <div class="flex flex-col lg:flex-row gap-6">
                 <!-- Carrusel Principal (Imagen Grande y Texto) -->
                 <div id="mainCarouselDisplay" class="relative lg:w-3/4 bg-gray-900 rounded-lg overflow-hidden shadow-xl aspect-w-16 aspect-h-9 sm:aspect-h-10 lg:aspect-h-9 xl:aspect-h-7">
@@ -28,38 +28,54 @@
             </div>
         </section>
 
-        <!-- Sección 2: Los más populares -->
-        <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h3 class="estilo-h3">Los más Populares</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Imagen 1 -->
-                <div class="bg-slate-700 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/FFD700/000000?text=Popular+1" alt="Popular 1" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Aventura Épica</h4>
-                        <p class="text-gray-200">El juego más vendido del mes. ¡Únete a la leyenda!</p>
+        <!-- Sección 1: Ofertas -->
+        <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
+            <h2 class="estilo-h3 mb-6">Ofertas</h2>
+            
+            <!-- Contenedor principal del carrusel -->
+            <div class="relative">
+                <!-- Flecha izquierda -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Anterior">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <!-- Contenedor del carrusel -->
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
+                    <div class="flex space-x-6 w-max">
+                        <!-- Items-->
+                        {% for juego in juegosRebajados %}
+                        <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
+                            <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
+                            </div>
+                            <div class="p-4 flex-grow bg-slate-700">
+                                <a href="#" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
+                                </a>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                       
+                    
                     </div>
                 </div>
-                <!-- Imagen 2 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/C0C0C0/000000?text=Popular+2" alt="Popular 2" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Estrategia Maestra</h4>
-                        <p class="text-gray-600">Pon a prueba tu mente con este desafiante título.</p>
-                    </div>
-                </div>
-                <!-- Imagen 3 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/DAA520/000000?text=Popular+3" alt="Popular 3" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Simulador de Vida</h4>
-                        <p class="text-gray-600">Crea tu propio mundo y vive una vida virtual.</p>
-                    </div>
-                </div>
+                
+                <!-- Flecha derecha -->
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Siguiente">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
             </div>
         </section>
 
-        <!-- Sección 1: Ofertas -->
+        <!-- Sección 2 Recomendados -->
         <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
             <h3 class="estilo-h3 mb-6">Recomendaciones para ti</h3>
             
@@ -73,22 +89,75 @@
                 </button>
                 
                 <!-- Contenedor del carrusel -->
-                <div class="pb-4 scrollbar-hide">
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
                     <div class="flex space-x-6 w-max">
-                        <!-- Item 1 -->
+                        <!-- Items-->
+                        {% for juego in juegosRecomendados %}
                         <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
                             <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
-                                <img src="#" alt="Oferta 1" class="w-full h-full object-cover"> <!-- Rellenar con las imagenes -->
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
                             </div>
                             <div class="p-4 flex-grow bg-slate-700">
                                 <a href="#" class="block">
-                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">Titulo Oferta 1</h4>
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
                                 </a>
-                                <p class="text-stone-200">Adéntrate en un mundo mágico lleno de misterios.</p>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
                             </div>
                         </div>
-                        
-                        <!-- Puedes agregar más items aquí -->
+                        {% endfor %}
+                       
+                    
+                    </div>
+                </div>
+                
+                <!-- Flecha derecha -->
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Siguiente">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- Sección 3 Recientes -->
+        <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
+            <h2 class="estilo-h3 mb-6">Juegos recientes</h2>
+            
+            <!-- Contenedor principal del carrusel -->
+            <div class="relative">
+                <!-- Flecha izquierda -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Anterior">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <!-- Contenedor del carrusel -->
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
+                    <div class="flex space-x-6 w-max">
+                        <!-- Items-->
+                        {% for juego in juegosRecientes %}
+                        <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
+                            <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
+                            </div>
+                            <div class="p-4 flex-grow bg-slate-700">
+                                <a href="#" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
+                                </a>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                       
+                    
                     </div>
                 </div>
                 

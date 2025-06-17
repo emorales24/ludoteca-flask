@@ -1,15 +1,17 @@
 import mysql.connector
 
-with open("init_db.sql") as f:
+with open("init_db.sql", encoding="utf-8") as f:
     sql = f.read()
 
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
-    password=""
+    password="1234",
+    charset='utf8mb4',
 )
 
 cursor = conn.cursor()
+cursor.execute("SET NAMES utf8mb4;")
 for statement in sql.split(";"):
     if statement.strip():
         print(statement)

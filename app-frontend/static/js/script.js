@@ -105,88 +105,21 @@ document.addEventListener('DOMContentLoaded', () => {
     startAutoSlide();
 });
 
-// Funcionalidad de CARRITO.HTML
-
-// Función de ejemplo para actualizar un ítem del carrito
-// En una aplicación real, esto haría una llamada a la API del backend
-function updateCartItem(itemId, newQuantity) {
-    console.log(`Actualizando ítem ${itemId} a cantidad: ${newQuantity}`);
-    // Aquí iría la lógica para enviar la actualización al backend
-    // y luego re-renderizar los totales o el ítem específico.
-}
-
-// Simula la carga de ítems del carrito (en una aplicación real, se obtendría del backend)
-const cartItems = [
-    { id: 1, name: "Aventura Épica", price: 29.99, quantity: 1, imageUrl: "https://placehold.co/100x100/FF5733/FFFFFF?text=Juego1" },
-    { id: 2, name: "Simulador Urbano", price: 19.99, quantity: 2, imageUrl: "https://placehold.co/100x100/33FF57/FFFFFF?text=Juego2" },
-    // Puedes añadir más ítems de ejemplo aquí
-];
-
-function renderCart() {
-    const container = document.getElementById('cartItemsContainer');
-    const subtotalAmountSpan = document.getElementById('subtotalAmount');
-    const totalAmountSpan = document.getElementById('totalAmount');
-    const emptyCartMessage = document.getElementById('emptyCartMessage');
-
-    container.innerHTML = ''; // Limpiar el contenedor antes de renderizar
-
-    let subtotal = 0;
-
-    if (cartItems.length === 0) {
-        emptyCartMessage.classList.remove('hidden');
-    } else {
-        emptyCartMessage.classList.add('hidden');
-        cartItems.forEach(item => {
-            const itemSubtotal = item.price * item.quantity;
-            subtotal += itemSubtotal;
-
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'flex items-center bg-gray-700 p-4 rounded-lg shadow-md';
-            itemDiv.innerHTML = `
-                <img src="${item.imageUrl}" alt="${item.name}" class="w-24 h-24 object-cover rounded-md mr-4">
-                <div class="flex-grow">
-                    <h3 class="text-xl font-semibold text-gray-100">${item.name}</h3>
-                    <p class="text-gray-300">Precio Unitario: <span class="font-bold">$${item.price.toFixed(2)}</span></p>
-                    <div class="flex items-center mt-2">
-                        <label for="quantity-${item.id}" class="mr-2 text-gray-300">Cantidad:</label>
-                        <input type="number" id="quantity-${item.id}" value="${item.quantity}" min="1"
-                                class="w-16 p-2 rounded-md bg-gray-600 text-gray-100 border border-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                                onchange="updateItemQuantity(${item.id}, this.value)">
-                    </div>
-                </div>
-                <div class="text-right">
-                    <p class="text-lg font-bold text-blue-300">Subtotal: $${itemSubtotal.toFixed(2)}</p>
-                    <button onclick="removeItem(${item.id})" class="text-red-400 hover:text-red-500 transition duration-200 ease-in-out mt-2 text-sm">
-                        Eliminar
-                    </button>
-                </div>
-            `;
-            container.appendChild(itemDiv);
-        });
-    }
+// Funcionalidad de las Flechas del Carrusel
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.overflow-x-auto');
+    const leftBtn = document.querySelector('button[aria-label="Anterior"]');
+    const rightBtn = document.querySelector('button[aria-label="Siguiente"]');
     
-    subtotalAmountSpan.textContent = `$${subtotal.toFixed(2)}`;
-    totalAmountSpan.textContent = `$${subtotal.toFixed(2)}`; // Asumiendo envío gratis por ahora
-}
+    rightBtn.addEventListener('click', () => {
+        container.scrollBy({ left: 650, behavior: 'smooth' });
+    });
+    
+    leftBtn.addEventListener('click', () => {
+        container.scrollBy({ left: -650, behavior: 'smooth' });
+    });
+});
 
-function updateItemQuantity(itemId, newQuantity) {
-    const itemIndex = cartItems.findIndex(item => item.id === itemId);
-    if (itemIndex > -1) {
-        cartItems[itemIndex].quantity = parseInt(newQuantity);
-        renderCart(); // Volver a renderizar para actualizar totales y subtotales
-    }
-}
-
-function removeItem(itemId) {
-    const initialLength = cartItems.length;
-    cartItems.splice(cartItems.findIndex(item => item.id === itemId), 1);
-    if (cartItems.length < initialLength) {
-        renderCart(); // Volver a renderizar si se eliminó un ítem
-    }
-}
-
-// Carga el carrito cuando la página esté lista
-document.addEventListener('DOMContentLoaded', renderCart);
 
 // Funcionalidad de BUSCADOR.HTML
 document.addEventListener('DOMContentLoaded', async () => {
@@ -256,21 +189,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchGames(query);
 });
 
-// Funcionalidad de las Flechas del Carrusel
-document.addEventListener('DOMContentLoaded', function() {
-    const container = document.querySelector('.overflow-x-auto');
-    const leftBtn = document.querySelector('button[aria-label="Anterior"]');
-    const rightBtn = document.querySelector('button[aria-label="Siguiente"]');
-    
-    rightBtn.addEventListener('click', () => {
-        container.scrollBy({ left: 650, behavior: 'smooth' });
-    });
-    
-    leftBtn.addEventListener('click', () => {
-        container.scrollBy({ left: -650, behavior: 'smooth' });
-    });
-});
-
 // Funcionalidad ADMIN.HTML
 function mostrarFormularioEditar(id, precio, porcentaje, en_oferta) {
     document.getElementById('formulario-editar').classList.remove('hidden');
@@ -282,3 +200,60 @@ function mostrarFormularioEditar(id, precio, porcentaje, en_oferta) {
 function cerrarFormularioEditar() {
     document.getElementById('formulario-editar').classList.add('hidden');
 }
+
+// Funcionalidad PERFIL.HTML
+document.addEventListener('DOMContentLoaded', function() {
+    const editarBtn = document.getElementById('editar-btn');
+    const guardarBtn = document.getElementById('guardar-btn');
+    const cancelarBtn = document.getElementById('cancelar-btn');
+    const inputs = document.querySelectorAll('#perfil-form input');
+
+    editarBtn.addEventListener('click', function() {
+        inputs.forEach(input => input.disabled = false);
+        editarBtn.classList.add('hidden');
+        guardarBtn.classList.remove('hidden');
+        cancelarBtn.classList.remove('hidden');
+    });
+
+    cancelarBtn.addEventListener('click', function() {
+        // Recarga la página para restaurar los valores originales
+        window.location.reload();
+    });
+});
+
+
+// Funcionalidad para JUEGO.HTML
+
+        const buyButton = document.getElementById('buyButton');
+        const buyPopup = document.getElementById('buyPopup');
+        const cancelBuyButton = document.getElementById('cancelBuyButton');
+
+        buyButton.addEventListener('click', () => {
+            buyPopup.classList.remove('hidden');
+        });
+
+        cancelBuyButton.addEventListener('click', () => {
+            buyPopup.classList.add('hidden');
+        });
+
+
+            // Aca agregué esto para ver si se podia poner una notificacion de que se compró algo, ver a lo ultimo
+            // const form = document.querySelector('form');
+            // const toast = document.getElementById('toast');
+
+            // form.addEventListener('submit', (e) => {
+            //     e.preventDefault(); // Evita que se recargue la página (opcional)
+
+            //     // Oculta popup
+            //     popup.classList.add('hidden');
+
+            //     // Muestra el toast
+            //     toast.classList.remove('hidden');
+
+            //     // Oculta el toast después de 3 segundos
+            //     setTimeout(() => {
+            //         toast.classList.add('hidden');
+            //     }, 3000);
+            // });
+
+// ---------------------------------------------------------------------------
