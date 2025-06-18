@@ -19,10 +19,8 @@ def validar_usuario(usr, contra_evaluar):
     )
     if response.status_code == 200:
         return response.json()
-    elif response.status_code == 404:
-        return "no_encontrado"
-    elif response.status_code == 401:
-        return "contra_incorrecta"
+    else:
+        return response.status_code
 
 def actualizar_usuario(usuario, email, contra, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, usuario_viejo):
     response = requests.put(

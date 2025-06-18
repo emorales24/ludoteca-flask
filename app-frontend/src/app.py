@@ -48,10 +48,10 @@ def login():
 
         validacion_usuario = validar_usuario(user, contra)
 
-        if validacion_usuario == "no_encontrado":
+        if validacion_usuario == 404:
             flash("Usuario no encontrado")
             return redirect(url_for("login"))
-        elif validacion_usuario == "contra_incorrecta":
+        elif validacion_usuario == 401:
             flash("Contaseña Invalida.")
             return redirect(url_for("login"))
         else:
