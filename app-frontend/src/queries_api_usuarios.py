@@ -77,3 +77,19 @@ def actualizar_usuario_online():
     if response.status_code == 200:
         return True
     return None
+
+def registrar_usuario(usuario, nombre, apellido, email, contra, pais, ciudad):
+    response = requests.post(
+        f"{API_BASE}/registro",
+        json = {
+            "usuario": usuario,
+            "contra": contra, 
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "pais": pais,
+            "ciudad": ciudad    
+        }
+    )
+
+    return response.status_code
