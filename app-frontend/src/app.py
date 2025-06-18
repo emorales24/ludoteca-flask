@@ -42,6 +42,7 @@ def login():
         flash("Error, ya hay sesion iniciada")
         return redirect(url_for("index"))
 
+    # PULIR Y PASAR ALGUNAS AL BACK
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contra"]
@@ -50,7 +51,7 @@ def login():
         if usuario == None:
             flash("Usuario no encontrado")
             return redirect(url_for("login"))
-        elif usuario["contra"] == contra:  
+        elif usuario["contra"] == contra:
             loguear_usuario(user)
             if usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))

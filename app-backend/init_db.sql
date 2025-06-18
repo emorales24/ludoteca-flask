@@ -144,7 +144,9 @@ El lugar entero se encuentra lleno de maleza y árboles, y la única construcci�
 
 INSERT INTO usuarios (rol, usuario, contra, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal) VALUES
 ('admin', 'admin', '1234', 'admin@example.com', 'Admin', 'Root', 'Argentina', 'CABA', 'Avenida Central', '123 Piso 1', '1000'),
-('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Argentina','AVELLANEDA', 'Mitre', '4325 Dto 3', '1407');
+('final', 'juancito', '4321', 'juan@gmail.com', 'Juan', 'Pérez', 'Argentina','AVELLANEDA', 'Mitre', '4325 Dto 3', '1407'),
+('final', 'pepe', '5678', 'pepe@gmail.com', 'Pepe', 'Garcia', 'Argentina','San Isidro', 'Mitre', '4325 Dto 3', '1407'),
+('final', 'carlos', '8910', 'carlos@gmail.com', 'Carlos', 'Aguas', 'Argentina','Palermo', 'Mitre', '4325 Dto 3', '1407');
 
 
 INSERT INTO items_carrito (estado, usuario_id, juego_id, precio, tipo_envio) VALUES
