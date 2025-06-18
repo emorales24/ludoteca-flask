@@ -111,7 +111,15 @@ def get_juego(id):
     """
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT juegos.*, generos.nombre_genero FROM juegos JOIN generos on juegos.id_genero = generos.id WHERE juegos.id = %s ", (id,))
+    cursor.execute(
+        """
+            SELECT 
+            juegos.*, generos.nombre_genero
+            FROM juegos 
+            JOIN generos on juegos.id_genero = generos.id 
+            WHERE juegos.id = %s 
+        """, (id,)
+    )
     juego = cursor.fetchone()
     cursor.close()
     conn.close()

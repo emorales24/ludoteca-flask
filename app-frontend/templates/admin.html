@@ -55,7 +55,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for juego in juegosRebajados %}
+                    {% for juego in juegos_rebajados %}
                     <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition" id="fila-{{ juego.id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre_genero.upper() }}</td>
@@ -93,7 +93,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for juego in juegosRecientes %}
+                    {% for juego in juegos_recientes %}
                     <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition" id="fila-{{ juego.id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre_genero.upper() }}</td>
@@ -131,7 +131,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for juego in juegosRecomendados %}
+                    {% for juego in juegos_recomendados %}
                     <tr class="bg-gray-700/70 hover:bg-gray-600/80 transition" id="fila-{{ juego.id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-gray-100">{{ juego.nombre_genero.upper() }}</td>

@@ -17,12 +17,14 @@ def get_usuarios():
 def get_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("""
-                   SELECT * FROM usuarios 
-                   INNER JOIN usuario_online
-                   ON usuario_online.usuario = usuarios.usuario
-                   WHERE usuarios.usuario = %s
-                   """, (usr,))
+    cursor.execute(
+        """
+            SELECT * FROM usuarios 
+            INNER JOIN usuario_online
+            ON usuario_online.usuario = usuarios.usuario
+            WHERE usuarios.usuario = %s
+        """, (usr,)
+    )
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
@@ -109,9 +111,6 @@ def post_usuario_online(usr):
     conn.close()
     return jsonify("Se inició sesión correctamente", 204)
 
-
-# este es borrable pero lo dejo para no modificar el del perfil
-# este  nos sirve para 
 # OBJETIVO: TRAEMOS EL USUARIO ONLINE 
 # CONSECUENCIA EN EL FRONT 1: Si existe, lo mostramos trayendolo con get_usuario
 # CONSECUENTA EN EL FRONT 2: Si no hay dato, lo redirigimos al login

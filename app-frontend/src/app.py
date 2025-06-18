@@ -126,9 +126,9 @@ def inicioAdmin():
 
     if usuario_online:
         if usuario_online["rol"] == "admin":
-            juegosRecientes = obtener_juegos_recientes()
-            juegosRebajados = obtener_juegos_rebajados()
-            juegosRecomendados = obtener_juegos_recomendados()
+            juegos_recientes = obtener_juegos_recientes()
+            juegos_rebajados = obtener_juegos_rebajados()
+            juegos_recomendados = obtener_juegos_recomendados()
 
             if request.method == "POST":
                 id_juego = request.form["id_juego"]
@@ -137,9 +137,9 @@ def inicioAdmin():
                 en_oferta = request.form["en_oferta"]
 
                 modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
-                return redirect(url_for("inicioAdmin", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados))
+                return redirect(url_for("inicioAdmin", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados))
 
-            return render_template("admin.html", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados)
+            return render_template("admin.html", juegos_recientes=juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados)
         else:
             flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
             return redirect(url_for("index"))
@@ -152,9 +152,9 @@ def inicioAdmin():
 @app.route("/")
 def index():
     try:
-        juegosRecientes = obtener_juegos_recientes()
-        juegosRebajados = obtener_juegos_rebajados()
-        juegosRecomendados = obtener_juegos_recomendados()
+        juegos_recientes = obtener_juegos_recientes()
+        juegos_rebajados = obtener_juegos_rebajados()
+        juegos_recomendados = obtener_juegos_recomendados()
     except:
         flash(
             "No se pudo obtener la lista de juegos. El servidor está caído",
@@ -162,7 +162,7 @@ def index():
         )
         return redirect(url_for("index"))
 
-    return render_template("inicio.html", juegosRecientes=juegosRecientes, juegosRebajados=juegosRebajados, juegosRecomendados=juegosRecomendados)
+    return render_template("inicio.html", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados)
 
 
 #PAGINA DE BUSQUEDA
