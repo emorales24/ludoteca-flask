@@ -36,7 +36,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
                             <label for="vencimiento" class="block text-gray-400 text-sm font-medium mb-1">Fecha de Vencimiento</label>
-                            <input type="date" name="metodo_vencimiento" id="metodo_vencimiento" value="{{ metodo.fecha_vencimiento }}" disabled
+                            <input type="text" name="metodo_vencimiento" id="metodo_vencimiento" value="{{ metodo.fecha_vencimiento }}" disabled
                                 class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
                         </div>
                         <div>
@@ -46,6 +46,28 @@
                         </div>
                     </div>
                 {% endfor %}
+
+            <!-- Formulario para Agregar Metodo de Pago -->
+            <button id="boton_mostrar_popup" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Agregar método de pago
+            </button>
+
+            <div id="popup_metodo_pago" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <form method="post" action="{{ url_for("ver_metodos_pago") }}" class="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-300">Agregar Metodo de Pago</h2>
+
+                    <input name="tipo" type="text" placeholder="Tipo" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="marca" type="text" placeholder="Marca" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="numero" type="password" placeholder="Numero de Tarjeta" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="vencimiento" type="date" placeholder="Vencimiento" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="numero_cvv" type="number" placeholder="CVV" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    
+                    <div class="flex justify-end space-x-2 mt-4">
+                        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Aceptar</button>
+                        <button id="boton_cancelar_carga" type="button" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancelar</button>
+                    </div>
+                </form>
+            </div>
         </section>
     </main>
 {% endblock %}
