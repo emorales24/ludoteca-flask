@@ -30,15 +30,27 @@ def get_usuario(usr):
     conn.close()
     return jsonify(usuario)
 
-@usuarios_bp.route("/validar/<usr>")
-def get_rol_usuario_clave(usr):
+@usuarios_bp.route("/validar/<usr>", methods = ["POST"])
+def validate_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT rol, usuario, contra FROM usuarios WHERE usuario = %s", (usr,))
+    data = request.json
+    contra_evaluar = data.get("contra_evaluar")
+    cursor.execute(
+        """
+            SELECT rol, usuario, contra FROM usuarios WHERE usuario = %s
+        """, (usr,)
+    )
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    return jsonify(usuario)
+
+    if not usuario:
+        return jsonify("Usuario no encontrado."), 404
+    elif usuario["contra"] == contra_evaluar:
+        return jsonify(usuario), 200
+    else:
+        return jsonify("Error, contraseña incorrecta"), 401
 
 @usuarios_bp.route("/update/<usr>", methods = ["PUT"])
 def update_usuario(usr):

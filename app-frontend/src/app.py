@@ -42,24 +42,25 @@ def login():
         flash("Error, ya hay sesion iniciada")
         return redirect(url_for("index"))
 
-    # PULIR Y PASAR ALGUNAS AL BACK
     if request.method == "POST":
         user = request.form["usuario"]
         contra = request.form["contra"]
 
-        usuario = validar_usuario(user)
-        if usuario == None:
+        validacion_usuario = validar_usuario(user, contra)
+
+        if validacion_usuario == "no_encontrado":
             flash("Usuario no encontrado")
             return redirect(url_for("login"))
-        elif usuario["contra"] == contra:
+        elif validacion_usuario == "contra_incorrecta":
+            flash("Contaseña Invalida.")
+            return redirect(url_for("login"))
+        else:
             loguear_usuario(user)
-            if usuario["rol"] == "admin":
+            if validacion_usuario["rol"] == "admin":
                 return redirect(url_for("inicioAdmin"))
             else:
                 return redirect(url_for("index"))
-        else:
-            flash("Contaseña Invalida.")
-            return redirect(url_for("login"))
+
     
     return render_template("login.html")
 
