@@ -107,7 +107,7 @@ def perfil(usr):
             actualizar_usuario_online()
 
             datos_usr = obtener_usuario(username)
-            return redirect(url_for("perfil", usr = datos_usr))
+            return redirect(url_for("perfil", usr = datos_usr["usuario"]))
 
     return render_template("perfil.html", usuario = datos_usr)
 
