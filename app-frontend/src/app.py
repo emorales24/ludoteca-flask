@@ -104,13 +104,13 @@ def perfil(usr):
             pais = request.form["pais"]
 
             actualizar_usuario(username, email, contra, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
+
             actualizar_usuario_online()
 
             datos_usr = obtener_usuario(username)
             return redirect(url_for("perfil", usr = datos_usr["usuario"]))
-
+          
     return render_template("perfil.html", usuario = datos_usr)
-
 
 @app.route("/desloguear", methods=["POST"])
 def desloguear():
@@ -137,9 +137,11 @@ def inicioAdmin():
                 en_oferta = request.form["en_oferta"]
 
                 modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
+
                 return redirect(url_for("inicioAdmin", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados))
 
             return render_template("admin.html", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados)
+
         else:
             flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
             return redirect(url_for("index"))
@@ -160,7 +162,12 @@ def index():
         flash("No se pudo obtener la lista de juegos. El servidor está caído")
         return redirect(url_for("index"))
 
-    return render_template("inicio.html", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados)
+    return render_template(
+        "inicio.html",
+        juegos_recientes=juegos_recientes,
+        juegos_rebajados=juegos_rebajados,
+        juegos_recomendados=juegos_recomendados,
+    )
 
 
 # PAGINA DE BUSQUEDA
@@ -178,18 +185,14 @@ def buscar():
 # PAGINA DE DETALLE DE JUEGO
 @app.route("/juego/<int:id>")
 def ver_juego(id):
-
-    usuario_online = buscar_usuario_online()
-    if usuario_online:
-        juego = obtener_juego(id)
-        if not juego:
-            flash("No se puede obtener el juego. El servidor debe estar caido.")
-            return redirect(url_for("index"))
-        return render_template("juego.html", juego=juego)
-
-    flash("Necesitás iniciar sesión para ver juegos!")
-    return redirect(url_for("login"))
-
+    juego = obtener_juego(id)
+    if not juego:
+        flash(
+            "No se puede obtener el juego. El servidor debe estar caido.",
+            "Error interno",
+        )
+        return redirect(url_for("index"))
+    return render_template("juego.html", juego=juego)
 
 # PAGINA DE CARRITO
 @app.route("/carrito")
@@ -209,19 +212,19 @@ def carrito():
 # caso deberia estar el boton de comprar solo en la pantalla donde se ve un juego unico)
 @app.route("/carrito/agregar", methods=["POST"])
 def post_itemCarrito():
-    # usuario = buscar_usuario_online()
-
-    # if usuario:
+    usuario = buscar_usuario_online()
     id = int(request.form["id_juego"])
-    tipo_envio = "digital" if "opcion_digital" in request.form else "fisico"
-    precio = float(request.form["precio"])
 
-    response = colocar_item_carrito(id, tipo_envio, precio)
-    flash("Juego agregado a tu carrito!")
-    return redirect(url_for("ver_juego", id=id))
+    if usuario:        
+        tipo_envio = "digital" if "opcion_digital" in request.form else "fisico"
+        precio = float(request.form["precio"])
 
-    # flash("Para ver tu carrito necesitas iniciar sesión.")
-    # return redirect(url_for('index'))
+        response = colocar_item_carrito(id, tipo_envio, precio)
+        flash("Juego agregado a tu carrito!")
+        return redirect(url_for("ver_juego", id=id))
+
+    flash("Debes iniciar sesión para agregar items al carrito.")
+    return redirect(url_for('ver_juego', id = id))
 
 
 @app.route("/carrito/eliminar/<int:id>")
@@ -257,20 +260,6 @@ def ver_metodos_pago():
     if not usuario_online:
         flash("Necesitás iniciar sesión para acceder a tu perfil.")
         return redirect(url_for("index"))
-    
-    if request.method == "POST":
-        tipo = request.form["tipo"]
-        marca = request.form["marca"]
-        numero_tarjeta = request.form["numero"]
-        vencimineto = request.form["vencimiento"]
-        codigo_cvv = request.form["numero_cvv"]
-
-        agregar_metodo_pago(usuario_online["usuario_id"], tipo, marca, numero_tarjeta, vencimineto, codigo_cvv)
-        metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
-
-        return redirect(url_for("ver_metodo_pago", metodos_pago = metodos_pago))
-
-    metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
 
     return render_template("metodos_pago.html", metodos_pago = metodos_pago, usuario = usuario_online)
 
