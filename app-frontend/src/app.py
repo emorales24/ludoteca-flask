@@ -281,7 +281,7 @@ def registro():
 
         if registrado == 201:
             flash("Usuario registrado")
-            return redirect(url_for("registro"))
+            return redirect(url_for("index"))
         elif registrado == 409:
             flash("Error. El Usuario ya existe.")
             return redirect(url_for("registro"))
