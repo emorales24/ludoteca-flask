@@ -259,19 +259,19 @@ def carrito():
 # caso deberia estar el boton de comprar solo en la pantalla donde se ve un juego unico)
 @app.route("/carrito/agregar", methods=["POST"])
 def post_itemCarrito():
-    # usuario = buscar_usuario_online()
-
-    # if usuario:
+    usuario = buscar_usuario_online()
     id = int(request.form["id_juego"])
-    tipo_envio = "digital" if "opcion_digital" in request.form else "fisico"
-    precio = float(request.form["precio"])
 
-    response = colocar_item_carrito(id, tipo_envio, precio)
-    flash("Juego agregado a tu carrito!")
-    return redirect(url_for("ver_juego", id=id))
+    if usuario:        
+        tipo_envio = "digital" if "opcion_digital" in request.form else "fisico"
+        precio = float(request.form["precio"])
 
-    # flash("Para ver tu carrito necesitas iniciar sesión.")
-    # return redirect(url_for('index'))
+        response = colocar_item_carrito(id, tipo_envio, precio)
+        flash("Juego agregado a tu carrito!")
+        return redirect(url_for("ver_juego", id=id))
+
+    flash("Debes iniciar sesión para agregar items al carrito.")
+    return redirect(url_for('ver_juego', id = id))
 
 
 @app.route("/carrito/eliminar/<int:id>")
