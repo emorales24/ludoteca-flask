@@ -131,7 +131,7 @@ def post_usuario_online(usr):
 def get_usuario_online():     
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT id, usuario_id,usuario, rol FROM usuario_online WHERE id = 1")
+    cursor.execute("SELECT id, usuario_id, usuario, rol FROM usuario_online WHERE id = 1")
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()

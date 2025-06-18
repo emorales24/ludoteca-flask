@@ -3,21 +3,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
 
 # Importo funciones de peticiones a la API
-from queries_api_juegos import (
-    obtener_juego,
-    obtener_juegos_rebajados,
-    obtener_juegos_recientes,
-    obtener_juegos_recomendados,
-    modificar_juego,
-    buscar_juegos,
-)
-from queries_api_carrito import (
-    obtener_carrito,
-    comprar_carrito,
-    colocar_item_carrito,
-    sacar_item_carrito,
-    obtener_historial_compras,
-)
+from queries_api_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos
+from queries_api_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
 from queries_api_usuarios import (
     obtener_usuario,
     validar_usuario,
@@ -28,7 +15,7 @@ from queries_api_usuarios import (
     desloguear_usuario,
     buscar_usuario_online,
     actualizar_usuario_online,
-    registrar_usuario,
+    registrar_usuario
 )
 
 # Base dir es la ra�z del proyecto
@@ -64,7 +51,7 @@ def login():
         validacion_usuario = validar_usuario(user, contra)
 
         if validacion_usuario == 404:
-            flash("Usuario no encontrado")
+            flash("Usuario no encontrado. Debe registrarse")
             return redirect(url_for("login"))
         elif validacion_usuario == 401:
             flash("Contaseña Invalida.")
@@ -88,19 +75,16 @@ def redirigir_perfil():
         flash("Necesitás iniciar sesión para acceder a tu perfil.", "error")
         return redirect(url_for("index"))
 
-    return redirect(url_for("perfil", usr=usuario_online["usuario"]))
+    return redirect(url_for("perfil", usr = usuario_online["usuario"]))
 
 
 @app.route("/perfil/<usr>", methods=["GET", "POST"])
 def perfil(usr):
-
     datos_usr = obtener_usuario(usr)
 
     if datos_usr == None:
-        flash(
-            "Usuario no Encontrado. Si no tenes cuenta, completa el registro para comenzar a comprar juegos!"
-        )
-        return redirect(url_for("index"))  # CAMBIAR POR REGISTRARSE
+        flash("Usuario no Encontrado.")
+        return redirect(url_for("login"))
 
     if request.method == "POST":
         if request.form.get("eliminar"):
@@ -119,27 +103,13 @@ def perfil(usr):
             ciudad = request.form["ciudad"]
             pais = request.form["pais"]
 
-            actualizar_usuario(
-                username,
-                email,
-                contra,
-                nombre,
-                apellido,
-                calle,
-                direccion,
-                codigo_postal,
-                ciudad,
-                pais,
-                datos_usr["usuario"],
-            )
-
+            actualizar_usuario(username, email, contra, nombre, apellido, calle, direccion, codigo_postal, ciudad, pais, datos_usr["usuario"])
             actualizar_usuario_online()
 
             datos_usr = obtener_usuario(username)
+            return redirect(url_for("perfil", usr = datos_usr))
 
-            return redirect(url_for("perfil", usr=datos_usr["usuario"]))
-
-    return render_template("perfil.html", usuario=datos_usr)
+    return render_template("perfil.html", usuario = datos_usr)
 
 
 @app.route("/desloguear", methods=["POST"])
@@ -152,7 +122,6 @@ def desloguear():
 # PAGINA DE ADMIN
 @app.route("/admin", methods=["POST", "GET"])
 def inicioAdmin():
-
     usuario_online = buscar_usuario_online()
 
     if usuario_online:
@@ -168,25 +137,11 @@ def inicioAdmin():
                 en_oferta = request.form["en_oferta"]
 
                 modificar_juego(id_juego, precio, porcentaje_oferta, en_oferta)
-                return redirect(
-                    url_for(
-                        "inicioAdmin",
-                        juegos_recientes=juegos_recientes,
-                        juegos_rebajados=juegos_rebajados,
-                        juegos_recomendados=juegos_recomendados,
-                    )
-                )
+                return redirect(url_for("inicioAdmin", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados))
 
-            return render_template(
-                "admin.html",
-                juegos_recientes=juegos_recientes,
-                juegos_rebajados=juegos_rebajados,
-                juegos_recomendados=juegos_recomendados,
-            )
+            return render_template("admin.html", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados)
         else:
-            flash(
-                "Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion"
-            )
+            flash("Necesitas iniciar sesion con una cuenta valida de administrador para esa seccion")
             return redirect(url_for("index"))
 
     else:
@@ -202,18 +157,10 @@ def index():
         juegos_rebajados = obtener_juegos_rebajados()
         juegos_recomendados = obtener_juegos_recomendados()
     except:
-        flash(
-            "No se pudo obtener la lista de juegos. El servidor está caído",
-            "Error interno",
-        )
+        flash("No se pudo obtener la lista de juegos. El servidor está caído")
         return redirect(url_for("index"))
 
-    return render_template(
-        "inicio.html",
-        juegos_recientes=juegos_recientes,
-        juegos_rebajados=juegos_rebajados,
-        juegos_recomendados=juegos_recomendados,
-    )
+    return render_template("inicio.html", juegos_recientes = juegos_recientes, juegos_rebajados = juegos_rebajados, juegos_recomendados = juegos_recomendados)
 
 
 # PAGINA DE BUSQUEDA
@@ -225,7 +172,7 @@ def buscar():
         flash("No se han encontrado resultado para la busqueda")
         return redirect(url_for("index"))
 
-    return render_template("buscador.html", busqueda=busqueda)
+    return render_template("buscador.html", busqueda = busqueda)
 
 
 # PAGINA DE DETALLE DE JUEGO
@@ -236,10 +183,7 @@ def ver_juego(id):
     if usuario_online:
         juego = obtener_juego(id)
         if not juego:
-            flash(
-                "No se puede obtener el juego. El servidor debe estar caido.",
-                "Error interno",
-            )
+            flash("No se puede obtener el juego. El servidor debe estar caido.")
             return redirect(url_for("index"))
         return render_template("juego.html", juego=juego)
 
@@ -250,13 +194,12 @@ def ver_juego(id):
 # PAGINA DE CARRITO
 @app.route("/carrito")
 def carrito():
-
     usuario = buscar_usuario_online()
 
     if usuario:
         itemsCarrito = obtener_carrito()
         total = sum(item["precio"] for item in itemsCarrito)
-        return render_template("carrito.html", carrito=itemsCarrito, total=total)
+        return render_template("carrito.html", carrito = itemsCarrito, total=total)
 
     flash("Para ver tu carrito necesitas iniciar sesión.")
     return redirect(url_for("index"))
@@ -314,10 +257,22 @@ def ver_metodos_pago():
     if not usuario_online:
         flash("Necesitás iniciar sesión para acceder a tu perfil.")
         return redirect(url_for("index"))
-    else:
+    
+    if request.method == "POST":
+        tipo = request.form["tipo"]
+        marca = request.form["marca"]
+        numero_tarjeta = request.form["numero"]
+        vencimineto = request.form["vencimiento"]
+        codigo_cvv = request.form["numero_cvv"]
+
+        agregar_metodo_pago(usuario_online["usuario_id"], tipo, marca, numero_tarjeta, vencimineto, codigo_cvv)
         metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
-        print(metodos_pago)
-        return render_template("metodos_pago.html", metodos_pago=metodos_pago)
+
+        return redirect(url_for("ver_metodo_pago", metodos_pago = metodos_pago))
+
+    metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
+
+    return render_template("metodos_pago.html", metodos_pago = metodos_pago, usuario = usuario_online)
 
 
 @app.route("/registro", methods=["GET", "POST"])
@@ -335,15 +290,18 @@ def registro():
             usuario, nombre, apellido, email, contra, pais, ciudad
         )
 
-        if registrado == 200:
+        if registrado == 201:
             flash("Usuario registrado")
             return redirect(url_for("registro"))
+        elif registrado == 409:
+            flash("Error. El Usuario ya existe.")
+            return redirect(url_for("registro"))
         else:
-            flash("Error. No se ha podido registrar")
+            flash("Error. No se ha podido registrar el Usuario")
             return redirect(url_for("registro"))
 
     return render_template("registro.html")
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5001)
+    app.run(debug = True, port = 5001)
