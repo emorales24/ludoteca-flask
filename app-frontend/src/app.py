@@ -175,11 +175,19 @@ def buscar():
 @app.route("/buscar/<string:genero>")
 def buscar_por_genero(genero):
     busqueda = buscar_juegos_por_genero(genero)
-    print(busqueda)
     if not busqueda:
         flash("No se han encontrado resultados para la busqueda")
         return redirect(url_for('index'))
     
+    return render_template("buscador.html", busqueda = busqueda)
+
+@app.route("/ofertas")
+def buscar_ofertas():
+    busqueda = obtener_juegos_rebajados()
+    if not busqueda:
+        flash("No se han encontrado resultados para la busqueda")
+        return redirect(url_for('index'))
+
     return render_template("buscador.html", busqueda = busqueda)
 
 

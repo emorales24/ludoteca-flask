@@ -60,8 +60,6 @@ def buscar_juegos(query):
 
 def buscar_juegos_por_genero(genero):
     response = requests.get(f"{API_BASE}/juegos/{genero}")
-    print(response)
-    print("ABER")
     if response.status_code == 200:
         return response.json()
     return None
