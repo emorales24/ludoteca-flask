@@ -7,7 +7,7 @@ from api.queries_juegos import obtener_juego,obtener_juegos_rebajados, obtener_j
 from api.queries_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
 from api.queries_usuarios import obtener_usuario, validar_usuario, actualizar_usuario, eliminar_usuario, registrar_usuario
 from api.queries_usuario_online import loguear_usuario, desloguear_usuario, actualizar_usuario_online, buscar_usuario_online
-from api.queries_metodo_pago import obtener_metodos_pago, agregar_metodo_pago, eliminar_metodo_pago
+from api.queries_metodo_pago import obtener_metodos_pago, agregar_metodo_pago
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
