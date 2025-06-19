@@ -3,7 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
 
 # Importo funciones de peticiones a la API
-from queries_api_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos
+from queries_api_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos, buscar_juegos_por_genero
 from queries_api_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
 from queries_api_usuarios import (
     obtener_usuario,
@@ -179,6 +179,17 @@ def buscar():
         flash("No se han encontrado resultado para la busqueda")
         return redirect(url_for("index"))
 
+    return render_template("buscador.html", busqueda = busqueda)
+
+
+@app.route("/buscar/<string:genero>")
+def buscar_por_genero(genero):
+    busqueda = buscar_juegos_por_genero(genero)
+    print(busqueda)
+    if not busqueda:
+        flash("No se han encontrado resultados para la busqueda")
+        return redirect(url_for('index'))
+    
     return render_template("buscador.html", busqueda = busqueda)
 
 

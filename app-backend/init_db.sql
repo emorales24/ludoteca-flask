@@ -9,8 +9,8 @@ CREATE TABLE generos (
 
 CREATE TABLE juegos (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre NVARCHAR(50) NOT NULL,
-    descripcion NVARCHAR(500) NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(500) NOT NULL,
     tipo VARCHAR(50) NOT NULL,
     id_genero INT NOT NULL,
     fecha_lanzamiento DATE,
