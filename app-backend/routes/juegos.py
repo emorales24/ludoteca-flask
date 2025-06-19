@@ -13,6 +13,21 @@ def get_juegos():
     conn.close()
     return jsonify(juegos)
 
+@juegos_bp.route("/generos")
+def get_generos():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute(
+        """
+            SELECT * FROM generos
+        """
+    )
+    generos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return jsonify(generos)
+
 @juegos_bp.route("/ofertas")
 def get_juegos_oferta():
     conn = get_connection()
@@ -183,4 +198,3 @@ def get_juegos_por_genero(genero):
     cursor.close()
     conn.close()
     return jsonify(juegos)
-    
