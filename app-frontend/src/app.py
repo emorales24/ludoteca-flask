@@ -208,9 +208,6 @@ def carrito():
     flash("Para ver tu carrito necesitas iniciar sesión.")
     return redirect(url_for("index"))
 
-
-# es mejor que el boton solo agregue y no modifique la pagina (en nuestro
-# caso deberia estar el boton de comprar solo en la pantalla donde se ve un juego unico)
 @app.route("/carrito/agregar", methods=["POST"])
 def post_itemCarrito():
     usuario = buscar_usuario_online()
@@ -230,13 +227,14 @@ def post_itemCarrito():
 
 @app.route("/carrito/eliminar/<int:id>")
 def eliminar_itemCarrito(id):
-    # usuario = buscar_usuario_online()
-    # if usuario:
-    response = sacar_item_carrito(id)
-    return redirect(url_for("carrito"))
+    usuario = buscar_usuario_online()
 
-    # flash("Para ver tu carrito necesitas iniciar sesión.")
-    # return redirect(url_for('index'))
+    if not usuario:
+        flash("Para ver tu carrito necesitas iniciar sesión.")
+        return redirect(url_for('index'))
+    
+    sacar_item_carrito(id)
+    return redirect(url_for("carrito"))
 
 
 @app.route("/carrito/comprar")
