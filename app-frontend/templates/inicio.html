@@ -3,67 +3,9 @@
 {% block body %}
 <!-- Contenido Principal -->
     <main id="main-content" class="container mx-auto p-6 space-y-12">
-        <!-- Sección 1: Novedades - Carrusel Vertical -->
-        <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h3 class="estilo-h3">Novedades</h3>
-            <div class="flex flex-col lg:flex-row gap-6">
-                <!-- Carrusel Principal (Imagen Grande y Texto) -->
-                <div id="mainCarouselDisplay" class="relative lg:w-3/4 bg-gray-900 rounded-lg overflow-hidden shadow-xl aspect-w-16 aspect-h-9 sm:aspect-h-10 lg:aspect-h-9 xl:aspect-h-7">
-                    <!-- Ítems del carrusel (inicialmente ocultos, controlados por JS) -->
-                    <!-- Estos elementos se llenarán dinámicamente con JavaScript -->
-                </div>
-
-                <!-- Navegación de Thumbnails Vertical -->
-                <div class="lg:w-1/4 flex flex-col items-center space-y-3 p-2 bg-gray-100 rounded-lg shadow-inner no-scrollbar overflow-y-auto max-h-96 lg:max-h-full">
-                    <button id="carouselUpBtn" class="p-2 text-blue-600 hover:text-blue-800 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
-                    </button>
-                    <div id="carouselThumbnails" class="flex flex-col space-y-3 w-full">
-                        <!-- Thumbnails se cargarán aquí con JavaScript -->
-                    </div>
-                    <button id="carouselDownBtn" class="p-2 text-blue-600 hover:text-blue-800 focus:outline-none">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Sección 2: Los más populares -->
-        <section class="bg-slate-800 p-6 rounded-lg shadow-md">
-            <h3 class="estilo-h3">Los más Populares</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Imagen 1 -->
-                <div class="bg-slate-700 rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/FFD700/000000?text=Popular+1" alt="Popular 1" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <a href="#">
-                            <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">Aventura Épica</h4>
-                        </a>                        
-                        <p class="text-gray-200">El juego más vendido del mes. ¡Únete a la leyenda!</p>
-                    </div>
-                </div>
-                <!-- Imagen 2 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/C0C0C0/000000?text=Popular+2" alt="Popular 2" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Estrategia Maestra</h4>
-                        <p class="text-gray-600">Pon a prueba tu mente con este desafiante título.</p>
-                    </div>
-                </div>
-                <!-- Imagen 3 -->
-                <div class="rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    <img src="https://placehold.co/600x400/DAA520/000000?text=Popular+3" alt="Popular 3" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h4 class="text-xl font-semibold mb-2">Simulador de Vida</h4>
-                        <p class="text-gray-600">Crea tu propio mundo y vive una vida virtual.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Sección 1: Ofertas -->
         <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
-            <h3 class="estilo-h3 mb-6">Recomendaciones para ti</h3>
+            <h2 class="text-gray-50 text-2xl">Ofertas</h2>
             
             <!-- Contenedor principal del carrusel -->
             <div class="relative">
@@ -75,22 +17,165 @@
                 </button>
                 
                 <!-- Contenedor del carrusel -->
-                <div class="pb-4 scrollbar-hide">
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
                     <div class="flex space-x-6 w-max">
-                        <!-- Item 1 -->
+                        <!-- Items-->
+                        {% for juego in juegos_rebajados %}
                         <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
                             <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
-                                <img src="#" alt="Oferta 1" class="w-full h-full object-cover"> <!-- Rellenar con las imagenes -->
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
                             </div>
                             <div class="p-4 flex-grow bg-slate-700">
-                                <a href="#" class="block">
-                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">Titulo Oferta 1</h4>
+                                <a href="{{ url_for("ver_juego", id = juego.id)}}" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
                                 </a>
-                                <p class="text-stone-200">Adéntrate en un mundo mágico lleno de misterios.</p>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+                                {% if juego.en_oferta %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                        <span class="line-through text-red-400 ml-2">${{ juego.precio }}</span>
+                                    </p>
+                                {% elif juego.precio==0 %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ GRATIS }}
+                                    </p>
+                                {% else %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ juego.precio }}
+                                    </p>
+                                {% endif %}
+
                             </div>
                         </div>
-                        
-                        <!-- Puedes agregar más items aquí -->
+                        {% endfor %}
+                       
+                    
+                    </div>
+                </div>
+                
+                <!-- Flecha derecha -->
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Siguiente">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Sección 2 Recomendados -->
+        <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
+            <h3 class="text-gray-50 text-2xl">Recomendaciones para ti</h3>
+            
+            <!-- Contenedor principal del carrusel -->
+            <div class="relative">
+                <!-- Flecha izquierda -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Anterior">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <!-- Contenedor del carrusel -->
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
+                    <div class="flex space-x-6 w-max">
+                        <!-- Items-->
+                        {% for juego in juegos_recomendados %}
+                        <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
+                            <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
+                            </div>
+                            <div class="p-4 flex-grow bg-slate-700">
+                                <a href="{{ url_for("ver_juego", id = juego.id)}}" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
+                                </a>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+
+                                {% if juego.en_oferta %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                        <span class="line-through text-red-400 ml-2">${{ juego.precio }}</span>
+                                    </p>
+                                {% elif juego.precio==0 %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        GRATIS
+                                    </p>
+                                {% else %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ juego.precio }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                       
+                    
+                    </div>
+                </div>
+                
+                <!-- Flecha derecha -->
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Siguiente">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- Sección 3 Recientes -->
+        <section class="bg-slate-800 p-6 rounded-lg shadow-md relative">
+            <h2 class="text-gray-50 text-2xl">Juegos recientes</h2>
+            
+            <!-- Contenedor principal del carrusel -->
+            <div class="relative">
+                <!-- Flecha izquierda -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-75 transition-all transform hover:scale-110" aria-label="Anterior">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                
+                <!-- Contenedor del carrusel -->
+                <div class="pb-4 overflow-x-auto scrollbar-hide">
+                    <div class="flex space-x-6 w-max">
+                        <!-- Items-->
+                        {% for juego in juegos_recientes %}
+                        <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
+                            <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
+                                <img src="{{ url_for('static', filename=juego.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+                                
+                            </div>
+                            <div class="p-4 flex-grow bg-slate-700">
+                                <a href="{{ url_for("ver_juego", id = juego.id)}}" class="block">
+                                    <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ juego.nombre }}</h4>
+                                </a>
+                                <p class="text-stone-200">{{ juego.tipo }}</p>
+                                <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
+                                {% if juego.en_oferta %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                        <span class="line-through text-red-400 ml-2">${{ juego.precio }}</span>
+                                    </p>
+                                {% elif juego.precio == 0 %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        GRATIS
+                                    </p>
+                                {% else %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ juego.precio }}
+                                    </p>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                       
+                    
                     </div>
                 </div>
                 

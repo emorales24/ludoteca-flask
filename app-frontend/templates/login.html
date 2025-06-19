@@ -28,8 +28,8 @@
                 <input type="text" id="usuario" name="usuario" required class="login-input">
             </div>
             <div>
-                <label for="contraseña" class="login-label">Contraseña</label>
-                <input type="password" id="contraseña" name="contraseña" required class="login-input">
+                <label for="contra" class="login-label">Contraseña</label>
+                <input type="password" id="contra" name="contra" required class="login-input">
             </div>
             <button type="submit" class="login-button">Ingresar</button>
         </form>
@@ -37,7 +37,7 @@
         <br>
 
         <button type="submit" class="login-button" >
-               <a href="{{ url_for('index') }}">Entrar sin iniciar sesion</a> 
+               <a href="{{ url_for("registro") }}">Registrarse</a> 
         </button>
     </div>
 </body>

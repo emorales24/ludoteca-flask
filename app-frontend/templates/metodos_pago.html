@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <!-- Contenido Principal del Perfil -->
+    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-6 min-h-screen-minus-nav">
+        <!-- Panel Lateral -->
+        <aside class="lg:w-1/4 bg-gray-900 p-6 rounded-lg shadow-xl flex flex-col space-y-4">
+            <h3 class="text-2xl font-bold text-blue-400 mb-4">Menú de Perfil</h3>
+            <a href="{{ url_for('redirigir_perfil') }}" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Mis Datos</a>
+            <a href="{{ url_for('ver_historial_compras') }}" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
+            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg bg-blue-700 hover:bg-blue-800 transition duration-200 ease-in-out font-semibold">Métodos de Pago</a>
+        </aside>
+
+        <!-- Sección de Contenido Principal de los Metodos de Pago -->
+        <section class="lg:w-3/4 bg-gray-900 p-8 rounded-lg shadow-xl">
+            <h2 class="text-3xl font-bold text-blue-400 mb-8">Metodos de Pago</h2>
+                {% for metodo in metodos_pago %}
+                    <!-- Metodos de Pago Existentes -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label for="metodo_tipo" class="block text-gray-400 text-sm font-medium mb-1">Tipo</label>
+                            <input type="text" name="metodo_tipo" id="metodo_tipo" value="{{ metodo.tipo }}" disabled
+                                class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                        </div>
+                        <div>
+                            <label for="metodo_marca" class="block text-gray-400 text-sm font-medium mb-1">Marca</label>
+                            <input type="text" name="metodo_marca" id="metodo_marca" value="{{ metodo.marca }}" disabled
+                                class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label for="metodo_numero_tarjeta" class="block text-gray-400 text-sm font-medium mb-1">Numero de Tarjeta</label>
+                            <input type="password" name="metodo_numero_tarjeta" id="metodo_numero_tarjeta" value="{{ metodo.numero_tarjeta }}" disabled
+                                class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <label for="vencimiento" class="block text-gray-400 text-sm font-medium mb-1">Fecha de Vencimiento</label>
+                            <input type="text" name="metodo_vencimiento" id="metodo_vencimiento" value="{{ metodo.fecha_vencimiento }}" disabled
+                                class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                        </div>
+                        <div>
+                            <label for="cvv" class="block text-gray-400 text-sm font-medium mb-1">Codigo CVV</label>
+                            <input type="number" name="cvv" id="cvv" value="{{ metodo.codigo_cvv }}" disabled
+                                class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
+                        </div>
+                    </div>
+                {% endfor %}
+
+            <!-- Formulario para Agregar Metodo de Pago -->
+            <button id="boton_mostrar_popup" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Agregar método de pago
+            </button>
+
+            <div id="popup_metodo_pago" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                <form method="post" action="{{ url_for("ver_metodos_pago") }}" class="bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-md">
+                    <h2 class="text-lg font-semibold mb-4 text-gray-300">Agregar Metodo de Pago</h2>
+
+                    <input name="tipo" type="text" placeholder="Tipo" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="marca" type="text" placeholder="Marca" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="numero" type="password" placeholder="Numero de Tarjeta" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="vencimiento" type="date" placeholder="Vencimiento" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    <input name="numero_cvv" type="number" placeholder="CVV" required class="mb-2 w-full p-2 rounded bg-gray-700 text-white">
+                    
+                    <div class="flex justify-end space-x-2 mt-4">
+                        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Aceptar</button>
+                        <button id="boton_cancelar_carga" type="button" class="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+{% endblock %}

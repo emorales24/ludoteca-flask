@@ -7,8 +7,8 @@
         <aside class="lg:w-1/4 bg-gray-900 p-6 rounded-lg shadow-xl flex flex-col space-y-4">
             <h3 class="text-2xl font-bold text-blue-400 mb-4">Menú de Perfil</h3>
             <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg bg-blue-700 hover:bg-blue-800 transition duration-200 ease-in-out font-semibold">Mis Datos</a>
-            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
-            <a href="#" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Métodos de Pago</a>
+            <a href="{{ url_for('ver_historial_compras') }}" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Historial de Compras</a>
+            <a href="{{ url_for('ver_metodos_pago') }}" class="block p-3 rounded-lg text-gray-200 text-lg hover:bg-blue-700 transition duration-200 ease-in-out">Métodos de Pago</a>
         </aside>
 
         <!-- Sección de Contenido Principal del Perfil -->
@@ -30,7 +30,7 @@
                     </div>
                     <div class="md:col-span-2">
                         <label for="password" class="block text-gray-400 text-sm font-medium mb-1">Contraseña</label>
-                        <input type="password" name="contraseña" id="password" value="{{ usuario.contraseña }}" disabled
+                        <input type="password" name="contra" id="password" value="{{ usuario.contra }}" disabled
                             class="w-full mb-4 p-2 rounded bg-gray-700 text-white border border-gray-400 focus:border-blue-500 hover:border-blue-400 transition">
                     </div>
                 </div>
@@ -82,7 +82,7 @@
 
                 <!-- Botones de Acción -->
                 <div class="flex justify-end space-x-4 mt-8">
-                    <form method="POST" action="{{ url_for('perfil', usr=usuario.usuario) }}"></form>
+                    <form method="POST" action="{{ url_for('perfil', usr = usuario.usuario) }}"></form>
                         <button type="button" id="editar-btn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                             Editar
                         </button>
@@ -110,5 +110,7 @@
                 </div>
             </form>
         </section>
+
+
     </main>
 {% endblock %}

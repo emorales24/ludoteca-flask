@@ -4,10 +4,40 @@
     <!-- Contenido Principal - Resultados de búsqueda -->
     <main class="container mx-auto p-6 space-y-8">
         <h2 class="text-3xl font-bold text-center text-gray-300">Resultados de Búsqueda</h2>
-        <p id="searchQueryDisplay" class="text-center text-gray-400 text-lg mb-6"></p>
+        
         <div id="searchResults" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            <!-- Los resultados de la búsqueda se inyectarán aquí -->
+            {% for resultado in busqueda %}
+                <div class="rounded-lg overflow-hidden shadow-lg flex flex-col flex-1 min-w-0 transform hover:scale-105 transition duration-300 ease-in-out">
+                    <div class="w-full aspect-9/16 bg-gray-200 max-w-[450px] max-h-[650px] mx-auto overflow-hidden">
+                        <img src="{{ url_for('static', filename=resultado.direccion_imagen, _external=True) }}" alt="Oferta 1" class="w-full h-full object-cover"> 
+
+                    </div>
+                    <div class="p-4 flex-grow bg-slate-900">
+                        <a href="{{ url_for("ver_juego", id = resultado.id)}}" class="block">
+                            <h4 class="text-xl font-semibold mb-2 hover:text-blue-600 transition-colors text-gray-300">{{ resultado.nombre }}</h4>
+                        </a>
+                        <p class="text-stone-200">{{ resultado.tipo }}</p>
+                        <p class="text-stone-200">Fecha de Lanzamiento: {{ resultado.fecha_lanzamiento }}</p>
+
+                        {% if resultado.en_oferta %}
+                            <p id="gamePrice" class="text-green-500 mr-4">
+                                ${{ (resultado.precio * (1 - (resultado.porcentaje_oferta / 100))) | round(2) }}
+                                <span class="line-through text-red-400 ml-2">${{ resultado.precio }}</span>
+                            </p>
+                        {% elif resultado.precio==0 %}
+                            <p id="gamePrice" class="text-green-500 mr-4">
+                                GRATIS
+                            </p>
+                        {% else %}
+                            <p id="gamePrice" class="text-green-500 mr-4">
+                                ${{ resultado.precio }}
+                            </p>
+                        {% endif %}
+
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        <p id="noResults" class="text-center text-gray-400 text-lg hidden">No se encontraron juegos para tu búsqueda.</p>
+
     </main>
 {% endblock %}

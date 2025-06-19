@@ -7,8 +7,6 @@ items_carrito_bp = Blueprint("carrito",__name__)
 def post_item_carrito(id, tipo_envio,precio):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    # falta agregar un get para obtener el precio en oferta en caso de que este en oferta y sbir ese como variable
-    #o que lo reciba por url
     cursor.execute("""
         INSERT INTO items_carrito (estado, usuario_id, juego_id, precio, tipo_envio)
         SELECT 'pendiente', usuario_id, %s, %s, %s
@@ -27,7 +25,7 @@ def delete_item_carrito(id):
     cursor = conn.cursor(dictionary = True)
     cursor.execute("""
         DELETE FROM items_carrito
-        WHERE id = %s;
+        WHERE id = %s and estado='pendiente';
     """, (id,))
     conn.commit()
     cursor.close()
@@ -61,6 +59,25 @@ def get_items_carrito():
         inner join generos
         on generos.id = juegos.id_genero
         WHERE items_carrito.estado = 'pendiente'
+        AND items_carrito.usuario_id = (SELECT usuario_id FROM usuario_online WHERE id = 1);
+    """)
+    carrito = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(carrito), 200
+
+@items_carrito_bp.route("/items/historial")
+def get_historial_items_carrito():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute("""
+        SELECT items_carrito.*,juegos.nombre, juegos.direccion_imagen, generos.nombre_genero as genero
+        from items_carrito
+        inner join juegos
+        on juegos.id = items_carrito.juego_id
+        inner join generos
+        on generos.id = juegos.id_genero
+        WHERE items_carrito.estado = 'comprado'
         AND items_carrito.usuario_id = (SELECT usuario_id FROM usuario_online WHERE id = 1);
     """)
     carrito = cursor.fetchall()

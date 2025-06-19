@@ -17,26 +17,40 @@ def get_usuarios():
 def get_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("""
-                   SELECT * FROM usuarios 
-                   INNER JOIN usuario_online
-                   ON usuario_online.usuario = usuarios.usuario
-                   WHERE usuarios.usuario = %s
-                   """, (usr,))
+    cursor.execute(
+        """
+            SELECT * FROM usuarios 
+            INNER JOIN usuario_online
+            ON usuario_online.usuario = usuarios.usuario
+            WHERE usuarios.usuario = %s
+        """, (usr,)
+    )
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
     return jsonify(usuario)
 
-@usuarios_bp.route("/validar/<usr>")
-def get_rol_usuario_clave(usr):
+@usuarios_bp.route("/validar/<usr>", methods = ["POST"])
+def validate_usuario(usr):
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT rol, usuario, contraseña FROM usuarios WHERE usuario = %s", (usr,))
+    data = request.json
+    contra_evaluar = data.get("contra_evaluar")
+    cursor.execute(
+        """
+            SELECT rol, usuario, contra FROM usuarios WHERE usuario = %s
+        """, (usr,)
+    )
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()
-    return jsonify(usuario)
+
+    if not usuario:
+        return jsonify("Usuario no encontrado."), 404
+    elif usuario["contra"] == contra_evaluar:
+        return jsonify(usuario), 200
+    else:
+        return jsonify("Error, contraseña incorrecta"), 401
 
 @usuarios_bp.route("/update/<usr>", methods = ["PUT"])
 def update_usuario(usr):
@@ -45,7 +59,7 @@ def update_usuario(usr):
     data = request.json
     usuario = data.get("usuario")
     email = data.get("email")
-    contraseña = data.get("contraseña")
+    contra = data.get("contra")
     nombre = data.get("nombre")
     apellido = data.get("apellido")
     calle = data.get("calle")
@@ -59,7 +73,7 @@ def update_usuario(usr):
             UPDATE usuarios
             SET 
                 usuario = %s,
-                contraseña = %s,
+                contra = %s,
                 email = %s,
                 nombre = %s,
                 apellido = %s,
@@ -69,7 +83,7 @@ def update_usuario(usr):
                 direccion = %s,
                 codigo_postal = %s
             WHERE usuario = %s
-        """, (usuario, contraseña, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal, usr,)
+        """, (usuario, contra, email, nombre, apellido, pais, ciudad, calle, direccion, codigo_postal, usr,)
     )
     conn.commit()
     cursor.close()
@@ -109,9 +123,6 @@ def post_usuario_online(usr):
     conn.close()
     return jsonify("Se inició sesión correctamente", 204)
 
-
-# este es borrable pero lo dejo para no modificar el del perfil
-# este  nos sirve para 
 # OBJETIVO: TRAEMOS EL USUARIO ONLINE 
 # CONSECUENCIA EN EL FRONT 1: Si existe, lo mostramos trayendolo con get_usuario
 # CONSECUENTA EN EL FRONT 2: Si no hay dato, lo redirigimos al login
@@ -120,7 +131,7 @@ def post_usuario_online(usr):
 def get_usuario_online():     
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
-    cursor.execute("SELECT id, usuario, rol FROM usuario_online WHERE id = 1")
+    cursor.execute("SELECT id, usuario_id, usuario, rol FROM usuario_online WHERE id = 1")
     usuario = cursor.fetchone()
     cursor.close()
     conn.close()

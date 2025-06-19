@@ -2,7 +2,7 @@
 
 {% block body %}
     <!-- Contenido Principal del Carrito -->
-    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-6 min-h-screen-minus-nav-footer">
+    <main class="container mx-auto p-6 flex flex-col lg:flex-row gap-8 min-h-screen-minus-nav-footer">
         <!-- Lista de Productos en el Carrito -->
         <section class="lg:w-3/4 bg-gray-900 p-8 rounded-lg shadow-xl">
             <h2 class="text-3xl font-bold text-blue-400 mb-8">Mi Carrito de Compras</h2>
@@ -14,7 +14,7 @@
                         <div class="flex items-center bg-gray-700 p-4 rounded-lg shadow-md">
                             <img src="{{ url_for('static', filename=item['direccion_imagen']) }}" class="w-24 h-24 object-cover rounded-md mr-4">
                             <div class="flex-grow">
-                                <h3 class="text-xl font-semibold text-gray-100">{{ item.nombre }}  ({{ item.genero.upper() }})</h3>
+                                <h3 class="text-xl font-semibold text-gray-100"><a href="{{ url_for("ver_juego", id = item.juego_id) }}" class="block hover:text-blue-600 transition-colors text-gray-300">{{ item.nombre }}</a>  ({{ item.genero.upper() }})</h3>
                                 <p class="text-gray-300">Precio Unitario: <span class="font-bold">$ {{ item.precio }}</span></p>
                                 <div class="flex items-center mt-2">
                                     <label class="mr-2 font-semibold text-gray-100">Tipo envío:</label>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="border-t border-gray-700 pt-4 flex justify-between text-2xl font-bold text-blue-300">
                     <span>Total:</span>
-                    <span id="totalAmount" class="text-gray-100">${{ total+10 | round(2) }}</span>
+                    <span id="totalAmount" class="text-gray-100">${{ (total+10) | round(2) }}</span>
                 </div>
 
             {% else %}

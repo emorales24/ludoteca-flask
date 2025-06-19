@@ -7,7 +7,7 @@
         </a>
         
         <!-- Input de Buscador (Modificado para ser un formulario) -->
-        <form action="/buscar" method="GET" class="relative w-full md:w-1/3">
+        <form action="{{ url_for("buscar") }}" method="GET" class="relative w-full md:w-1/3">
             <input type="text" name="q" placeholder="Buscar..."
                     class="w-full pl-10 pr-4 py-2 rounded-lg bg-sky-950 text-white placeholder-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white focus:text-gray-800 transition duration-300 ease-in-out shadow-sm">
             <button type="submit" class="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-200 h-5 w-5 p-0 bg-transparent border-none cursor-pointer">
@@ -21,7 +21,7 @@
         <div class="flex flex-wrap justify-center md:justify-end space-x-4">
             <!-- Menú desplegable Categorías -->
             <div class="relative group">
-                <a href="/categorias" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium flex items-center">
+                <a class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium flex items-center">
                     Categorías
                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -30,15 +30,16 @@
                 <!-- Menú desplegable (modificar con los de la bd) -->
                 <div class="absolute left-0 mt-2 w-48 bg-slate-800 rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 ease-in-out z-50">
                     <div class="py-1">
-                        <a href="/categorias/rol" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Juegos de Rol</a>
-                        <a href="/categorias/estrategia" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Estrategia</a>
-                        <a href="/categorias/aventura" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Aventura</a>
-                        <a href="/categorias/deportes" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Deportes</a>
+                        <a href="{{ url_for('buscar_por_genero', genero='rpg') }}" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">RPG</a>
+                        <a href="{{ url_for('buscar_por_genero', genero='accion') }}" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Accion</a>
+                        <a href="{{ url_for('buscar_por_genero', genero='visual novel') }}" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Novela visual</a>
+                        <a href="{{ url_for('buscar_por_genero', genero='deportes') }}" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Deportes</a>
+                        <a href="{{ url_for('buscar_por_genero', genero='terror') }}" class="block px-4 py-2 text-white hover:bg-slate-700 hover:text-blue-200">Terror</a>
                     </div>
                 </div>
             </div>
 
-            <a href="#" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">Ofertas</a>
+            <a href="{{ url_for('buscar_ofertas') }}" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">Ofertas</a>
             <a href="{{ url_for("login") }}" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">Iniciar Sesion</a>
             <a href="{{ url_for('redirigir_perfil')}}" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">Mi Cuenta</a>
             <a href="{{ url_for('carrito') }}" class="text-white hover:text-blue-200 transition duration-300 ease-in-out font-medium">Carrito</a>
