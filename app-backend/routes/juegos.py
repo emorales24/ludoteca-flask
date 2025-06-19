@@ -186,14 +186,16 @@ def buscar():
 def get_juegos_por_genero(genero):
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("""
-        select
-        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen 
-        from juegos 
-        join generos
-        on juegos.id_genero = generos.id
-        where generos.nombre_genero=%s
-                   """, (genero,))
+    cursor.execute(
+        """
+            SELECT
+            generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, 
+                    juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen 
+            FROM juegos 
+            JOIN generos
+            ON juegos.id_genero = generos.id
+            WHERE generos.nombre_genero = %s
+        """, (genero,))
     juegos = cursor.fetchall()
     cursor.close()
     conn.close()
