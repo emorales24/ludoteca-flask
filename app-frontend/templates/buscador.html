@@ -18,7 +18,22 @@
                         </a>
                         <p class="text-stone-200">{{ resultado.tipo }}</p>
                         <p class="text-stone-200">Fecha de Lanzamiento: {{ resultado.fecha_lanzamiento }}</p>
-                        <p class="text-green-500 ">$ {{ resultado.precio }}</p>
+
+                        {% if resultado.en_oferta %}
+                            <p id="gamePrice" class="text-green-500 mr-4">
+                                ${{ (resultado.precio * (1 - (resultado.porcentaje_oferta / 100))) | round(2) }}
+                                <span class="line-through text-red-400 ml-2">${{ resultado.precio }}</span>
+                            </p>
+                        {% elif resultado.precio==0 %}
+                            <p id="gamePrice" class="text-green-500 mr-4">
+                                GRATIS
+                            </p>
+                        {% else %}
+                            <p id="gamePrice" class="text-green-500 mr-4">
+                                ${{ resultado.precio }}
+                            </p>
+                        {% endif %}
+
                     </div>
                 </div>
             {% endfor %}

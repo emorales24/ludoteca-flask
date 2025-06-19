@@ -6,24 +6,8 @@ from routes.admin import admin_bp
 from routes.items_carrito import items_carrito_bp
 from routes.metodos_pago import metodos_pago_bp
 from routes.registro import registro_bp
-from flasgger import Swagger
 
 app = Flask(__name__)
-
-swagger_template = {
-    "swagger": "2.0",
-    "info": {
-        "title": "API del sitio web FLASK AND FURIOUS",
-        "description": "Documentación de la API de ludoteca",
-        "version": "1.0.0",
-        "contact": {
-            "name": "Equipo Soporte Flask and Furious",
-            "email": "calle_falsa_123@fi.uba.ar"
-        },
-        "basePath": "/"
-    },
-}
-swagger = Swagger(app, template=swagger_template)
 
 
 app.register_blueprint(usuarios_bp, url_prefix="/usuarios")

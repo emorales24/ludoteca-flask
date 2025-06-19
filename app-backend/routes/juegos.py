@@ -48,19 +48,6 @@ def get_juegos_oferta():
 
 @juegos_bp.route("/recientes/<int:fecha>")
 def get_juegos_recientes(fecha):
-    """
-    Obtener juegos recientes por fecha minima
-    ---
-    parameters:
-      - name: fecha
-        in: juegos/recientes/<int:fecha>
-        type: string
-        required: true
-        description: devuelve una lista de juegos recientes
-    responses:
-      200:
-        description: juego
-    """
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     cursor.execute(
@@ -79,19 +66,6 @@ def get_juegos_recientes(fecha):
 
 @juegos_bp.route("/mas_valorados/<int:puntaje>")
 def get_juegos_mas_valorados(puntaje):
-    """
-    Obtener juegos recientes por puntaje minimo
-    ---
-    parameters:
-      - name: puntaje
-        in: juegos/mas_valorados/<int:puntaje>
-        type: string
-        required: true
-        description: devuelve una lista de juegos mejor puntuados
-    responses:
-      200:
-        description: juego
-    """
     conn = get_connection()
     cursor = conn.cursor(dictionary = True)
     cursor.execute(
@@ -111,19 +85,6 @@ def get_juegos_mas_valorados(puntaje):
 
 @juegos_bp.route("/<int:id>")
 def get_juego(id):
-    """
-    Obtener juego por ID
-    ---
-    parameters:
-      - name: id
-        in: juegos/{id}
-        type: integer
-        required: true
-        description: ID del juego
-    responses:
-      200:
-        description: juego
-    """
     conn = get_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute(

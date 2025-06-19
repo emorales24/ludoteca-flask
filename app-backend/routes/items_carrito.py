@@ -25,7 +25,7 @@ def delete_item_carrito(id):
     cursor = conn.cursor(dictionary = True)
     cursor.execute("""
         DELETE FROM items_carrito
-        WHERE id = %s;
+        WHERE id = %s and estado='pendiente';
     """, (id,))
     conn.commit()
     cursor.close()

@@ -32,7 +32,21 @@
                                 </a>
                                 <p class="text-stone-200">{{ juego.tipo }}</p>
                                 <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
-                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
+                                {% if juego.en_oferta %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                        <span class="line-through text-red-400 ml-2">${{ juego.precio }}</span>
+                                    </p>
+                                {% elif juego.precio==0 %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ GRATIS }}
+                                    </p>
+                                {% else %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ juego.precio }}
+                                    </p>
+                                {% endif %}
+
                             </div>
                         </div>
                         {% endfor %}
@@ -79,7 +93,22 @@
                                 </a>
                                 <p class="text-stone-200">{{ juego.tipo }}</p>
                                 <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
-                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
+
+                                {% if juego.en_oferta %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                        <span class="line-through text-red-400 ml-2">${{ juego.precio }}</span>
+                                    </p>
+                                {% elif juego.precio==0 %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        GRATIS
+                                    </p>
+                                {% else %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ juego.precio }}
+                                    </p>
+                                {% endif %}
+
                             </div>
                         </div>
                         {% endfor %}
@@ -127,7 +156,21 @@
                                 </a>
                                 <p class="text-stone-200">{{ juego.tipo }}</p>
                                 <p class="text-stone-200">Fecha de Lanzamiento: {{ juego.fecha_lanzamiento }}</p>
-                                <p class="text-green-500 ">$ {{ juego.precio }}</p>
+                                {% if juego.en_oferta %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ (juego.precio * (1 - (juego.porcentaje_oferta / 100))) | round(2) }}
+                                        <span class="line-through text-red-400 ml-2">${{ juego.precio }}</span>
+                                    </p>
+                                {% elif juego.precio == 0 %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        GRATIS
+                                    </p>
+                                {% else %}
+                                    <p id="gamePrice" class="text-green-500 mr-4">
+                                        ${{ juego.precio }}
+                                    </p>
+                                {% endif %}
+
                             </div>
                         </div>
                         {% endfor %}
