@@ -1,29 +1,21 @@
+from dotenv import load_dotenv
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_mail import Mail, Message
 
 # Importa funciones de peticiones a la API
-from api.queries_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos
+from api.queries_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos, buscar_juegos_por_genero
 from api.queries_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
 from api.queries_usuarios import obtener_usuario, validar_usuario, actualizar_usuario, eliminar_usuario, registrar_usuario
 from api.queries_usuario_online import loguear_usuario, desloguear_usuario, actualizar_usuario_online, buscar_usuario_online
-from api.queries_metodo_pago import obtener_metodos_pago, agregar_metodo_pago, eliminar_metodo_pago
+from api.queries_metodo_pago import obtener_metodos_pago, agregar_metodo_pago
 
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
+load_dotenv()
+
 app = Flask(__name__, root_path=base_dir)
 
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
-app.config["MAIL_USERNAME"] = "mail"
-app.config["MAIL_PASSWORD"] = "clave-temporal"
-app.config["MAIL_DEFAULT_SENDER"] = "mail"
-mail = Mail(app)
-
+app.secret_key = os.getenv("SECRET_KEY")
 
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
@@ -168,6 +160,25 @@ def buscar():
     if not busqueda:
         flash("No se han encontrado resultado para la busqueda")
         return redirect(url_for("index"))
+
+    return render_template("buscador.html", busqueda = busqueda)
+
+
+@app.route("/buscar/<string:genero>")
+def buscar_por_genero(genero):
+    busqueda = buscar_juegos_por_genero(genero)
+    if not busqueda:
+        flash("No se han encontrado resultados para la busqueda")
+        return redirect(url_for('index'))
+    
+    return render_template("buscador.html", busqueda = busqueda)
+
+@app.route("/ofertas")
+def buscar_ofertas():
+    busqueda = obtener_juegos_rebajados()
+    if not busqueda:
+        flash("No se han encontrado resultados para la busqueda")
+        return redirect(url_for('index'))
 
     return render_template("buscador.html", busqueda = busqueda)
 

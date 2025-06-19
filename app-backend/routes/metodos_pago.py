@@ -9,7 +9,15 @@ def get_metodos_pago(usuario_id):
     cursor = conn.cursor(dictionary = True)
     cursor.execute(
         """
-            SELECT * FROM metodos_pago
+            SELECT 
+            id,
+            usuario_id,
+            tipo,
+            marca,
+            numero_tarjeta,
+            DATE_FORMAT(metodos_pago.fecha_vencimiento, '%d %b %Y') AS fecha_vencimiento,
+            codigo_cvv 
+            FROM metodos_pago
             WHERE usuario_id = %s
         """, (usuario_id,)
     )

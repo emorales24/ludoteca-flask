@@ -3,15 +3,30 @@ from db import get_connection
 
 juegos_bp = Blueprint("juegos",__name__)
 
-# @juegos_bp.route("/")
-# def get_juegos():
-#     conn = get_connection()
-#     cursor = conn.cursor(dictionary=True)
-#     cursor.execute("SELECT * FROM juegos")
-#     juegos = cursor.fetchall()
-#     cursor.close()
-#     conn.close()
-#     return jsonify(juegos)
+@juegos_bp.route("/")
+def get_juegos():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM juegos")
+    juegos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return jsonify(juegos)
+
+@juegos_bp.route("/generos")
+def get_generos():
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+    cursor.execute(
+        """
+            SELECT * FROM generos
+        """
+    )
+    generos = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    return jsonify(generos)
 
 @juegos_bp.route("/ofertas")
 def get_juegos_oferta():
@@ -20,7 +35,7 @@ def get_juegos_oferta():
     cursor.execute(
         """
         SELECT
-        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
+        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE en_oferta = TRUE
@@ -51,7 +66,7 @@ def get_juegos_recientes(fecha):
     cursor.execute(
         """
         SELECT
-        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
+        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE fecha_lanzamiento like '%s%'
@@ -82,12 +97,12 @@ def get_juegos_mas_valorados(puntaje):
     cursor.execute(
         """
         SELECT
-        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
+        generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE puntuacion >= %s
         """, (puntaje,)
-    )
+    )    
     mas_valorados = cursor.fetchall()
     conn.close()
     cursor.close()
@@ -138,7 +153,7 @@ def buscar():
     cursor.execute(
         """
         SELECT
-            generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo, juegos.fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
+            generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen
         FROM juegos
         JOIN generos ON generos.id = juegos.id_genero
         WHERE LOWER(juegos.nombre) LIKE %s OR LOWER(generos.nombre_genero) LIKE %s
@@ -163,6 +178,25 @@ def buscar():
             juegos = cursor.fetchall()
             reduced_query = reduced_query[:len(reduced_query)-1]
 
+    cursor.close()
+    conn.close()
+    return jsonify(juegos)
+
+@juegos_bp.route("/<string:genero>")
+def get_juegos_por_genero(genero):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute(
+        """
+            SELECT
+            generos.nombre_genero, juegos.id, juegos.nombre, juegos.tipo,  DATE_FORMAT(juegos.fecha_lanzamiento, '%d %b %Y') AS fecha_lanzamiento, 
+                    juegos.precio, juegos.porcentaje_oferta, juegos.en_oferta, juegos.puntuacion, juegos.direccion_imagen 
+            FROM juegos 
+            JOIN generos
+            ON juegos.id_genero = generos.id
+            WHERE generos.nombre_genero = %s
+        """, (genero,))
+    juegos = cursor.fetchall()
     cursor.close()
     conn.close()
     return jsonify(juegos)
