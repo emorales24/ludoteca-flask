@@ -2,7 +2,7 @@
 # Ludoteca
 ### Flask and Furious
 
-Este es el repositorio para almacenar el trabajo práctico de Introducción al Desarrollo de Software de la Cátedra Lanzillotta, del grupo nro. 18.
+Este es el repositorio para almacenar el trabajo práctico de Introducción al Desarrollo de Software de la Cátedra Lanzillotta, del grupo nro. 17.
 
 ## Instalación
 
