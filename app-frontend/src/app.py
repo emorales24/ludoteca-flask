@@ -1,6 +1,8 @@
+from dotenv import dotenv_values
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_mail import Mail, Message
+
+config = dotenv_values(".env")
 
 # Importa funciones de peticiones a la API
 from api.queries_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos, buscar_juegos_por_genero
@@ -13,17 +15,7 @@ base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 app = Flask(__name__, root_path=base_dir)
 
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-
-app.config["MAIL_SERVER"] = "smtp.gmail.com"
-app.config["MAIL_PORT"] = 587
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USE_SSL"] = False
-app.config["MAIL_USERNAME"] = "mail"
-app.config["MAIL_PASSWORD"] = "clave-temporal"
-app.config["MAIL_DEFAULT_SENDER"] = "mail"
-mail = Mail(app)
-
+app.secret_key = config["SECRET_KEY"]
 
 # LOGIN PRIMERO
 @app.route("/login", methods=["GET", "POST"])
