@@ -256,8 +256,6 @@ def ver_historial_compras():
 def ver_metodos_pago():
     usuario_online = buscar_usuario_online()
 
-    metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
-
     if not usuario_online:
         flash("Necesitás iniciar sesión para acceder a tu perfil.")
         return redirect(url_for("index"))

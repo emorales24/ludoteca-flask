@@ -72,11 +72,11 @@ def get_historial_items_carrito():
     cursor = conn.cursor(dictionary = True)
     cursor.execute("""
         SELECT items_carrito.*,juegos.nombre, juegos.direccion_imagen, generos.nombre_genero as genero
-        from items_carrito
-        inner join juegos
-        on juegos.id = items_carrito.juego_id
-        inner join generos
-        on generos.id = juegos.id_genero
+        FROM items_carrito
+        INNER JOIN juegos
+        ON juegos.id = items_carrito.juego_id
+        INNER JOIN generos
+        ON generos.id = juegos.id_genero
         WHERE items_carrito.estado = 'comprado'
         AND items_carrito.usuario_id = (SELECT usuario_id FROM usuario_online WHERE id = 1);
     """)

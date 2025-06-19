@@ -123,10 +123,6 @@ def post_usuario_online(usr):
     conn.close()
     return jsonify("Se inició sesión correctamente", 204)
 
-# OBJETIVO: TRAEMOS EL USUARIO ONLINE 
-# CONSECUENCIA EN EL FRONT 1: Si existe, lo mostramos trayendolo con get_usuario
-# CONSECUENTA EN EL FRONT 2: Si no hay dato, lo redirigimos al login
-# (este comentario es mejor moverlo al app.py de front)
 @usuarios_bp.route("check")  
 def get_usuario_online():     
     conn = get_connection()
