@@ -1,8 +1,6 @@
 import requests
 
-# API Backend
 API_BASE = "http://localhost:5000"
-
 
 def obtener_carrito():
     response = requests.get(f"{API_BASE}/carrito/items")
