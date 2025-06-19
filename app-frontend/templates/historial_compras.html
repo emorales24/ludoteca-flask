@@ -30,8 +30,11 @@
                     {% endfor %}
                 </div>
 
-        </section>
-
-        
+                {% if not compras %}
+                    <div id="emptyCartMessage" class="text-center text-gray-400 text-xl mt-8">
+                        ¡Explora nuestros juegos y añade algunos!
+                    </div>
+                {% endif %}
+        </section>        
     </main>
 {% endblock %}
