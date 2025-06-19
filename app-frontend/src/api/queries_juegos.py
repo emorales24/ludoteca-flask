@@ -1,7 +1,7 @@
 import os
 import requests
 from dotenv import load_dotenv
-load_dotenv
+load_dotenv()
 
 API_BASE = os.getenv("API_BASE")
 
