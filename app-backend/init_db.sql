@@ -146,11 +146,5 @@ INSERT INTO usuarios (rol, usuario, contra, email, nombre, apellido, pais, ciuda
 ('final', 'pepe', '5678', 'pepe@gmail.com', 'Pepe', 'Garcia', 'Argentina','San Isidro', 'Mitre', '4325 Dto 3', '1407'),
 ('final', 'carlos', '8910', 'carlos@gmail.com', 'Carlos', 'Aguas', 'Argentina','Palermo', 'Mitre', '4325 Dto 3', '1407');
 
-
-INSERT INTO items_carrito (estado, usuario_id, juego_id, precio, tipo_envio) VALUES
-('pendiente', 2, 1, 59.99, 'digital'),
-('pendiente', 2, 2, 79.99, 'fisico'),
-('comprado', 2, 3, 49.99, 'digital');
-
 INSERT INTO metodos_pago (usuario_id, tipo, marca, numero_tarjeta, fecha_vencimiento, codigo_cvv) VALUES
 (2, "TARJETA DEBITO", "VISA", "12345687", "2028-12-12", "321");

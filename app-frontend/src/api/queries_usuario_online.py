@@ -1,6 +1,9 @@
+import os
 import requests
+from dotenv import load_dotenv
+load_dotenv
 
-API_BASE = "http://localhost:5000"
+API_BASE = os.getenv("API_BASE")
 
 def loguear_usuario(usuario):
     response = requests.post(f"{API_BASE}/usuarios/login/{usuario}")

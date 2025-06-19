@@ -1,6 +1,9 @@
+import os
 import requests
+from dotenv import load_dotenv
+load_dotenv
 
-API_BASE = "http://localhost:5000"
+API_BASE = os.getenv("API_BASE")
 
 def obtener_metodos_pago(usuario_id):
     response = requests.get(f"{API_BASE}/metodos_pago/{usuario_id}")
