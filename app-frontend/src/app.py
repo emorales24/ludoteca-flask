@@ -2,23 +2,13 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_mail import Mail, Message
 
-# Importo funciones de peticiones a la API
-from queries_api_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos, buscar_juegos_por_genero
-from queries_api_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
-from queries_api_usuarios import (
-    obtener_usuario,
-    validar_usuario,
-    actualizar_usuario,
-    obtener_metodos_pago,
-    eliminar_usuario,
-    loguear_usuario,
-    desloguear_usuario,
-    buscar_usuario_online,
-    actualizar_usuario_online,
-    registrar_usuario
-)
+# Importa funciones de peticiones a la API
+from api.queries_juegos import obtener_juego,obtener_juegos_rebajados, obtener_juegos_recientes, obtener_juegos_recomendados, modificar_juego, buscar_juegos, buscar_juegos_por_genero
+from api.queries_carrito import obtener_carrito, comprar_carrito, colocar_item_carrito, sacar_item_carrito, obtener_historial_compras
+from api.queries_usuarios import obtener_usuario, validar_usuario, actualizar_usuario, eliminar_usuario, registrar_usuario
+from api.queries_usuario_online import loguear_usuario, desloguear_usuario, actualizar_usuario_online, buscar_usuario_online
+from api.queries_metodo_pago import obtener_metodos_pago, agregar_metodo_pago, eliminar_metodo_pago
 
-# Base dir es la ra�z del proyecto
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 app = Flask(__name__, root_path=base_dir)
@@ -30,7 +20,7 @@ app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
 app.config["MAIL_USE_SSL"] = False
 app.config["MAIL_USERNAME"] = "mail"
-app.config["MAIL_PASSWORD"] = "clave-temporal"  # Contrase�a de aplicaci�n
+app.config["MAIL_PASSWORD"] = "clave-temporal"
 app.config["MAIL_DEFAULT_SENDER"] = "mail"
 mail = Mail(app)
 
@@ -261,18 +251,35 @@ def comprar_itemsCarrito():
 def ver_historial_compras():
 
     historial_compras = obtener_historial_compras()
-    return render_template("historial_compras.html", compras=historial_compras)
+    return render_template("historial_compras.html", compras = historial_compras)
 
 
-@app.route("/perfil/metodos_pago")
+@app.route("/perfil/metodos_pago", methods = ["GET", "POST"])
 def ver_metodos_pago():
     usuario_online = buscar_usuario_online()
+
+    metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
 
     if not usuario_online:
         flash("Necesitás iniciar sesión para acceder a tu perfil.")
         return redirect(url_for("index"))
+    
+    if request.method == "POST":
+        tipo = request.form["tipo"]
+        marca = request.form["marca"]
+        numero_tarjeta = request.form["numero"]
+        vencimineto = request.form["vencimiento"]
+        codigo_cvv = request.form["numero_cvv"]
 
-    return render_template("metodos_pago.html", metodos_pago = metodos_pago, usuario = usuario_online)
+        agregado = agregar_metodo_pago(usuario_online["usuario_id"], tipo, marca, numero_tarjeta, vencimineto, codigo_cvv)
+        if agregado:
+            flash("Metodo de Pago Agregado Exitosamente.")
+            metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
+            return redirect(url_for("ver_metodos_pago", metodos_pago = metodos_pago))
+
+    metodos_pago = obtener_metodos_pago(usuario_online["usuario_id"])
+
+    return render_template("metodos_pago.html", metodos_pago = metodos_pago)
 
 
 @app.route("/registro", methods=["GET", "POST"])
@@ -286,9 +293,7 @@ def registro():
         pais = request.form["pais"]
         ciudad = request.form["ciudad"]
 
-        registrado = registrar_usuario(
-            usuario, nombre, apellido, email, contra, pais, ciudad
-        )
+        registrado = registrar_usuario(usuario, nombre, apellido, email, contra, pais, ciudad)
 
         if registrado == 201:
             flash("Usuario registrado")

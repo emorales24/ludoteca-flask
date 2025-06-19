@@ -17,3 +17,28 @@ def get_metodos_pago(usuario_id):
     cursor.close()
     conn.close()
     return jsonify(metodos)
+
+@metodos_pago_bp.route("/add/<int:usuario_id>", methods = ["POST"])
+def add_metodo_pago(usuario_id):
+    conn = get_connection()
+    cursor = conn.cursor(dictionary = True)
+
+    data = request.json
+
+    tipo = data.get("tipo")
+    marca = data.get("marca")
+    numero_tarjeta = data.get("numero_tarjeta")
+    fecha_vencimiento = data.get("fecha_vencimiento")
+    numero_cvv = data.get("numero_cvv")
+
+    cursor.execute(
+        """
+        INSERT INTO metodos_pago
+        (usuario_id, tipo, marca, numero_tarjeta, fecha_vencimiento, codigo_cvv)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """, (usuario_id, tipo, marca, numero_tarjeta, fecha_vencimiento, numero_cvv,)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify("Tarjeta Agregada Correctamente"), 201

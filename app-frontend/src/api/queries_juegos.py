@@ -1,8 +1,6 @@
 import requests
 
-# API Backend
 API_BASE = "http://localhost:5000"
-
 
 def obtener_juego(id):
     try:

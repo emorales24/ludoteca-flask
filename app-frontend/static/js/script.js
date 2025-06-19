@@ -41,6 +41,19 @@ document.addEventListener('DOMContentLoaded', function() {
             buyPopup.classList.add('hidden');
         });
     }
+
+    // Mostrar PopUp Agregar Metodo de Pago
+    const mostrarBtn = document.getElementById('boton_mostrar_popup');
+    const cancelarCargaBtn = document.getElementById('boton_cancelar_carga');
+    const popup = document.getElementById('popup_metodo_pago');
+    if (mostrarBtn && cancelarCargaBtn && popup) {
+        mostrarBtn.onclick = function() {
+            popup.classList.remove('hidden');
+        };
+        cancelarCargaBtn.onclick = function() {
+            popup.classList.add('hidden');
+        };
+    }
 });
 
 // Funcionalidad ADMIN.HTML
