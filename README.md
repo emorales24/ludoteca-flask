@@ -31,6 +31,6 @@ _Comandos:_
 ```
   cd app-frontend/src
   touch .env
-  echo SECRET_KEY=_5#y2L"F4Q8z\n\xec] >> .env
-  echo API_BASE="http://localhost:5000" >> .env
+  echo 'SECRET_KEY=_5#y2L"F4Q8z\n\xec]' >> .env
+  echo 'API_BASE="http://localhost:5000"' >> .env
 ```
